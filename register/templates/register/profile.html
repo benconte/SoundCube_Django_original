@@ -1,0 +1,26 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container" style="margin-bottom: 100px;color: #fff;">
+        <div class="media">
+            
+                <img class="img-profile rounded-circle" src="{{user.profile.image.url}}" width="80" height="80">
+            
+            <div class="media-body ml-2">
+                <h2 class="account-heading">{{user.username}}</h2>
+                <p class="text-secondary">{{user.email}}</p>
+            </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}<!-- hidden tag. it defends our form from attacks -->
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Profile Info</legend>
+                {{ u_form|crispy }}
+                {{ p_form|crispy }}
+            </fieldset>
+            <div class="form-group mb-5">
+                <button class="btn btn-outline-success" type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

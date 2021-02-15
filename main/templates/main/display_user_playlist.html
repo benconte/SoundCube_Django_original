@@ -1,0 +1,481 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+	<div class="home-show-playlist user_playlists" style="color: #fff;margin-bottom: 80px; padding: 10px;">
+		{% if playlist.userplaylists.exists %}
+		<div class="playlist-header" style="display: flex;">
+			<div class="playlist-img">
+				<img src="{{playlist.playlist_img.url}}" width="300" height="300" style="border-radius: 5px;">
+				
+				{% if playlist.user == user %}
+					<i class="fas fa-pencil-alt fa-4x" style="color: #fff;margin-top: 12vh;" data-toggle="modal" data-target="#exampleModal-picture"></i>
+
+					<div class="modal fade" id="exampleModal-picture" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+						  <div class="modal-content">
+							
+							<div class="modal-header">
+							  <h5 class="modal-title" id="exampleModalLabel" style="color: #000;">Choose a picture??</h5>
+							  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							  </button>
+							</div>
+							<form method="POST" onsubmit="return check_form_input()">
+								  {% csrf_token %}
+									<div class="modal-body">
+										<label id="error_display" style="color: #000;font-weight: bold;font-size: 21px;margin-bottom: 15px;display: none;">No file chosen.The Field can not be <b style='color:red;'>Empty!</b></label>
+									  <div class="form-group" style="color: #000;">
+										  <input type="file" id="file_input" name="playlist_img" accept="image/*" class=" form-control-file" id="id_playlist_img">
+									  </div>     	
+										  
+									</div>
+									<div class="modal-footer">
+										
+										  <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('error_display').style.display = 'none';">Cancel</button>
+										  
+										  <button type="submit" class="btn btn-success btn-sm" id="update">Update</button>
+									  
+									</div>
+									<script type="text/javascript">
+										var update_btn = document.getElementById("update")
+										
+  
+										// if (update_input.value == "") {
+										// 	update_btn.setAttribute("disabled", "off")
+										// } else {
+										// 	update_btn.RemoveAttribute("disabled")
+										// }
+										function check_form_input(){
+											var update_input = document.getElementById("file_input").value;
+											var error_display = document.getElementById("error_display");
+											if (update_input == ""){
+												error_display.style.display = "block";
+												return false;
+											}
+										}
+									</script>
+							</form>
+							
+						<!-- --------------------  -->
+						  </div>
+						</div>
+					  </div>
+				{% else %}
+
+				{% endif %}
+					
+				
+			</div>
+			
+			<div class="playlist-header-content">
+				<h2>{{playlist.name}}</h2><br>
+				{% if user.is_authenticated %}
+					{% if user.username == playlist.user.username %}
+						<p class="featuring" style="color: #717171; font-size: 25px;">Inspired by <a href="{% url 'profile' %}" class="show_profile">{{playlist.user.username}}</a></p><br>
+					{% else %}
+						<p class="featuring" style="color: #717171; font-size: 25px;">Inspired by <label href="{% url 'profile' %}" style="color: #fff;text-decoration: none;">{{playlist.user.username}}</label></p><br>
+					{% endif %}
+				{% endif %}
+				<h3>Discover new, popular music similar to the artists you've been listening to lately</h3>
+				<p style=" font-size: 25px; margin-top: 20px;font-family: 'Pattaya';">Created on: <label style="color: #717171;font-family: 'Pattaya';">{{playlist.date_created|date:"F d, Y"}}</label></p>
+				<p style="color: #717171; font-size: 25px; margin-top: 20px;font-family: 'Pattaya';" id="playlist_songs_length"></p>
+				<!-- <form action="" method="POST">
+					{% csrf_token %}
+					
+					{{p_form}}
+					<button type="submit" class="btn btn-success" >Save</button>
+				</form> -->
+			</div>
+
+			
+		</div>
+		<button class="playlist-songs" id="playlist-songs" style="" onclick='
+			queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.user.name}}"}
+
+			{% for plt in playlist.userplaylists.all %}
+		        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
+
+		    {% endfor %}
+			playMusic(0);
+			// console.log(musicData)
+			'
+
+		><i class="far fa-play-circle fa-1x"></i> Listen</button>
+		<button class="user_playlists_ellpsis" id="playlist-songs" style="border: none;">
+			<div class="btn-group">
+			    <div class="btn-group">
+				  <i class="fas fa-ellipsis-h fa-2x" data-toggle="dropdown" style="cursor: pointer;"></i>
+			      <div class="dropdown-menu" style="background: #333;">
+			      	<a class="dropdown-item" href="#" style="color: #fff;">Make Collaborative</a>
+			      	<a class="dropdown-item" href="#" style="color: #fff;">Edit Playlist</a>
+			      	<a class="dropdown-item" href="#" style="color: #fff;">Download</a>
+			      	<a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-{{playlist.id}}">Delete Playlist</a>
+			        <div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="#" style="color: #fff;">Share</a>
+			      </div>
+				</div>
+			</div>
+		</button>
+		<!-- Split dropup button -->
+		<div class="modal fade" id="exampleModal-{{playlist.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel" style="color: #000;"><b>{{user.username}}'s</b> - Playlist</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <div class="sidebar-data">
+	              <div class="modal-body-data">
+	                   <h5 style="color: #717171;margin-left: 20px;">Are you sure you want to remove playlist (<b style="color: red;">{{playlist.name}}</b>) from your library </h5>
+	              </div> 
+	            </div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+		        <form action="{% url 'delete_user_playlist' playlist.id %}" method="post" enctype="multipart/form-data">
+		        	
+	                {% csrf_token %}
+	                <button type="submit" class="btn btn-danger">Remove</button>
+	            </form> 
+		        
+		      </div>
+		    </div>
+		  </div>
+		</div>
+			
+		
+			<table class="table mt-3" style="margin-bottom: 100px;color: #fff;width: 100%;">
+				<thead>
+					<th>#</th>
+					<!-- <th>Playlist Image</th> -->
+					<th>Track</th>
+					<th>Lyrics</th>
+					<th>Album</th>
+					<th>Like</th>
+					<th>Total Likes</th>
+					<!-- <th>Favorites</th> -->
+					<th>Length</th>
+					<th>More</th>
+					</thead>
+				<tbody>
+
+					{% for plt in playlist.userplaylists.all %}
+					<tr>
+						<td><img src="{{plt.song_model.song_img.url}}" class="song_img" width="50" height="50">
+							<i class="fa fa-play-circle fa-3x " id="{{plt.song_model.id}}" onclick='
+
+						
+						queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.user.name}}"}
+
+						{% for plt in playlist.userplaylists.all %}
+					        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
+
+					    {% endfor %}
+
+		
+						playMusic({{forloop.counter0}});
+						// console.log(musicData)
+
+
+						' id='{{plt.song_model.id}}'></i>
+					</td>
+						<!-- 
+						// if(musicData.id == "{{plt.id}}")
+							
+						// 		if (player.currentTime > 0) {
+						// 			if (musicData !== {}){
+						// 				  if (isPlaying == false){
+						// 				  isPlaying = true
+										  
+						// 				  player.play();
+										  
+						// 				  pausing.className = "fas fa-pause-circle fa-3x";
+
+						// 				}else{
+						// 				  isPlaying = false
+						// 				  player.pause();
+										  
+						// 				  pausing.className = "fa fa-play-circle fa-3x";
+						// 				}
+						// 				}
+						// 		} else {
+						// 			add_data("{{plt.song_model.id}}","{{plt.song_model.song_name}}","{{plt.song_model.song_path.url}}", "{{plt.song_model.song_auther}}",  `{{plt.song_model.lyrics}}`);
+						// 		}
+						// 	else{
+						// 		add_data("{{plt.song_model.id}}","{{plt.song_model.song_name}}","{{plt.song_model.song_path.url}}", "{{plt.song_model.song_auther}}",  `{{plt.song_model.lyrics}}`);
+						// 	} -->
+						<td>{{plt.song_model.song_name}}</td>
+						{% if plt.song_model.lyrics %}
+							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
+							
+
+							queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.user.name}}"}
+
+							{% for plt in playlist.userplaylists.all %}
+						        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
+
+						    {% endfor %}
+
+		
+						playMusic({{forloop.counter0}});
+						showLyrics(`{{plt.song_model.lyrics}}`,"{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
+						// console.log(musicData)
+
+							'
+							 width="50" height="50"></td>
+						{% else %}
+							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='showLyrics(`<center style="margin-top:100px;">No lyrics found for this song.<i class="far fa-grin-beam-sweat"></i><i class="far fa-frown ml-1"></i><center/>`,"{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");add_data("{{plt.song_model.id}}","{{plt.song_model.song_name}}","{{plt.song_model.song_path.url}}", "{{plt.song_model.song_auther}}");' width="50" height="50"></td>
+						{% endif %}
+						<td>Rollin</td>
+						<td>
+							<form action="{% url 'like_song' plt.song_model.id %}" method="post">
+				        		{% csrf_token %}
+					        	{% if liked %}
+					        			<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button><!--  <small>{{ total_likes }} Likes</small> -->
+
+					        	{% else %}
+					        		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button><!--  <small> {{ total_likes }} Likes</small> -->
+					        	{% endif %}
+
+							</form>
+						</td>
+						<td>{{plt.song_model.total_likes}}</td>
+						<td>3.12</td>
+						<td>
+							<div class="btn-group">
+							    <div class="btn-group">
+								  <i class="fas fa-ellipsis-h fa-2x" data-toggle="dropdown" style="cursor: pointer;"></i>
+							      <div class="dropdown-menu" style="background: #333;">
+							        <a class="dropdown-item" href="#"  style="color: #fff;">Play next</a>
+							        {% if is_favorite %}
+							        	<a href="{% url 'favorite_song' plt.song_model.id %}" class="dropdown-item" name="song_favorite" style="color: #fff;">Remove from Favorites</a>
+							        {% else %}
+							        	<a href="{% url 'favorite_song' plt.song_model.id %}" class="dropdown-item" name="song_favorite" style="color: #fff;">Add To Favorites</a>
+							        {% endif %}
+							        <a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-{{plt.song_model.id}}">Add to playlist</a>
+							        <a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-{{plt.song_model.reference_name}}">Remove from playlist</a>
+							        <div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="#" style="color: #fff;">Share</a>
+							      </div>
+								</div>
+							</div>
+						</td>
+						<!-- Default dropup button -->
+
+					</tr>
+					<!-- adding a song to a playlist -->
+					<div class="modal fade" id="exampleModal-{{plt.song_model.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						  <div class="modal-dialog modal-dialog-scrollable" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="exampleModalLabel" style="color: #000;"><b>{{user.username}}'s</b> - Playlists</h5>
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body">
+						        <div class="sidebar-data">
+					              {% if user.user_created_playlists.exists %}
+					              <div class="modal-body-data">
+					                {% for playlist in user.user_created_playlists.all %}
+					                <form action="{% url 'add_song_to_playlist' playlist=playlist.id id=plt.song_model.id  %}" method="post" enctype="multipart/form-data">
+					                	{% csrf_token %}
+					                	<div class="song_container">
+						                  	<button type="submit" name="submit_button">
+							                  	<img src="{{ playlist.playlist_img.url }}" width="60" height="60" name="song_img">
+							                    <p class="plt_name" name="song_name">{{playlist.name}}</p>
+							                  </button>
+						                  </div>
+					                	}
+					                </form>    
+					                {% endfor %}
+					                
+					              </div> 
+					              {% else %} 
+
+					              {% endif %}
+					            </div>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						        <a href="{% url 'create_playlist' user.id %}">
+						        <button type="submit" class="btn btn-success btn-sm">Create new playlist</button></a>
+						        <!-- <form action="" method="POST">
+						        	<button type="submit" class="btn btn-success btn-sm">Save</button>
+						        </form> -->
+						        
+						      </div>
+						    </div>
+						  </div>
+						</div>
+
+						<!-- removing a song from a playlist -->
+						<div class="modal fade" id="exampleModal-{{plt.song_model.reference_name}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						  <div class="modal-dialog" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="exampleModalLabel" style="color: #000;"><b>{{user.username}}'s</b> - Playlists</h5>
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body">
+						        <div class="sidebar-data">
+					              <div class="modal-body-data">
+					                   <h5 style="color: #717171;margin-left: 20px;">Are you sure you want to remove (<b style="color: red;">{{plt.song_model.song_name}}</b> <b style="color: #000;">by</b> <b style="color: red;">{{plt.song_model.song_auther}}</b>) from playlist <b style="color: red;">"{{playlist.name}}"</b></h5>
+					              </div> 
+					            </div>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						        <form action="{% url 'remove_song_from_playlist' playlist=playlist.id id=plt.song_model.id  %}" method="post" enctype="multipart/form-data">
+						        	<!-- {% url 'remove_song_from_playlist' playlist=playlist.id id=plt.song_model.id  %} -->
+					                {% csrf_token %}
+					                <button type="submit" class="btn btn-danger">Remove</button>
+					            </form> 
+						        
+						      </div>
+						    </div>
+						  </div>
+						</div>
+					{% endfor %}
+				</tbody>
+			</table>
+		
+			{% else %}
+			<div class="playlist-header" style="display: flex;">
+				<div class="playlist-img">
+					<i class="fas fa-pencil-alt fa-4x" style="color: #fff;margin-top: 12vh;" data-toggle="modal" data-target="#exampleModal-picture"></i>
+					<img src="{{playlist.playlist_img.url}}" width="300" height="300" style="border-radius: 5px;">
+
+					<div class="modal fade" id="exampleModal-picture" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel" style="color: #000;">Choose a picture??</h5>
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					          <span aria-hidden="true">&times;</span>
+					        </button>
+					      </div>
+					      <form method="POST" onsubmit="return check_form_input()">
+					        	{% csrf_token %}
+							      <div class="modal-body">
+							      	<label id="error_display" style="color: #000;font-weight: bold;font-size: 21px;margin-bottom: 15px;display: none;">No file chosen.The Field can not be <b style='color:red;'>Empty!</b></label>
+					        		<div class="form-group" style="color: #000;">
+					        			<input type="file" id="file_input" name="playlist_img" accept="image/*" class=" form-control-file" id="id_playlist_img">
+					        		</div>     	
+							        	
+							      </div>
+							      <div class="modal-footer">
+							      	
+								        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('error_display').style.display = 'none';">Cancel</button>
+								        
+								        <button type="submit" class="btn btn-success btn-sm" id="update">Update</button>
+							        
+							      </div>
+							      <script type="text/javascript">
+							      	var update_btn = document.getElementById("update")
+							      	
+
+							      	// if (update_input.value == "") {
+							      	// 	update_btn.setAttribute("disabled", "off")
+							      	// } else {
+							      	// 	update_btn.RemoveAttribute("disabled")
+							      	// }
+							      	function check_form_input(){
+							      		var update_input = document.getElementById("file_input").value;
+							      		var error_display = document.getElementById("error_display");
+							      		if (update_input == ""){
+							      			error_display.style.display = "block";
+							      			return false;
+							      		}
+							      	}
+							      </script>
+					      </form>
+					      
+				      <!-- --------------------  -->
+					    </div>
+					  </div>
+					</div>
+				</div>
+				
+				<div class="playlist-header-content">
+					<h2>{{playlist.name}}</h2><br>
+
+					{% if user.is_authenticated %}
+						{% if user.username == playlist.user.username %}
+							<p class="featuring" style="color: #717171; font-size: 25px;">Inspired by <a href="{% url 'profile' %}" class="show_profile">{{playlist.user.username}}</a></p><br>
+						{% else %}
+							<p class="featuring" style="color: #717171; font-size: 25px;">Inspired by <label href="{% url 'profile' %}" style="color: #fff;text-decoration: none;">{{playlist.user.username}}</label></p><br>
+						{% endif %}
+					{% endif %}
+					<h3>Discover new, popular music similar to the artists you've been listening to lately</h3>
+					<p style=" font-size: 25px; margin-top: 20px;font-family: 'Pattaya';">Created on: <label style="color: #717171;font-family: 'Pattaya';">{{playlist.date_created|date:"F d, Y"}}</label></p>
+				</div>
+
+				
+			</div>
+			<a href="{% url 'home' %}"><button class="playlist-songs" id="playlist-songs" disabled>Get Songs</button></a>
+			<button class="user_playlists_ellpsis" id="playlist-songs" style="border: none;">
+				<div class="btn-group">
+				    <div class="btn-group">
+					  <i class="fas fa-ellipsis-h fa-2x" data-toggle="dropdown" style="cursor: pointer;"></i>
+				      <div class="dropdown-menu" style="background: #333;">
+				      	<a class="dropdown-item" href="#" style="color: #fff;">Make Collaborative</a>
+				      	<a class="dropdown-item" href="#" style="color: #fff;">Edit Playlist</a>
+				      	<a class="dropdown-item" href="#" style="color: #fff;">Download</a>
+				      	<a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-{{playlist.id}}">Delete Playlist</a>
+				        <div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#" style="color: #fff;">Share</a>
+				      </div>
+					</div>
+				</div>
+			</button>
+			<!-- Split dropup button -->
+			<div class="modal fade" id="exampleModal-{{playlist.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel" style="color: #000;"><b>{{user.username}}'s</b> - Playlist</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        <div class="sidebar-data">
+		              <div class="modal-body-data">
+		                   <h5 style="color: #717171;margin-left: 20px;">Are you sure you want to remove playlist (<b style="color: red;">{{playlist.name}}</b>) from your library </h5>
+		              </div> 
+		            </div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+			        <form action="{% url 'delete_user_playlist' playlist.id %}" method="post" enctype="multipart/form-data">
+			        	
+		                {% csrf_token %}
+		                <button type="submit" class="btn btn-danger">Remove</button>
+		            </form> 
+			        
+			      </div>
+			    </div>
+			  </div>
+			</div>
+			<center style="display: block;">
+				<div>
+					<h3 style="margin-top: 10px;margin-bottom: 10px;">This playlist is currently empty.</h3>
+					<h6>Find songs from our new releases from your favorite Artists and others.</h6>
+					<br>
+					<a href="{% url 'discover' %}" class="btn btn-outline-success">Discover</a>
+				</div>
+				
+			</center>
+		
+			{% endif %}
+		
+	</div>
+{% endblock %}

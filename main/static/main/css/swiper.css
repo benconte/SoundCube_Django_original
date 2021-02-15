@@ -1,0 +1,39 @@
+.swiper-container {
+  margin-left: none;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+  width: 98%;
+}
+.swiper-container-no-flexbox .swiper-slide {
+  float: left;
+}
+
+.swiper-wrapper {
+  position: relative;
+  width: 60%;
+  height: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  -o-transition-property: -o-transform;
+  -ms-transition-property: -ms-transform;
+  transition-property: transform;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.swiper-slide {
+  -webkit-flex-shrink: 0;
+  -ms-flex: 0 0 auto;
+  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+

@@ -1,0 +1,254 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+	<div class="tabs-holder">
+		<button class="tablink" onclick="openPage('Discover', this, '#1DB954')" id="defaultOpen">Discover</button>
+		<button class="tablink" onclick="openPage('Podcasts', this, '#1DB954')">Podcasts</button>
+		<button class="tablink" onclick="openPage('New Releases', this, '#1DB954')">New Releases</button>
+		<button class="tablink" onclick="openPage('Genre & Moods', this, '#1DB954')" >Genre & Moods</button>
+
+		<!-- First tab -->
+		<div id="Discover" class="tabcontent">
+			<center><h3>Discover</h3></center>
+		  <div class="">
+			<div class="carousel-field" style="padding-right: 20px;">
+			      <div class="carousel-header">
+						<h3>This week's specials</h3>
+						<div class="carousel-icons">
+							<div class="leftdirection recent-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
+							<div class="nextdirection recent-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
+						</div>
+
+					</div>
+			      <div class="all_slides">
+			        <div class="recentslider"><!-- change the slide name also the slide icons -->
+			          <div class="swiper-container">
+			            <div class="swiper-wrapper">
+			              {% for plt in discover_playlist %}
+			                <div class="swiper-slide">
+			                	<button class="playlist-button" type="button" onclick='
+
+			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
+
+								    {% for plts in plt.homepageplaylist.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
+								    {% endfor %}
+								     playMusic({{forloop.counter0}})
+			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+								
+			                  <a href="{% url 'discover_playlists' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
+			                </div>
+			              {% endfor %}
+
+			              <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+			            </div>
+			            
+			          </div>
+
+
+			        </div>
+			      </div>
+			  </div>
+
+			  <div class="carousel-field">
+			      <div class="carousel-header">
+						<h3>Popular Playlist</h3>
+						<div class="carousel-icons">
+							<div class="leftdirection second-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
+							<div class="nextdirection second-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
+						</div>
+
+					</div>
+			      <div class="all_slides">
+			        <div class="secondslider"><!-- change the slide name also the slide icons -->
+			          <div class="swiper-container">
+			            <div class="swiper-wrapper">
+			              {% for plt in playlist %}
+			                <div class="swiper-slide">
+			                	<button class="playlist-button" type="button" onclick='
+
+			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
+
+								    {% for plts in plt.homepageplaylist.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
+								    {% endfor %}
+								    playMusic({{forloop.counter0}})
+			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+								
+			                  <a href="{% url 'discover_playlists' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
+			                </div>
+			              {% endfor %}
+
+			              <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+			            </div>
+			            
+			          </div>
+
+
+			        </div>
+			      </div>
+			  </div>
+			  <div class="carousel-field" style="padding-right: 20px;">
+			      <div class="carousel-header">
+						<h3>This week's specials</h3>
+						<div class="carousel-icons">
+							<div class="leftdirection third-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
+							<div class="nextdirection third-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
+						</div>
+
+					</div>
+			      <div class="all_slides">
+			        <div class="thirdslider"><!-- change the slide name also the slide icons -->
+			          <div class="swiper-container">
+			            <div class="swiper-wrapper">
+			              {% for plt in discover_playlist %}
+			                <div class="swiper-slide">
+			                	<button class="playlist-button" type="button" onclick='
+
+			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
+
+								    {% for plts in plt.homepageplaylist.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
+								    {% endfor %}
+								     playMusic({{forloop.counter0}})
+			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+					
+			                  <a href="{% url 'discover_playlists' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
+			                </div>
+			              {% endfor %}
+
+			              <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+			            </div>
+			            
+			          </div>
+
+
+			        </div>
+			      </div>
+			  </div>
+
+			  <div class="carousel-field">
+			      <div class="carousel-header">
+						<h3>Popular Playlist</h3>
+						<div class="carousel-icons">
+							<div class="leftdirection forth-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
+							<div class="nextdirection forth-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
+						</div>
+
+					</div>
+			      <div class="all_slides">
+			        <div class="forthslider"><!-- change the slide name also the slide icons -->
+			          <div class="swiper-container">
+			            <div class="swiper-wrapper">
+			              {% for plt in playlist %}
+			                <div class="swiper-slide">
+			                	<button class="playlist-button" type="button" onclick='
+
+			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
+
+								    {% for plts in plt.homepageplaylist.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
+								    {% endfor %}
+								    playMusic({{forloop.counter0}})
+			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+								
+			                  <a href="{% url 'discover_playlists' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
+			                </div>
+			              {% endfor %}
+
+			              <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+			            </div>
+			            
+			          </div>
+
+
+			        </div>
+			      </div>
+			  </div>
+
+
+		    
+			
+			
+			
+		</div>
+		</div>
+		<!-- Second tab -->
+		<div id="Podcasts" class="tabcontent">
+		  <h3>Podcasts</h3>
+		  <p>Discover and listen to Podcasts!</p>
+		</div>
+		<!-- Third tab -->
+		<div id="New Releases" class="tabcontent">
+		  <h3>New Releases</h3>
+		  <p>Discover new songs from your favorite artists and more.</p>
+		</div>
+		<!-- Fourth tab -->
+		<div id="Genre & Moods" class="tabcontent">
+		  <h3>Genre & Moods</h3>
+		  <div class="genre-moods">
+				{% for cat in category %}
+				
+					<a href="#" class="genre-moods-boxes"><!-- style="background: {{cat.category_color}}" -->
+						<p class="category_img_name">{{ cat.category }}</p>
+						<img src="{{cat.category_img.url}}" class="category_img" style="width: 100%;
+  						height: 200px;" alt="{{ cat.category }}">
+  						
+					</a>
+				{% endfor %}
+
+		   </div>
+
+		   
+		   <div class="category-field mt-4">
+				<div class="category-header">
+					<h3>Popular Genres</h3>
+					<div class="category-icons">
+						<a href="{% url 'discover' %}">See more &#8594</a>
+					</div>
+				</div>
+				
+				{% for cat in category %}
+					<button class="category-boxes" style="background: {{cat.category_color}}">
+						{{ cat.category }}
+					</button>
+				{% endfor %}
+
+			</div>
+		  
+
+
+		</div>
+	</div>
+	<script type="text/javascript">
+		function openPage(pageName, elmnt, color) {
+  // Hide all elements with class="tabcontent" by default */
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Remove the borderBottom of all tablinks/buttons
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.borderBottom = "";
+  }
+
+  // Show the specific tab content
+  document.getElementById(pageName).style.display = "block";
+
+  // Add the specific color to the button used to open the tab content
+  elmnt.style.borderBottom = '3px solid ' + color;
+  elmnt.style.color = '#fff';
+}
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+	</script>
+{% endblock %}

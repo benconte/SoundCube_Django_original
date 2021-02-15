@@ -1,0 +1,100 @@
+body{
+	background: #000;
+	/*background-image: url("{% static 'register/cheers-204742_1920.jpg' %}");
+	background-size: cover;
+	background-repeat: no-repeat;
+	height: 100%;
+	color: #fff;*/
+}
+.box{
+	width: 90%;
+	height: 80vh;
+	background-color: #fff;
+	align-items: center;
+    margin: 80px 80px;
+}
+
+.box .left{
+	width: 50%;
+	height: 80vh;
+	float: left;
+	/*background-image: url("/static/register/img/login_background.jpg");*/
+}
+
+.box .left .left-img{
+	width: 100%;
+	height: 100%;
+
+}
+.box .right{
+	width: 50%;
+	height: 80vh;
+	float: right;
+	background-color: #fff;
+}
+
+
+.box .right .header{
+	width: 100%;
+	height: 100px;
+	border-bottom: 1px solid #717171;
+}
+
+.box .right .header label{
+    color: #111;
+    letter-spacing: 2px;
+    font-size: 40px;
+    padding: 0 50px;
+    font-weight: 500;
+    margin-left: 100px;
+    margin-top: 10px;
+}
+
+.box .right .header img{
+    /*margin-top: 10px;*/
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+
+.box .right .header span{
+    color: #1DB954;
+}
+
+.box .right form{
+	padding: 20px;
+}
+
+.box .right form .submit{
+  background-color: #1DB954;
+  border-radius: 30px;
+  width: 80%;
+  height: 35px;
+  margin: 30px;
+  margin-bottom: 50px;
+  border: none;
+  outline:none;
+
+}
+
+.box .right form .submit:focus{
+  outline: none;
+}
+
+.box .right form .submit:hover{
+  opacity: 0.9;
+}
+
+.terms{
+	margin-left: 25%;
+}
+
+.policy{
+	color: #1DB954;
+	font-weight: bold;
+}
+
+.policy:hover{
+	color: #1DB954;
+
+}

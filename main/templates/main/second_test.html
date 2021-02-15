@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	  <meta name="description" content="">
+	  <meta name="author" content="">
+
+	  {% if title %}
+			<title>{{ title }}</title>
+		{%else%}
+			<title>Display</title>
+		{% endif %}
+	<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"> 
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	
+	<style type="text/css">
+		.card-body{
+
+		}
+
+		.card{
+			margin-right: 20px;
+			padding-right: 10px;
+			margin-bottom: 20px;
+
+		}
+		.song{
+			width: 250px;
+		}
+
+		.own{
+	width: 100%;
+	height: 90px;
+	min-width: 50%;
+	min-height: 10px;
+	background-color: #F3F4F5;
+	margin-top: 50%;
+	display: flex;
+	
+	border-top: 1px solid grey;
+	border-bottom: none;
+	border-left: none;
+	border-right: none;
+	position: fixed;
+	bottom: 0;
+
+}
+		.prev-track{
+			margin-right: 20px;
+			margin-left: 30px;
+		}
+
+		.buttons { 
+			display: flex; 
+			flex-direction: row; 
+			align-items: center; 
+		}
+		.playpause-track{
+			margin-right: 20px;
+		} 
+
+.slider_container { 
+	width: 50%; 
+	
+	display: flex; 
+	justify-content: center; 
+	align-items: center; 
+	margin-left: 50px;
+}
+
+/* Modify the appearance of the slider thumb */
+.seek_slider::-webkit-slider-thumb, 
+.volume_slider::-webkit-slider-thumb { 
+	-webkit-appearance: none; 
+	-moz-appearance: none; 
+	appearance: none; 
+	width: 5px; 
+	height: 1px; 
+	background: white; 
+	cursor: pointer; 
+	border-radius: 50%; 
+} 
+
+/* Change the opacity when mouse is hovered */
+.seek_slider:hover, 
+.volume_slider:hover { 
+	opacity: 1.0; 
+} 
+
+.seek_slider { 
+	width: 20px;
+	height: 5px;
+} 
+
+.volume_slider { 
+	width: 60%; 
+} 
+
+.current-time, 
+.total-duration { 
+padding: 10px; 
+} 
+
+i.fa-volume-down, 
+i.fa-volume-up { 
+padding: 10px; 
+} 
+
+/* Change the mouse cursor to a pointer 
+when hovered over */
+i.fa-play-circle, 
+i.fa-pause-circle, 
+i.fa-step-forward, 
+i.fa-step-backward { 
+cursor: pointer; 
+} 
+
+
+
+.re-play{
+	margin-left: 15px;
+	font-size: 30px;
+}
+.re-play:hover{
+	color: red;
+	cursor: pointer;
+}
+
+.container .row{
+	margin-bottom: 90px;
+}
+
+.card-img-top:hover{
+
+cursor: pointer;
+}
+
+.card-img-top:hover{
+	/*width: 270px;*/
+	padding: 10px;
+}
+#progress{
+	width: 830px;
+	height: 5px;
+
+}
+
+#progress:hover{
+	height: 50px;
+}
+
+#volumeBar{
+	width: 150px;
+	height: 5px;
+}
+
+#volumeBar:hover{
+	height: 50px;
+}
+
+.song-name{
+	position: absolute;
+	top: 5px;
+
+	display: inline-flex;
+	font-weight: bold;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.add{
+	margin-right: 10px;
+	border: 1px solid grey;
+	box-shadow: none;
+}
+.queue{
+	margin-right: 10px;
+	border: 1px solid grey;
+	box-shadow: none;
+}
+.own-right-icons{
+	margin: 20px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-around;
+}
+
+
+
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<h2>Audio Page</h2><a href="{% url 'home' %}" class="btn btn-outline-primary" style="margin-bottom: 20px;">Home Page</a><a href="{% url 'home' %}" class="btn btn-outline-primary" style="margin-bottom: 20px; margin-left: 10px;">Display Page</a><br>
+		<div class="row">
+
+			
+<!-- 			<div class="song">
+				<label>{{song.name}}</label>
+				<audio src="{{song.song}}" controls="on" >not allowed</audio>
+			</div> -->
+			{% for song in playlist.playlist.all %}
+			<div class="card" style="width: 17rem; border: none; margin-right: 20px;"><!-- add_data('{{song.id}}','{{song.name}}' ,'{{song.song}}') -->
+			  <img src="{{song.song_img.url}}" width="300" height="300" id="img"  class="card-img-top" alt="..." onclick="add_data('{{song.id}}','{{song.song_name}}' ,'{{song.song_path.url}}')">
+			  <div class="card-body">
+			    <h5 class="card-text" id="song" ><a href="{{song.song_path}}" style="color: black; text-decoration: none; cursor: pointer;">{{song.song_name}}</a></h5>
+			    
+
+			  </div>
+			</div>
+
+			{% endfor %}
+		</div>
+
+		
+	</div>
+	
+
+	<div id="main" >
+		<div>
+
+			<div class="row">
+				<div class="own" id="own">
+						<div class="buttons"> 
+							<div class="prev-track" onclick="prevPlay()"> 
+								<i class="fa fa-step-backward fa-2x"></i> 
+							</div> 
+							<div class="playpause-track" onclick="play()"> 
+								<i class="fa fa-play-circle fa-3x" id='pause'></i> 
+							</div>
+							<div class="next-track" onclick="nextPlay()"> 
+								<i class="fa fa-step-forward fa-2x"></i> 
+							</div> 
+						</div>
+						
+						<div class="slider_container"> 
+							<label class="song-name" id="playing_song_name">Song</label>
+							<div class="current-time" id="ctview">00:00</div> 
+							<input type="range" min="1" max="100"
+								value="0" class="seek_slider" id="progress" oninput="changeProgressBar()"> 
+							<div class="total-duration" id="ttview">00:00</div> 
+
+							<div class="re-play" ><i class="fas fa-retweet" id="re_play" onclick="repeat()" ></i></div>
+						</div>
+
+						<div class="slider_container"> 
+							<i class="fa fa-volume-down" onclick="volumeDown()"></i> 
+							<input type="range" min="0" max="100"
+								value="10"  class="volume_slider" id="volumeBar" oninput="player.volume = this.value/100"> 
+						<i class="fa fa-volume-up" onclick="volumeUp()"></i> 
+					</div>
+					<div class="own-right-icons">
+						<button class="add">add</button>
+						<button class="queue"><i class="fas fa-bars"></i></button>
+					</div>  
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function() { startplayer(); }, false);
+		var player = new Audio; //document.getElementById('music_player');
+		var isPlaying = false;
+		var re_playying = document.getElementById("re_play");
+		var own = document.getElementById('own');
+		// var main = document.getElementById('main');
+		var volumeBar = document.getElementById('volumeBar');
+		let index = 1;
+		var pausing = document.getElementById('pause');
+		var song_path = 'static/uploads/Syn Cole - Feel Good - (Music Video).mp3';
+		let repeatMusic = false;
+		var rep_on = false;
+		var img = document.getElementById('img');
+		var son = document.getElementById('song');
+		var playing_song_name = document.getElementById("playing_song_name");
+
+
+
+
+		const musicData = new Array();
+		
+
+		player.type = 'audio/mpeg';
+				 
+		// if (musicData == {}){
+		// 	own.style.display = none;
+		// }
+
+
+
+		function startplayer() 
+		{
+			 
+			 player.controls = false;
+		}
+
+		 function re_play(){
+		 	if (rep_on == false){
+		 		rep_on = true;
+		 		re_playying.style.color = 'red';
+		 	}
+		 	else{
+		 		rep_on = false;
+		 		re_playying.style.color = none;
+		 	}
+		 	
+		 }
+
+		 const progress = document.getElementById("progress");
+		function play(){
+			if (musicData !== {}){
+				if (isPlaying == false){
+				isPlaying = true
+				
+			 	player.play();
+			 	
+			 	pausing.className = "fas fa-pause-circle fa-4x";
+
+			 	
+
+
+			}else{
+				isPlaying = false
+			 	player.pause();
+			 	
+				pausing.className = "fa fa-play-circle fa-4x";
+			}
+			}
+			
+
+		}
+
+
+
+		const playMusic = async (i) => {
+			  
+			  // let data = musicData.find(m => m.id === i) || musicData[1];
+			  
+			  	  player.src = musicData.src;
+				  await player.load();
+				  player.play();
+
+				  isPlaying = true
+			 	
+			 	  pausing.className = "fas fa-pause-circle fa-3x"
+
+			  
+			}
+
+			function add_data(id, name, song) {
+				musicData['id'] = [id];
+				musicData['name']=[name];
+				musicData['src'] = [song];
+				// musicData.push(musicData['src'] = [song]);
+				
+
+				
+				// console.log(id+ ', ' + name+', '+ song);
+				console.log(musicData)
+				playMusic();
+				playing_song_name.innerHTML = name;
+				document.getElementById('own').style.display = 'flex';
+				
+			}
+	
+
+		const nextPlay = () => {
+		  index++;
+		  if (index > musicData.length) {
+		   index = 1;
+		  }
+		  playMusic(index);
+		  // if (isPlaying == false){
+		  // 	isPlaying = true;
+		  // 	pausing.className = "fas fa-pause-circle fa-4x"
+
+		  // }
+		  // else{
+		  // 	isPlaying = false;
+		  // 	pausing.className = "fas fa-play-circle fa-4x"
+		  // }
+		 }
+
+		 const prevPlay = () => {
+		  index--;
+		  if (index <= 0) {
+		  index = musicData.length;
+		  }
+		  playMusic(index);
+		  // if (isPlaying == false){
+		  // 	isPlaying = true;
+		  // 	pausing.className = "fas fa-pause-circle fa-4x"
+
+		  // }
+		  // else{
+		  // 	isPlaying = false;
+		  // 	pausing.className = "fas fa-play-circle fa-4x"
+		  // }
+		 }
+
+
+
+		  // eventListners 
+		 player.addEventListener("ended", () => {
+		  nextPlay();
+		 })
+
+		const volumeDown = () => {
+		  volumeBar.value = Number(volumeBar.value) - 20
+		  player.volume = volumeBar.value / 100
+		 }
+		 const volumeUp = () => {
+		  volumeBar.value = Number(volumeBar.value) + 20
+		  player.volume = volumeBar.value / 100
+		 }
+
+		 const repeat = e => {
+		  repeatMusic = !repeatMusic;
+		  player.loop = repeatMusic;
+
+		  if (rep_on == false){
+		 		rep_on = true;
+		 		re_playying.style.color = 'red';
+		 	}
+		 	else{
+		 		rep_on = false;
+		 		re_playying.style.color = 'black';
+		 	}
+		 }
+
+		player.onloadeddata = () =>  {
+		 progress.max = player.duration
+		 const ds = parseInt(player.duration % 60)
+		 const dm = parseInt((player.duration / 60) % 60)
+		 ttview.textContent = dm + ':' + ds;
+		 }
+		 player.ontimeupdate =  () =>  { 
+		   progress.value = player.currentTime 
+		 }
+		 player.addEventListener('timeupdate', () => {
+		 //progress.value = player.currentTime;
+		 var cs = parseInt(player.currentTime % 60)
+		 var cm = parseInt((player.currentTime / 60) % 60)
+		  ctview.textContent = cm + ':' + cs;
+		 }, false);
+
+		
+		const changeProgressBar = () => { 
+		   player.currentTime = progress.value;
+		 }
+
+		 var vol = document.getElementById("change_vol");
+		 const changeVolume = () => { 
+		   player.volume = vol.value;
+		 }
+
+		function stop_aud() 
+		{
+			 player.pause();
+			 player.currentTime = 0;
+		}
+		function change_vol()
+		{
+			 
+			  if (player.volume < 1) {
+                player.volume += 0.1;
+                console.log(player.volume);
+            } else {
+                player.volume = 1;
+            }
+		}
+	</script>
+
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

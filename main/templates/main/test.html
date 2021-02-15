@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div style="padding: 30px;color: #fff;">
+    <label>no like</label>
+    <i class="far fa-heart fa-2x"></i>
+    <br>
+    <label>Liked</label>
+    <i class="fas fa-heart fa-2x"></i>
+
+  </div>
+{% endblock %}
+
+<!-- {% for plt in playlist.playlist.all %}
+			
+			
+			<p>{{plt.song_model.song_name}}</p>
+			
+		{% endfor %} -->
+
+    {% for plt in playlist.playlist.all %}
+        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
+
+      {% endfor %}

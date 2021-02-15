@@ -1,0 +1,216 @@
+body{
+
+	box-sizing: border-box;
+	background: #222;
+	margin: 0;
+	padding: 0;
+}
+
+.header{
+	width: 100%;
+	height: 85px;
+	background: #333;
+	display: inline-flex;
+}
+
+.header .logo{
+	position: absolute;
+	left: 40px;
+
+}
+
+.header .logo img{
+	float: left;
+	padding: 20px;
+	background: #fff;
+}
+
+.header .logo a{
+	padding: 10px;
+	font-size: 50px;
+	font-family: 'Damion', sans-serif;
+}
+
+.header .logo a .span1{
+	color: #fff;
+}
+
+.header .logo a .span2{
+	color: #1DB954;
+	font-family: 'Damion', 
+	sans-serif; 
+	font-weight: bold;
+}
+
+.header .header-input{
+	width: 100%;
+	height: 100%;
+	background: #333;
+}
+/*{% for art in artists %}*/
+.header .header-input input{
+	margin: 10px 0  0 20%;
+	width: 50%;
+	height: 60px;
+	/*padding: 20px 50% 20px 0;*/
+	border-radius: 8px;
+	background: #333;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px solid #fff;
+	color: #fff;
+	font-size: 15px;
+	text-align: center;
+	padding-right: 20px;
+
+}
+
+.header .header-input input:focus{
+	outline: none;
+	border-bottom: 2px solid #1DB954;
+  	box-shadow: 0 3px 5px #1DB954; 
+}
+
+.header .header-input .search_button{
+	padding: 20px;
+	background: rgba(29, 185, 84, 1);
+	border-radius: 8px;
+	color: #fff;
+}
+
+.header .header-input .search_button:hover{
+	background: rgba(29, 185, 84, 0.7);
+	cursor: pointer;
+}
+
+.header .header-input .search_button:focus{
+	outline: none;
+}
+
+
+.header .header-input .header-back-button{
+	float: right;
+	padding: 20px 40px;
+	color: #fff;
+	text-decoration: none;
+	font-size: 30px;
+	font-family: 'Damion', sans-serif;
+
+}
+
+.header .header-input .header-back-button:hover{
+	text-decoration: underline;
+}
+
+
+.body-header{
+	margin: 50px;
+	color: #fff;
+	text-align: center;
+	
+}
+
+.body-header .alert{
+	color: red;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.body-header .alert b{
+	margin-top: 8px;
+}
+
+.body-header .info{
+	font-size: 35px;
+}
+
+.artist-holder{
+	width: 99%;
+	height: 100%;
+	margin-bottom: 100px;
+
+}
+
+.artist-holder .artist-images{
+	display: inline-block;
+	width: 280px;
+	height: 280px;
+	margin: 20px;
+	/*background: green;*/
+}
+
+.artist-holder .artist-images .img-holder{
+	width: 100%;
+	height: 80%;
+	/*background: red;*/
+	
+}
+
+.artist-holder .artist-images img{
+	/*width: 100%;
+	height: 80%;*/
+	border-radius: 50%;
+	margin-left: 10px;
+}
+
+.artist-holder .artist-images img:hover{
+	cursor: pointer;
+	/*opacity: 0.8;*/
+}
+
+.artist-holder .artist-images .checkbox{
+	border-radius: 40px;
+	position: absolute;
+	margin: 100px 110px;
+	background: #000;
+	color: #1DB954;
+	visibility: hidden;
+	
+	
+}
+
+.artist-holder .artist-images .checkbox:hover{
+	cursor: pointer;
+}
+
+.artist-name{
+	width: 100%;
+	height: 50px;
+	color: #fff;
+	text-align: center;
+	margin-top: 30px;
+
+}
+
+.artist-name label{
+	font-size: 30px;
+	font-family: 'Damion', sans-serif;
+}
+
+.artist-submit-btn{
+	width: 100%;
+	height: 90px;
+	position: fixed;
+	bottom: 0;
+	/*border-top: 1px solid #fff;*/
+	background: #222;
+}
+
+.artist-submit-btn .save-btn{
+	width: 50%;
+	height: 70px;
+	margin: 10px 0 0 430px;
+	background: rgba(29, 185, 84, 1);
+	color: #fff;
+	border-radius: 30px;
+}
+
+.artist-submit-btn .save-btn:focus{
+	outline: none;
+}
+
+.artist-submit-btn .save-btn:hover{
+	background: rgba(29, 185, 84, 0.7);
+	cursor: pointer;
+}

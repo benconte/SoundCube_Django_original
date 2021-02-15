@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+{% block title %} Search {% endblock %}
+{% block content %}
+	<div class="content-section" style="padding: 0 50px; color: #fff;">
+		<h3>Results found: {{ length }} </h3>
+		<div class="row">
+			{% for song in match %}
+              <!-- <div class="row" style="display: inline-block;">
+					<div class="card" style="width:13rem;background: #222;border:none;margin-right: 50px;">
+	                    
+	                      <img src="{{song.song_img.url}}" class="d-block w-100" style="width: 300px; height: 300px;cursor: pointer;" onclick="add_data('{{song.id}}','{{song.song_name}}' ,'{{song.song_path.url}}')" alt="{{song.song_name}}">
+	                   
+	                    
+	                    <div class="card-body">
+					    	<h5 class="card-text" id="plt" ><a href="{% url 'playlist' song.id %}" style="color: #fff; cursor: pointer;" onclick="add_data('{{song.id}}','{{song.song_name}}' ,'{{song.song_path.url}}')">{{song.song_auther}}</a></h5>
+					    
+
+					  </div>
+					  
+					  	<button class="playlist-button" type="submit"><i class="far fa-play-circle fa-3x" style="" id='pause' onclick="add_data('{{song.id}}','{{song.song_name}}' ,'{{song.song_path.url}}')"></i></button>
+					  
+					  
+
+                  </div>
+					
+				</div>	 -->	
+				<div class="swiper-slide">
+                	<button class="playlist-button" type="submit"><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+					<img src="{{song.song_img.url}}" onclick='
+						{% for playlist_plt in match %}
+
+								musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{playlist_plt.song_name}}", img:"{{playlist_plt.song_img.url}}", src:"{{playlist_plt.song_path.url}}", song_auther: "{{playlist_plt.song_auther}}", lyrics:`{{playlist_plt.lyrics}}`}
+
+							{% endfor %}
+							playMusic({{forloop.counter0}})
+
+					' alt="{{song.song_name}}"><h3 class="hometitle" onclick='
+						{% for playlist_plt in match %}
+
+								musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{playlist_plt.song_name}}", img:"{{playlist_plt.song_img.url}}", src:"{{playlist_plt.song_path.url}}", song_auther: "{{playlist_plt.song_auther}}", lyrics:`{{playlist_plt.lyrics}}`}
+
+							{% endfor %}
+							playMusic({{forloop.counter0}})
+					'>{{song.song_name}} - {{song.song_auther}}</h3>
+                </div>
+              
+            
+            {% endfor %}
+		</div>
+	</div>
+{% endblock %}
