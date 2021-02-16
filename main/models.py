@@ -183,7 +183,17 @@ class UserInheritedPlaylists(models.Model):
     playlist = models.ForeignKey(Playlists, on_delete=models.CASCADE, null=True, related_name="userInheritedPlaylists")
 
     def __str__(self):
-        return f"UserInheritedPlaylists('{self.playlist.name}', '{self.playlist.name}', '{self.playlist.playlist_author}')"
+        return f"UserInheritedPlaylists('{self.playlist.name}', '{self.playlist.playlist_author}')"
+
+    def get_absolute_url(self):
+        return reverse('home')
+
+class DiscoverPage_UserInheritedPlaylists(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="discover_userInherited")
+    playlist = models.ForeignKey(HomePagePlaylists, on_delete=models.CASCADE, null=True, related_name="discover_userInheritedPlaylists")
+
+    def __str__(self):
+        return f"DiscoverPage_UserInheritedPlaylists('{self.playlist.name}', '{self.playlist.playlist_author}')"
 
     def get_absolute_url(self):
         return reverse('home')

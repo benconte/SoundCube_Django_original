@@ -9,7 +9,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 from .models import (
 		Playlists, Playlist_songs, Song_Categories, Albums, HomePagePlaylists, HomePagePlaylists_songs, 
-		Artists, UserArtists, UserPlaylists, UserPlaylists_songs, UserInheritedPlaylists, Song_model
+		Artists, UserArtists, UserPlaylists, UserPlaylists_songs, UserInheritedPlaylists, Song_model,
+		DiscoverPage_UserInheritedPlaylists
 		)
 from .forms import CreateUserPlaylists, UserPlaylistsImgUpdate
 import json
@@ -46,10 +47,13 @@ def discover(request):
 	playlist = HomePagePlaylists.objects.all()
 	discover_playlist = HomePagePlaylists.objects.order_by('-date_created')
 	category = Song_Categories.objects.all()
+
+	
 	context = {
 		'category': category,
 		'discover_playlist': discover_playlist,
-		'playlist':playlist
+		'playlist':playlist,
+		
 	}
 	return render(request, 'main/discover.html', context)
 
@@ -103,15 +107,21 @@ def display_playlist_songs(request,id):
 		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
 		for song in stuff:
 			if song.song_model.likes.filter(id=request.user.id).all():
-				liked = True
+				# liked = True
 				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
 				song_liked_list.append(f"{song.song_model.song_name}")
-		print(song_liked_list)
+		
+		# check if playlist exist in user_inherited
+		is_playlist_inherited = False
+
+		if (UserInheritedPlaylists.objects.filter(user=request.user, playlist=playlist)).exists():
+			is_playlist_inherited = True
+		
 
 		context = {
 			'playlist': playlist,
 			'song_liked_list':song_liked_list,
-			'liked': liked,
+			'is_playlist_inherited': is_playlist_inherited,
 
 		}
 		return render(request, 'main/display_playlist.html', context)
@@ -125,7 +135,6 @@ def display_discover_playlist_songs(request,id):
 	if playlist:
 		# first we get the playlist using filter.This will get a specific playlist
 		stuff = HomePagePlaylists_songs.objects.filter(playlist=playlist).all()
-		# liked = False
 		# song_liked_dict = {}
 		# we create an array to hold the liked songs
 		song_liked_list = []
@@ -136,11 +145,16 @@ def display_discover_playlist_songs(request,id):
 
 				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
 				song_liked_list.append(f"{song.song_model.song_name}")
-		print(song_liked_list)
+		
+		is_playlist_inherited = False
+		if (DiscoverPage_UserInheritedPlaylists.objects.filter(user=request.user, playlist=playlist)).exists():
+			is_playlist_inherited = True
+		
 
 		context = {
 			'playlist': playlist,
 			'song_liked_list':song_liked_list,
+			"is_playlist_inherited":is_playlist_inherited,
 
 		}
 		return render(request, 'main/display_discover_playlist_songs.html', context)
@@ -289,7 +303,6 @@ def display_user_playlist_songs(request,id):
 		# first we get the playlist using filter.This will get a specific playlist
 		stuff = UserPlaylists_songs.objects.filter(playlist=playlist).all()
 		
-		liked = False
 		# song_liked_dict = {}
 		# we create an array to hold the liked songs
 		song_liked_list = []
@@ -320,6 +333,26 @@ def savePlaylistToLibrary(request, id):
 			messages.success(request, f'Playlist ({get_playlist.name}) removed from library successfully!')
 		else:
 			db = UserInheritedPlaylists(user= request.user, playlist=get_playlist)
+			db.save()
+			messages.success(request, f'Playlist ({get_playlist.name}) added to library successfully!')
+
+		return redirect("home")
+
+	else:
+		messages.error(request, f'Error adding ({get_playlist.name}) to library, Please Try again after a while!')
+		return redirect("home")
+
+
+def saveDiscoverPlaylistToLibrary(request, id):
+	#adding songs from home page playlists to playlist the user choosed
+	get_playlist = get_object_or_404(HomePagePlaylists,  id=id)
+	if(get_playlist):
+		if (DiscoverPage_UserInheritedPlaylists.objects.filter(user=request.user, playlist=get_playlist)).exists():
+			db = DiscoverPage_UserInheritedPlaylists.objects.get(user= request.user, playlist=get_playlist)
+			db.delete()
+			messages.success(request, f'Playlist ({get_playlist.name}) removed from library successfully!')
+		else:
+			db = DiscoverPage_UserInheritedPlaylists(user= request.user, playlist=get_playlist)
 			db.save()
 			messages.success(request, f'Playlist ({get_playlist.name}) added to library successfully!')
 

@@ -57,11 +57,22 @@
                 <ul>  
                   <!-- user added to library playlist -->
                   {% if user.userInherited.exists %}
-                  {% for plt in user.userInherited.all %}
-                    <li><a href="{% url 'playlist' plt.playlist.id %}">
-                      <p class="plt_name">{{plt.playlist.name}}</p>
-                    </a></li>
-                  {% endfor %}              
+                    {% for plt in user.userInherited.all %}
+                      <li><a href="{% url 'playlist' plt.playlist.id %}">
+                        <p class="plt_name">{{plt.playlist.name}}</p>
+                      </a></li>
+                    {% endfor %}              
+                  
+                  {% else %} 
+
+                  {% endif %}
+
+                  {% if user.discover_userInherited.exists %}
+                    {% for plt in user.discover_userInherited.all %}
+                      <li><a href="{% url 'discover_playlists' plt.playlist.id %}">
+                        <p class="plt_name">{{plt.playlist.name}}</p>
+                      </a></li>
+                    {% endfor %}              
                   
                   {% else %} 
 

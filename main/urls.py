@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 urlpatterns = [
 	path('', views.home, name="home"),
 	path('savePlaylistToLibrary/<int:id>', views.savePlaylistToLibrary, name="savePlaylistToLibrary"),
+	path('saveDiscoverPlaylistToLibrary/<int:id>', views.saveDiscoverPlaylistToLibrary, name="saveDiscoverPlaylistToLibrary"),
 	path('add_song_playlist/<int:playlist>/<int:id>', views.add_song_to_user_playlist, name="add_song_to_playlist"),
 	path('remove_song_playlist/<int:playlist>/<int:id>', views.remove_song_from_playlist, name="remove_song_from_playlist"),
 	path(f'library/<str:username>', views.user_playlist, name='user_playlist'),

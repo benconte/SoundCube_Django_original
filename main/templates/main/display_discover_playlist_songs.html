@@ -40,16 +40,16 @@
 			      	<a class="dropdown-item" href="#" style="color: #fff;">Go to Artist</a>
 			      	<!-- <a class="dropdown-item" href="{% url 'savePlaylistToLibrary' playlist.id %}" style="color: #fff;">Save to your Library</a> -->
 			      	{% if user.userInherited.exists %}
-                  		{% for plt in user.userInherited.all %}
-	                  		{% if playlist.id == plt.playlist.id %}
+                  		
+	                  		{% if is_playlist_inherited %}
 
-				      			<a class="dropdown-item" href="{% url 'savePlaylistToLibrary' playlist.id %}" style="color: #fff;">Remove from library</a>
+				      			<a class="dropdown-item" href="{% url 'saveDiscoverPlaylistToLibrary' playlist.id %}" style="color: #fff;">Remove from library</a>
 
 				      		{% else %}
-				      			<a class="dropdown-item" href="{% url 'savePlaylistToLibrary' playlist.id %}" style="color: #fff;">Save to your Library</a>
+				      			<a class="dropdown-item" href="{% url 'saveDiscoverPlaylistToLibrary' playlist.id %}" style="color: #fff;">Save to your Library</a>
 
 				      		{% endif %}
-			      		{% endfor %}
+			      		
 			      	{% else %}
 				      	<a class="dropdown-item" href="{% url 'savePlaylistToLibrary' playlist.id %}" style="color: #fff;">Save to your Library</a>
 			      	{% endif %}
