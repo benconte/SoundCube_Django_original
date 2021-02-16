@@ -55,15 +55,6 @@ class Playlists(models.Model):
     def get_absolute_url(self):
         return reverse('home')
 
-    def save(self, *args, **kwargs):
-        super(Playlists,self).save(*args, **kwargs)
-
-        img = Image.open(self.playlist_img.path)
-
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.playlist_img.path)# file path
 
 class Playlist_songs(models.Model):
     playlist = models.ForeignKey(Playlists, on_delete=models.CASCADE, null=True, related_name="playlist")

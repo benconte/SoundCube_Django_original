@@ -90,7 +90,7 @@
 
 			
 		</div>
-		<button class="playlist-songs" id="playlist-songs" style="" onclick='
+		<button class="playlist-songs" id="playlist-songs" onclick='
 			queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.user.name}}"}
 
 			{% for plt in playlist.userplaylists.all %}
@@ -234,12 +234,24 @@
 						<td>
 							<form action="{% url 'like_song' plt.song_model.id %}" method="post">
 				        		{% csrf_token %}
-					        	{% if liked %}
-					        			<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button><!--  <small>{{ total_likes }} Likes</small> -->
-
+					        	<!-- {% if liked %}
+					        			<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button>
 					        	{% else %}
-					        		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button><!--  <small> {{ total_likes }} Likes</small> -->
-					        	{% endif %}
+					        		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button>
+					        	{% endif %} -->
+								
+								{% if user.is_authenticated %}
+				                  {% if plt.song_model.song_name in song_liked_list %}
+								  		<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;color: #1DB954;"><i class="fas fa-heart fa-2x"></i></button>
+
+						          {% else %}
+								  		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button>
+						          {% endif %}
+					           	{% else %}
+					        		<p>Can't like</p>
+					          	{% endif %}
+
+								
 
 							</form>
 						</td>
@@ -283,6 +295,7 @@
 					              <div class="modal-body-data">
 					                {% for playlist in user.user_created_playlists.all %}
 					                <form action="{% url 'add_song_to_playlist' playlist=playlist.id id=plt.song_model.id  %}" method="post" enctype="multipart/form-data">
+										<!-- for album your say album=plt.album.id -->
 					                	{% csrf_token %}
 					                	<div class="song_container">
 						                  	<button type="submit" name="submit_button">

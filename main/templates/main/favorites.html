@@ -5,9 +5,10 @@
 	<div class="" style="padding: 5px;color: #fff;margin-bottom: 100px;">
 		<div class="content-section mt-4">
 			{% if user.favorite_song.exists %}
-			<div style="padding-left: 35%;">
+			<center>
 				<h1>Favorites Songs</h1>
-				<button class="playlist-songs" id="playlist-songs" style="margin-left: 80px;" onclick='
+				<p style="color: #717171; font-size: 21px; margin-top: 10px;font-family: 'Pattaya';" id="playlist_songs_length"></p>
+				<button class="playlist-songs" id="playlist-songs"  onclick='
 				queue_playlist[0] = {id:"{{user.id}}", name: "{{user.username}}", img:"{{user.profile.image.url}}"}
 				{% for fav_song in user.favorite_song.all %}
 
@@ -16,7 +17,7 @@
 				{% endfor %}
 				playMusic(0)
 			'><i class="far fa-play-circle fa-1x"></i> Listen</button>
-			</div>
+			</center>
 			
 			
 				<table class="table mt-3">

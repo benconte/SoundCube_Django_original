@@ -91,24 +91,28 @@ def favorite_song(request, id):
 @login_required
 def display_playlist_songs(request,id):
 	playlist = Playlists.objects.get(id=id)
+	
 	if playlist:
-		stuff = get_object_or_404(Playlist_songs, id=id)
-		total_likes = stuff.song_model.total_likes()
-		liked = False
-		is_favorite = False
-
-		if stuff.song_model.favorite.filter(id=request.user.id).exists():
-			is_favorite = True
-
+		# first we get the playlist using filter.This will get a specific playlist
+		stuff = Playlist_songs.objects.filter(playlist=playlist).all()
+		# liked = False
+		# song_liked_dict = {}
+		# we create an array to hold the liked songs
+		song_liked_list = []
 		
-		if stuff.song_model.likes.filter(id=request.user.id).exists():
-			liked = True
+		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
+		for song in stuff:
+			if song.song_model.likes.filter(id=request.user.id).all():
+				liked = True
+				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
+				song_liked_list.append(f"{song.song_model.song_name}")
+		print(song_liked_list)
 
 		context = {
 			'playlist': playlist,
-			'total_likes':total_likes,
+			'song_liked_list':song_liked_list,
 			'liked': liked,
-			'is_favorite': is_favorite,
+
 		}
 		return render(request, 'main/display_playlist.html', context)
 
@@ -119,21 +123,25 @@ def display_discover_playlist_songs(request,id):
 	
 
 	if playlist:
-		# stuff = get_object_or_404(HomePagePlaylists_songs, playlist=playlist)
-		stuff = HomePagePlaylists_songs.objects.filter(playlist=playlist).first()
-		# stuff = get_object_or_404(HomePagePlaylists_songs, playlist=playlist).first()
-		print(stuff.song_model.likes.filter(id=request.user.id))
-		total_likes = stuff.song_model.total_likes()
-		liked = False
+		# first we get the playlist using filter.This will get a specific playlist
+		stuff = HomePagePlaylists_songs.objects.filter(playlist=playlist).all()
+		# liked = False
+		# song_liked_dict = {}
+		# we create an array to hold the liked songs
+		song_liked_list = []
+		
+		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
+		for song in stuff:
+			if song.song_model.likes.filter(id=request.user.id).all():
 
-
-		if stuff.song_model.likes.filter(id=request.user.id):
-			liked = True
+				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
+				song_liked_list.append(f"{song.song_model.song_name}")
+		print(song_liked_list)
 
 		context = {
 			'playlist': playlist,
-			'total_likes':total_likes,
-			'liked': liked,
+			'song_liked_list':song_liked_list,
+
 		}
 		return render(request, 'main/display_discover_playlist_songs.html', context)
 
@@ -276,19 +284,31 @@ def display_user_playlist_songs(request,id):
 		playlist.save()
 		messages.success(request, f"Playlist {playlist.name} updated successfully")
 		return redirect('home')
-		# return HttpResponseRedirect(reverse('display_user_playlist_songs', args=[str(id)]))
 
-	# else:
-	# 	messages.error(request, f"Error updating {playlist.name}. Try again after a while!!")
-	# 	# return HttpResponseRedirect(reverse('display_user_playlist_songs', args=[str(id)]))
-	# 	return redirect('home')
+	if playlist:
+		# first we get the playlist using filter.This will get a specific playlist
+		stuff = UserPlaylists_songs.objects.filter(playlist=playlist).all()
+		
+		liked = False
+		# song_liked_dict = {}
+		# we create an array to hold the liked songs
+		song_liked_list = []
+		
+		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
+		for song in stuff:
+			if song.song_model.likes.filter(id=request.user.id).all():
 
-	context = {
-			'playlist': playlist,
-			
-	}
+				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
+				song_liked_list.append(f"{song.song_model.song_name}")
+		print(song_liked_list)
 
-	return render(request, 'main/display_user_playlist.html', context)
+		context = {
+				'playlist': playlist,
+				"song_liked_list": song_liked_list,
+				
+		}
+
+		return render(request, 'main/display_user_playlist.html', context)
 
 def savePlaylistToLibrary(request, id):
 	#adding songs from home page playlists to playlist the user choosed
