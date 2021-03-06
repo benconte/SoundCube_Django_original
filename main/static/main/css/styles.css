@@ -53,12 +53,20 @@ body{
   	margin-right: 10px;
   	cursor: pointer;
 }
-
+.swiper-slide .art_img img{
+	width: 260px; 
+  	height: 260px;
+  	border-radius: 50%;
+  	margin-bottom: 50px;
+  	margin-left: 10px;
+  	margin-right: 10px;
+  	cursor: pointer;
+}
 .swiper-button-disabled{
 	opacity: 0.3;
 }
 
-.hometitle{
+.swiper-slide .hometitle{
 	position: absolute;
 	width: 260px;
 	left: 10px;
@@ -73,6 +81,21 @@ body{
 	color: #fff;
 	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
+}
+
+.swiper-slide .art_img .artist-name{
+	position: absolute;
+	width: 260px;
+	left: 10px;
+	line-height: 1.3;
+	font-weight: bold;
+	bottom: 2px;
+
+	font-size: 16px;
+	color: #fff;
+	text-align: center;
+
+	
 }
 
 h3 {

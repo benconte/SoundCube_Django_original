@@ -178,37 +178,37 @@ $(document).ready(function(){
 });
 
 
-// // 6th slider
-// $(document).ready(function(){
+// 6th slider
+$(document).ready(function(){
 
-// 	var recentswiper = new Swiper('.carousel-image-holder > .slider', {
-// 		nextButton: '.six-next',
-// 		prevButton: '.six-prev',
-// 		slidesPerView: 5,
-// 		paginationClickable: false,
-// 		preventClicks:false,
-// 		preventClicksPropagation:false,
-// 		spaceBetween: 7,
-// 		breakpoints: {
-// 			320: {//on the width of 320, we show only 3 slides per view
-// 				slidesPerView: 6,
-// 				spaceBetween: 5
-// 			},
+	var recentswiper = new Swiper('.sixthslider > .swiper-container', {
+		nextButton: '.six-next',
+		prevButton: '.six-prev',
+		slidesPerView: 5,
+		paginationClickable: false,
+		preventClicks:false,
+		preventClicksPropagation:false,
+		spaceBetween: 7,
+		breakpoints: {
+			320: {//on the width of 320, we show only 3 slides per view
+				slidesPerView: 6,
+				spaceBetween: 5
+			},
 
-// 			480: {//on the width of 480, we show only 3 slides per view
-// 				slidesPerView: 6,
-// 				spaceBetween: 5
-// 			},
+			480: {//on the width of 480, we show only 3 slides per view
+				slidesPerView: 6,
+				spaceBetween: 5
+			},
 
-// 			768: {//on the width of 768, we show only 5 slides per view
-// 				slidesPerView: 4,
-// 				spaceBetween: 5
-// 			},
-// 			1024: {//on the width of 1024, we show only 6 slides per view
-// 				slidesPerView: 3,
-// 				spaceBetween: 10
-// 			}
-// 		}
-// 	});
+			768: {//on the width of 768, we show only 5 slides per view
+				slidesPerView: 4,
+				spaceBetween: 5
+			},
+			1024: {//on the width of 1024, we show only 6 slides per view
+				slidesPerView: 3,
+				spaceBetween: 10
+			}
+		}
+	});
 
-// });
+});

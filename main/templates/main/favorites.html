@@ -44,12 +44,12 @@
 
 									// -------------------------------------------------------------------------------
 									queue_playlist[0] = {id:"{{user.id}}", name: "{{user.username}}", img:"{{user.profile.image.url}}"}
+								{% for fav_song in user.favorite_song.all %}
 
-									{% for fav_song in user.playlist_favorite_song.all %}
+									musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{fav_song.song_name}}", img:"{{fav_song.song_img.url}}", src:"{{fav_song.song_path.url}}", song_auther: "{{fav_song.song_auther}}", lyrics:`{{fav_song.lyrics}}`}
 
-										musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{fav_song.song_name}}", img:"{{fav_song.song_img.url}}", src:"{{fav_song.song_path.url}}", song_auther: "{{fav_song.song_auther}}", lyrics:`{{fav_song.lyrics}}`}
-
-									{% endfor %}
+								{% endfor %}
+								playMusic({{forloop.counter0}});
 									playMusic({{forloop.counter0}})
 									
 

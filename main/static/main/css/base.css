@@ -259,6 +259,11 @@ search
 
 .playlist-img{
   position: relative;
+
+}
+.playlist-img img{
+  object-fit: cover;
+  
 }
 /*
 .playlist-img form{
@@ -354,8 +359,11 @@ table tbody tr td .fa-ellipsis-h{
     visibility: hidden;
     cursor: pointer;
 }
+table tbody tr{
+  border-color: #555;
+}
 table tbody tr:hover{
-  background: #F0F0F0;
+  background: #717171;
 }
 
 table tbody tr:hover td .song_img{
@@ -529,12 +537,18 @@ cursor: pointer;
 
 #progress{
   width: 830px;
-  height: 35px;
+  height: 5px;
+  outline: none;
 
 }
 
 #progress:hover{
   height: 50px;
+  outline: none;
+}
+
+#progress:focus{
+  outline: none;
 }
 
 #volumeBar{
@@ -649,7 +663,7 @@ cursor: pointer;
   color: #1DB954;
 }
 
-.carousel-field .carousel-image-holder{
+/* .carousel-field .carousel-image-holder{
   width: 85em;
   height: 390px;
   justify-content: space-around;
@@ -668,13 +682,11 @@ cursor: pointer;
   margin-right: 10px;
   cursor: pointer;
 }
-.carousel-field .carousel-image-holder img:hover{
-  /*opacity: 0.5;*/
-}
+
 .carousel-field .carousel-image-holder .img-btn-container{
   display: block;
 
-}
+} */
 
 
 
@@ -1096,7 +1108,16 @@ cursor: pointer;
   color: #fff;
   /*border: none;*/
 }
+.table td .table-content{
+  color: #fff;
+  text-decoration: none;
+}
 
+.table td .table-content:hover{
+  text-decoration: none;
+  color: #1DB954;
+  font-weight: 500;
+}
 
 .queue-box{
   width: 100%;

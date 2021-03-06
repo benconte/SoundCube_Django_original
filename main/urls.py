@@ -15,6 +15,7 @@ urlpatterns = [
 	path('search', views.search, name="search"),
 	path('test', views.test, name="test"),#path('test/<int:id>', views.test, name="test"),
 	path('playlist/<int:id>', views.display_playlist_songs, name="playlist"),
+	path('album/<int:id>', views.display_album_songs, name="album"),
 	path('discover/playlist/<int:id>', views.display_discover_playlist_songs, name="discover_playlists"),
 	path('user_playlist/<int:id>', views.display_user_playlist_songs, name="display_user_playlist_songs"),
 	path('like/<int:pk>', views.like_song, name="like_song"),

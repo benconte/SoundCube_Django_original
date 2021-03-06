@@ -150,7 +150,34 @@
 		        </div>
 		      </div>
 		  </div>
+		  <div class="carousel-field">
+				<div class="carousel-header">
+					<h3>Your Favorite Artists</h3>
+					<div class="carousel-icons">
+						<div class="leftdirection six-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
+						<div class="nextdirection six-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
+					</div>
 
+				</div>
+				<div class="all_slides">
+				<div class="sixthslider"><!-- change the slide name also the slide icons -->
+					<div class="swiper-container">
+					<div class="swiper-wrapper">
+						{% for art in artists %}
+						<div class="swiper-slide">
+							<a href="#" class="art_img"><img src="{{art.img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="artist-name">{{art.name}}</h3></a>
+						</div>
+						{% endfor %}
+
+						<div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
+					</div>
+					
+					</div>
+
+
+				</div>
+				</div>
+			</div>
 		    <div class="carousel-field">
 		      <div class="carousel-header">
 					<h3>Made For you</h3>
@@ -236,8 +263,7 @@
 		        </div>
 		      </div>
 		  </div>
-			
-			
+
 			
 		</div>
 	</div>

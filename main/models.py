@@ -14,7 +14,26 @@ class Song_Categories(models.Model):
     def __str__(self):
         return f'Song_Categories({self.category}, {self.category_color})'
 
+class Albums(models.Model):
+    name = models.CharField(max_length=200)
+    album_author = models.CharField(max_length=200)
+    album_img = models.ImageField(upload_to='album_imgs', default='playlist_icon.jpg')
+    date_created = models.DateTimeField(default=timezone.now)
+    likes = models.ManyToManyField(User, related_name="album_name", blank=True)
+    favorite = models.ManyToManyField(User, related_name="album_favorite", blank=True)
+
+
+    def __str__(self):
+        return f"Albums({self.name},{self.date_created})"
+
+    def total_likes(self):
+        return self.likes.count()
+
+    def get_absolute_url(self):
+        return reverse('home')
+
 class Song_model(models.Model):
+    album = models.ForeignKey(Albums, on_delete=models.CASCADE, related_name='album_model',null=True)
     song_name = models.CharField(max_length=200)
     song_auther = models.CharField(max_length=200)
     song_img = models.ImageField(upload_to='song_model_images')
@@ -35,6 +54,16 @@ class Song_model(models.Model):
     def total_likes(self):
         return self.likes.count()
 
+
+class Album_songs(models.Model):
+    album = models.ForeignKey(Albums, on_delete=models.CASCADE, related_name='album',null=True)
+    song_model = models.ForeignKey(Song_model, on_delete=models.CASCADE, null=True, related_name="album_songs")
+
+    def __str__(self):
+        return f"Album_songs({self.album.name}, {self.song_model.song_name}, {self.song_model.song_auther})"
+
+    def get_absolute_url(self):
+        return reverse('home')
 
 class Playlists(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="user_playlists")
@@ -66,33 +95,6 @@ class Playlist_songs(models.Model):
     def get_absolute_url(self):
         return reverse('home')
 
-
-class Albums(models.Model):
-    name = models.CharField(max_length=200)
-    album_author = models.CharField(max_length=200)
-    date_created = models.DateTimeField(default=timezone.now)
-    likes = models.ManyToManyField(User, related_name="album_name", blank=True)
-    favorite = models.ManyToManyField(User, related_name="album_favorite", blank=True)
-
-
-    def __str__(self):
-        return f"Albums({self.name},{self.date_created})"
-
-    def total_likes(self):
-        return self.likes.count()
-
-    def get_absolute_url(self):
-        return reverse('home')
-
-class Album_songs(models.Model):
-    album = models.ForeignKey(Albums, on_delete=models.CASCADE, related_name='album',null=True)
-    song_model = models.ForeignKey(Song_model, on_delete=models.CASCADE, null=True, related_name="album_songs")
-
-    def __str__(self):
-        return f"Album_songs({self.album.name}, {self.song_model.song_name}, {self.song_model.song_auther})"
-
-    def get_absolute_url(self):
-        return reverse('home')
 
 class HomePagePlaylists(models.Model):
     name = models.CharField(max_length=200)

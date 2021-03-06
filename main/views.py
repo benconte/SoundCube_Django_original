@@ -22,6 +22,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 def home(request):
 	playlist = Playlists.objects.all()
 	playlist2 = Playlists.objects.order_by('-date_created')#[:5]
+	artist = Artists.objects.all()[:10]
 	category = Song_Categories.objects.all()[:12]
 	playlist_length = len(playlist)
 	# pltlist = json.dumps(playlist)
@@ -29,7 +30,8 @@ def home(request):
 		'playlist': playlist,
 		'playlist2': playlist2,
 		'category': category,
-		'playlist_length': playlist_length
+		'playlist_length': playlist_length,
+		'artists':artist
 	}
 	return render(request, 'main/home.html', context)
 
@@ -127,6 +129,40 @@ def display_playlist_songs(request,id):
 		return render(request, 'main/display_playlist.html', context)
 
 @login_required
+def display_album_songs(request,id):
+	album = Albums.objects.get(id=id)
+	
+	if album:
+		# first we get the playlist using filter.This will get a specific playlist
+		stuff = Song_model.objects.filter(album=album).all()
+		# liked = False
+		# song_liked_dict = {}
+		# we create an array to hold the liked songs
+		song_liked_list = []
+		
+		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
+		for song in stuff:
+			if song.likes.filter(id=request.user.id).all():
+				# liked = True
+				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
+				song_liked_list.append(f"{song.song_name}")
+		
+		# check if playlist exist in user_inherited
+		is_playlist_inherited = False
+
+		# if (UserInheritedPlaylists.objects.filter(user=request.user, playlist=playlist)).exists():
+		# 	is_playlist_inherited = True
+		
+
+		context = {
+			'album': album,
+			'song_liked_list':song_liked_list,
+			'is_playlist_inherited': is_playlist_inherited,
+
+		}
+		return render(request, 'main/display_album.html', context)
+
+@login_required
 def display_discover_playlist_songs(request,id):
 	# playlist = HomePagePlaylists.objects.get(id=id)
 	playlist = get_object_or_404(HomePagePlaylists, id=id)
@@ -194,11 +230,14 @@ def show_favorite(request):
 @login_required
 def user_choose_fav_artist(request):
     artist = Artists.objects.all()
-    if request.method == 'POST':
+    arts = request.POST.get('check_box')
+    if request.method == 'POST' and arts:
     	arts = request.POST.get('check_box')
     	plt = Artists.objects.get(name=arts)
     	userFavs = UserArtists(userartist=plt, user=request.user)
     	userFavs.save()
+    	return redirect('/')
+    else:
     	return redirect('/')
 
     	# plt = Artists.objects.get(name=arts)
@@ -356,7 +395,7 @@ def saveDiscoverPlaylistToLibrary(request, id):
 			db.save()
 			messages.success(request, f'Playlist ({get_playlist.name}) added to library successfully!')
 
-		return redirect("home")
+		return redirect("discover")
 
 	else:
 		messages.error(request, f'Error adding ({get_playlist.name}) to library, Please Try again after a while!')
