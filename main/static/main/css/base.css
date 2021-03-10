@@ -109,11 +109,15 @@ body{
 
 .wrapper .sidebar .library .sidebar-playlists{
   width: 100%;
-  height: 228px;
+  height: 50vh;
   overflow-x: hidden;
   overflow-y: scroll;
+  
 }
 
+.wrapper .sidebar .library .sidebar-playlists ul{
+  margin-bottom: 200px;
+}
 
 .wrapper .main_content{
   width: 100%;
@@ -249,7 +253,6 @@ body{
   justify-content: space-around;
 }
 
-search
 
 /*----------------------------------------------------------*/
 /* .playlist-header{
@@ -259,12 +262,28 @@ search
 
 .playlist-img{
   position: relative;
+  width: 320px;
+  height: 320px;
+
 
 }
 .playlist-img img{
   object-fit: cover;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 8px;
   
 }
+
+.playlist-img:hover img{
+    opacity: 0.2;
+}
+
 /*
 .playlist-img form{
   position: relative;
@@ -288,8 +307,16 @@ search
 }
 */
 .playlist-img i{
-  position: absolute;
-  top: 5px;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+
+
+}
+
+.playlist-img i:hover{
+  cursor: pointer;
 }
 
 .playlist-header h2{
@@ -1075,7 +1102,7 @@ cursor: pointer;
   
 }
 
-.lyrics-body section{
+.lyrics-body div{
   padding-left: 30vh;
   padding-right: 30vh;
   padding-top: 20px;
@@ -1183,7 +1210,7 @@ cursor: pointer;
   height: 45vh;
   border-radius: 8px;
   margin: 10px 70px 10px 70px;
-  
+  object-fit: cover;
 }
 
 .queue-box-body .queue-left-box .queue_plt_img .left-queue-icons{
@@ -1334,4 +1361,83 @@ cursor: pointer;
   100%{
     transform: translate(-100%, 0);
   }
+}
+
+.artists-block{
+  margin-bottom: 100px;
+}
+.artists-block .artist-img{
+  border-radius: 50%;
+  float: left;
+  margin-right: 50px;
+}
+
+.artist-data {
+  margin: 60px 0 0 0 ;
+}
+.artists-block .artist-data .artist-name{
+  text-transform: capitalize;
+
+}
+
+.artists-block .artist-data .followers{
+  color: #717171;
+}
+
+.artist-data .artist-data-buttons{
+  display: flex;
+}
+
+.artist-data .artist-data-buttons button{
+  margin: 10px 10px 0 0;
+}
+
+.artist-data .artist-data-buttons .randomize-btn{
+  padding: 5px 9px;
+  background-color: #1DB954;
+  color: #000;
+  border-radius: 8px;
+  border: none;
+}
+
+.artist-data .artist-data-buttons .randomize-btn:focus{
+  outline: none;
+}
+
+.artist-data .artist-data-buttons .randomize-btn:hover{
+  color: #fff;
+}
+
+.artist-data .artist-data-buttons .follow-btn{
+  padding: 9px 14px;
+  background-color: #e05353;
+  color: #000;
+  border-radius: 8px;
+  border: none;
+}
+
+.artist-data .artist-data-buttons .follow-btn:focus{
+  outline: none;
+}
+
+
+.artist-data .artist-data-buttons .follow-btn:hover{
+  color: #fff;
+}
+
+.artist-data .artist-data-buttons .more-btn{
+  padding: 9px 14px;
+  background-color: #e2e2e2;
+  color: #000;
+  border-radius: 8px;
+  border: none;
+}
+
+.artist-data .artist-data-buttons .more-btn:focus{
+  outline: none;
+}
+
+.artist-data .artist-data-buttons .more-btn:hover{
+  background-color: #717171;
+  color: #fff;
 }

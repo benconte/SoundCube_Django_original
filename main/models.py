@@ -131,7 +131,7 @@ class Artists(models.Model):
     def __str__(self):
         return f"Artists({self.name})"
 
-    def total_likes(self):
+    def total_followers(self):
         return self.followers_fans.count()
 
 class UserArtists(models.Model):

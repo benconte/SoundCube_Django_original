@@ -31,10 +31,10 @@
 
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
-								    {% for plts in plt.homepageplaylist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+									{% for plts in playlist.homepageplaylist.all %}
+										musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
 
-								    {% endfor %}
+									{% endfor %}
 								     playMusic({{forloop.counter0}})
 			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
 								
@@ -192,14 +192,16 @@
 		<div id="Genre & Moods" class="tabcontent">
 		  <h3>Genre & Moods</h3>
 		  <div class="genre-moods">
-				{% for cat in category %}
 				
-					<a href="#" class="genre-moods-boxes"><!-- style="background: {{cat.category_color}}" -->
-						<p class="category_img_name">{{ cat.category }}</p>
-						<img src="{{cat.category_img.url}}" class="category_img" style="width: 100%;
-  						height: 200px;" alt="{{ cat.category }}">
-  						
-					</a>
+				{% for cat in category %}
+				<a href="#" class="genre-holder">
+					<div class="genre-moods-boxes">
+						<img src="{{cat.category_img.url}}" class="category_img" alt="{{ cat.category }}">
+						
+						<center class="category_img_name">{{ cat.category }}</center> 
+						
+					</div>
+				</a>
 				{% endfor %}
 
 		   </div>

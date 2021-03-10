@@ -2,15 +2,16 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
-        <form method="POST" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data" onsubmit="return check_form_input()">
             {% csrf_token %}<!-- hidden tag. it defends our form from attacks -->
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4" style="color: #fff;">Create Playlist</legend>
+                <legend class="border-bottom mb-4" style="color: #fff;">User Playlist</legend>
                 {{ form|crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Create</button>
+                <button class="btn btn-outline-info" type="submit" id="update">Create</button>
             </div>
         </form>
     </div>
+
 {% endblock content %}

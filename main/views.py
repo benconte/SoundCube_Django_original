@@ -22,6 +22,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 def home(request):
 	playlist = Playlists.objects.all()
 	playlist2 = Playlists.objects.order_by('-date_created')#[:5]
+	album = Albums.objects.all()
 	artist = Artists.objects.all()[:10]
 	category = Song_Categories.objects.all()[:12]
 	playlist_length = len(playlist)
@@ -31,16 +32,19 @@ def home(request):
 		'playlist2': playlist2,
 		'category': category,
 		'playlist_length': playlist_length,
-		'artists':artist
+		'artists':artist,
+		'album': album,
 	}
 	return render(request, 'main/home.html', context)
 
 def test(request):
 	playlist = Playlist_songs.objects.all()
 	playlista = Playlists.objects.all()
+	get_song = Song_model.objects.get(id=17)
 	context = {
 		'playlista':playlista,
-		'playlist':playlist
+		'playlist':playlist,
+		'get_song': get_song
 	}
 	return render(request, 'main/test.html', context)
 
@@ -312,19 +316,21 @@ class DeleteUserPlaylistView(LoginRequiredMixin, SuccessMessageMixin, DeleteView
 			return True
 		return False
 
-# class ChangeUserPlaylist_Img(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-# 	model = UserPlaylists
-# 	fields = ["playlist_img"]
+class UserPlaylistUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+	model = UserPlaylists
+	fields = ['name', 'playlist_img']
+	success_message = "Playlist updated successfully!!"
 
-# 	def form_valid(self, form):
-# 		form.instance.user = self.request.user
-# 		return super().form_valid(form)
+	def form_valid(self, form):
+		form.instance.user = self.request.user
+		return super().form_valid(form)
 
-# 	def test_func(self):
-# 		post = self.get_object()
-# 		if self.request.user == post.user:
-# 			return True
-# 		return False
+	def test_func(self):
+		playlist = self.get_object()
+		if self.request.user == playlist.user:
+			return True
+		return False
+
 
 
 @login_required
@@ -352,7 +358,7 @@ def display_user_playlist_songs(request,id):
 
 				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
 				song_liked_list.append(f"{song.song_model.song_name}")
-		print(song_liked_list)
+		# print(song_liked_list)
 
 		context = {
 				'playlist': playlist,
@@ -452,3 +458,22 @@ def remove_song_from_playlist(request, playlist, id):
 @login_required
 def settings(request):
 	return render(request, "main/settings.html", {})
+
+@login_required
+def get_artists_data(request, id):
+	get_artists = get_object_or_404(Artists, id=id)
+
+	if get_artists:
+		is_favorite = False
+		if get_artists.followers_fans.filter(id=request.user.id).exists():
+			is_favorite = True
+		context = {
+			'artist_data': get_artists,
+			'is_favorite': is_favorite
+				
+		}
+
+		return render(request, 'main/artist_data.html', context)
+	
+	messages.error(request, "Error getting artists. Check your spelling and try again after a while!!")
+	return redirect('home')

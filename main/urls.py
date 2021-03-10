@@ -25,4 +25,6 @@ urlpatterns = [
     # path('ChangeUserPlaylist_Img/<int:id>', ChangeUserPlaylist_Img.as_view(), name='changeuserplaylist_img'),
     path('delete_user_playlist/<int:pk>', views.DeleteUserPlaylistView.as_view(), name='delete_user_playlist'),
     path('settings', views.settings, name="settings"),
+	path("artist/<int:id>", views.get_artists_data, name="artist_data"),
+	path("user_update_playlist/<int:pk>", views.UserPlaylistUpdateView.as_view(), name="user_update_playlist")
 ]

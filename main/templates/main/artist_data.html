@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+{% block title %}Artists{% endblock %}
+{% block content %}
+    <div class="artists-block" style="padding: 10px; color: #fff;">
+        <img src="{{artist_data.img.url}}" width="250" height="250" alt="artist_data.name" class="artist-img">
+        <div class="artist-data">
+            <h2 class="artist-name">{{artist_data.name}}</h2>
+            <b class="followers">{{artist_data.total_followers}} followers</b>
+            <div class="artist-data-buttons">
+                <button type="button" class="randomize-btn"><i class="far fa-play-circle fa-1x"></i> Mix</button>
+                {% if is_favorite %}
+                    <button type="button" class="follow-btn"><i class="far fa-heart"></i> Unfollow</button>
+                {% else %}
+                    <button type="button" class="follow-btn"><i class="fa fa-heart"></i> Follow</button>
+                {% endif %}
+                <button type="button" class="more-btn"><i class="fa fa-ellipsis-h fa-2x"></i></button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

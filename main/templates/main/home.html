@@ -110,7 +110,7 @@
 
 			<div class="carousel-field">
 		      <div class="carousel-header">
-					<h3>Trending now</h3>
+					<h3>Popular Albums</h3>
 					<div class="carousel-icons">
 						<div class="leftdirection third-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
 						<div class="nextdirection third-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
@@ -121,23 +121,23 @@
 		        <div class="thirdslider"><!-- change the slide name also the slide icons -->
 		          <div class="swiper-container">
 		            <div class="swiper-wrapper">
-		              {% for plt in playlist %}
+		              {% for alb in album %}
 		                <div class="swiper-slide">
 		                	<button class="playlist-button" onclick='
 
-								queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
+								queue_playlist[0] = {id:"{{alb.id}}", name: "{{alb.name}}", img:"{{alb.album_img.url}}", artists: "{{alb.album_author}}"}
 									
 									
-										{% for plts in plt.playlist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+										{% for albms in alb.album.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{albms.song_model.song_name}}", img:"{{albms.song_model.song_img.url}}", src:"{{albms.song_model.song_path.url}}", song_auther: "{{albms.song_model.song_auther}}", lyrics:`{{albms.song_model.lyrics}}`}
 
 								    {% endfor %}
 					
 									playMusic(0);
 									
-									'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
-							<a href="{% url 'playlist' plt.id %}">
-		                  <a href="{% url 'playlist' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
+									'><i class="far fa-play-circle fa-3x" id='play_icon'></i></button>
+							<a href="{% url 'album' alb.id %}">
+		                  <a href="{% url 'album' alb.id %}"><img src="{{alb.album_img.url}}" alt="{{alb.name}}" id="plt_image"><h3 class="hometitle">Featuring {{alb.album_author}}</h3></a>
 		                </div>
 		              {% endfor %}
 
@@ -165,7 +165,7 @@
 					<div class="swiper-wrapper">
 						{% for art in artists %}
 						<div class="swiper-slide">
-							<a href="#" class="art_img"><img src="{{art.img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="artist-name">{{art.name}}</h3></a>
+							<a href="{% url 'artist_data' art.id %}" class="art_img"><img src="{{art.img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="artist-name">{{art.name}}</h3></a>
 						</div>
 						{% endfor %}
 

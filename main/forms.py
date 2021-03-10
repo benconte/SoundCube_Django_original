@@ -17,4 +17,4 @@ class CreateUserPlaylists(forms.ModelForm):
 class UserPlaylistsImgUpdate(forms.ModelForm):
     class Meta:
         model = UserPlaylists
-        fields = ['playlist_img']
+        fields = ['name', 'playlist_img']
