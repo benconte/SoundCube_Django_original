@@ -341,8 +341,9 @@ def display_user_playlist_songs(request,id):
 		playlist_name_form = UserPlaylistsUpdate(request.POST, instance=playlist)
 		playlist_img_form = UserPlaylistsImgUpdate(request.POST, request.FILES, instance=playlist)
 
-		if playlist_form.is_valid():
-			playlist_form.save()
+		if playlist_name_form.is_valid() and playlist_img_form.is_valid():
+			playlist_name_form.save()
+			playlist_img_form.save()
 			messages.success(request, f"Playlist {playlist.name} was updated successfully")
 
 			return HttpResponseRedirect(reverse('display_user_playlist_songs', args=[str(playlist.id)]))
