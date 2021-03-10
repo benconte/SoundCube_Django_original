@@ -22,9 +22,8 @@ urlpatterns = [
     path('favorite/<int:id>', views.favorite_song, name="favorite_song"),
     path('show_favorite', views.show_favorite, name="show_favorite"),
     path('create_user_playlist/<int:id>', views.CreateUserPlaylistView.as_view(), name='create_playlist'),			
-    # path('ChangeUserPlaylist_Img/<int:id>', ChangeUserPlaylist_Img.as_view(), name='changeuserplaylist_img'),
     path('delete_user_playlist/<int:pk>', views.DeleteUserPlaylistView.as_view(), name='delete_user_playlist'),
     path('settings', views.settings, name="settings"),
 	path("artist/<int:id>", views.get_artists_data, name="artist_data"),
-	path("user_update_playlist/<int:pk>", views.UserPlaylistUpdateView.as_view(), name="user_update_playlist")
+	# path("user_update_playlist/<int:pk>", views.UserPlaylistUpdateView.as_view(), name="user_update_playlist")
 ]

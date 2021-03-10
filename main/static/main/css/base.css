@@ -255,10 +255,28 @@ body{
 
 
 /*----------------------------------------------------------*/
-/* .playlist-header{
-  
+ .album-header img{
+  object-fit: cover;
 
-} */
+} 
+
+ .album-header img{
+  width: 300px;
+  height: 300px;
+  border-radius: 5px;
+ }
+
+/*for user playlist images*/
+
+.modal-body .user-playlist-data .textinput {
+  /*position: relative;*/
+  width: 100%;
+}
+.modal-body .form-group a{
+  width: 100%;
+  word-break: break-all;
+}
+/* end of user playlist images */
 
 .playlist-img{
   position: relative;

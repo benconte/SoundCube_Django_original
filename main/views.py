@@ -12,7 +12,7 @@ from .models import (
 		Artists, UserArtists, UserPlaylists, UserPlaylists_songs, UserInheritedPlaylists, Song_model,
 		DiscoverPage_UserInheritedPlaylists
 		)
-from .forms import CreateUserPlaylists, UserPlaylistsImgUpdate
+from .forms import CreateUserPlaylists, UserPlaylistsUpdate, UserPlaylistsImgUpdate
 import json
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -316,20 +316,21 @@ class DeleteUserPlaylistView(LoginRequiredMixin, SuccessMessageMixin, DeleteView
 			return True
 		return False
 
-class UserPlaylistUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-	model = UserPlaylists
-	fields = ['name', 'playlist_img']
-	success_message = "Playlist updated successfully!!"
+# not necessary
+# class UserPlaylistUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+# 	model = UserPlaylists
+# 	fields = ['name', 'playlist_img']
+# 	success_message = "Playlist updated successfully!!"
 
-	def form_valid(self, form):
-		form.instance.user = self.request.user
-		return super().form_valid(form)
+# 	def form_valid(self, form):
+# 		form.instance.user = self.request.user
+# 		return super().form_valid(form)
 
-	def test_func(self):
-		playlist = self.get_object()
-		if self.request.user == playlist.user:
-			return True
-		return False
+# 	def test_func(self):
+# 		playlist = self.get_object()
+# 		if self.request.user == playlist.user:
+# 			return True
+# 		return False
 
 
 
@@ -337,12 +338,18 @@ class UserPlaylistUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView
 def display_user_playlist_songs(request,id):
 	playlist = UserPlaylists.objects.get(id=id)
 	if request.method == 'POST':
-		p_form = request.POST.get("playlist_img")
-		playlist.playlist_img = "user_playlist_images/"+p_form
+		playlist_name_form = UserPlaylistsUpdate(request.POST, instance=playlist)
+		playlist_img_form = UserPlaylistsImgUpdate(request.POST, request.FILES, instance=playlist)
 
-		playlist.save()
-		messages.success(request, f"Playlist {playlist.name} updated successfully")
-		return redirect('home')
+		if playlist_form.is_valid():
+			playlist_form.save()
+			messages.success(request, f"Playlist {playlist.name} was updated successfully")
+
+			return HttpResponseRedirect(reverse('display_user_playlist_songs', args=[str(playlist.id)]))
+
+	else:
+		playlist_name_form = UserPlaylistsUpdate(instance=playlist)
+		playlist_img_form = UserPlaylistsImgUpdate(instance=playlist)
 
 	if playlist:
 		# first we get the playlist using filter.This will get a specific playlist
@@ -363,6 +370,8 @@ def display_user_playlist_songs(request,id):
 		context = {
 				'playlist': playlist,
 				"song_liked_list": song_liked_list,
+				"playlist_name_form":playlist_name_form,
+				'playlist_img_form': playlist_img_form
 				
 		}
 
