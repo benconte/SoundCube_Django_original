@@ -41,11 +41,32 @@
             
             
         </div>
-        <form action="" method="POST" class="form">
+        <form action="" method="POST" class="form" onsubmit="form_validator();">
           {% csrf_token %}
+          <b style="color: red; padding: 10px; display: none;" id="submit_msg_error">Invalid info. Please fill out all the fields before submiting.</b>
           {{ form|crispy }}
           <small>Already have an account <span><a class="login-link" href="{% url 'login' %}">Login now?</a> </span></small>
+          <br><br>
+          <!-- <b style="margin: 98px 0px;" ><input type="checkbox" required id="checkbox"> <label for="checkbox"> By registering you agree to our <a href="#" class="policy"> terms of use</a>  and <a href="#" class="policy"> privacy policy</a></label></b> -->
           <button type="submit" class="submit">Register</button>
+
+          <!-- checking if all he fields are not empty before submiting -->
+          <script type="text/javascript">
+            let id_username = document.getElementById("id_username").value;
+            let id_email = document.getElementById("id_email").value;
+            let id_password1 = document.getElementById("id_password1").value;
+            let id_password2 = document.getElementById("id_password2").value;
+            let submit_msg_error = document.getElementById("submit_msg_error");
+
+            function form_validator(){
+              if (id_username != '' && id_email != '' && id_password1 != '' && id_password2 != '') {
+                return true;
+              } else {
+                submit_msg_error.style.display = "block";
+                return false;
+              }
+            }
+          </script>
         </form>
 
         <label class="terms">Read our <a href="#" class="policy"> terms of use</a>  and <a href="#" class="policy"> privacy policy</a> . More FAQS</label>

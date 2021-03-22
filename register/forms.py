@@ -6,10 +6,11 @@ from .models import Profile
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
+    checkbox = forms.BooleanField(label="<b style='margin: 98px 0px;'> By registering you agree to our <a href='#' class='policy'> terms of use</a>  and <a href='#' class='policy'> privacy policy</a></b>", required=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'password1', 'password2', 'checkbox']
 
 
 class UserUpdateForm(forms.ModelForm):

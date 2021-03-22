@@ -128,8 +128,8 @@
 								queue_playlist[0] = {id:"{{alb.id}}", name: "{{alb.name}}", img:"{{alb.album_img.url}}", artists: "{{alb.album_author}}"}
 									
 									
-										{% for albms in alb.album.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{albms.song_model.song_name}}", img:"{{albms.song_model.song_img.url}}", src:"{{albms.song_model.song_path.url}}", song_auther: "{{albms.song_model.song_auther}}", lyrics:`{{albms.song_model.lyrics}}`}
+									{% for albms in alb.album_model.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{albms.song_name}}", img:"{{albms.song_img.url}}", src:"{{albms.song_path.url}}", song_auther: "{{albms.song_auther}}", lyrics:`{{albms.lyrics}}`}
 
 								    {% endfor %}
 					

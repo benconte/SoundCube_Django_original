@@ -130,21 +130,14 @@
 							// -----------------------------------------------------------------------------------
 							queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.inspired}}"}
 							
-							noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}";
-
 							{% for plt in playlist.playlist.all %}
 						        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
 
 						    {% endfor %}
 							playMusic({{forloop.counter0}});
+							noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
 
-							console.log(musicData)
 							
-								if (player.currentTime > 0) {
-									console.log("Greater");
-								} else {
-									playMusic({{forloop.counter0}});
-								}
 
 								// ---------------------------------------------------------------------------------
 							' width="50" height="50"></td>

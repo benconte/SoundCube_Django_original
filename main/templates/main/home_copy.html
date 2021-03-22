@@ -1,16 +1,8 @@
 {% extends 'main/base.html' %}
 {% load static %}
 {% block title %} Home {% endblock %}
-
-
-<!-- for model Playlist 
-Don't forget
- -->
-
-
-
 {% block content %}
-  <div class="content-section" style="padding: 0 10px; color: #fff;margin-bottom: 100px;">
+  <div class="content-section" style="padding: 0 5px; color: #fff;margin-bottom: 100px;">
     <!-- <h3>Made For you</h3> -->
     <div class="">
       <div class="carousel-field">
@@ -31,26 +23,21 @@ Don't forget
                         <button class="playlist-button" onclick='
 
                 queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
-                  
-                  {% if plt.playlist.all %}
+
                     {% for plts in plt.playlist.all %}
-              
-                      musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_name}}", img:"{{plts.song_img.url}}", src:"{{plts.song_path.url}}", song_auther: "{{plts.song_auther}}", lyrics:`{{plts.lyrics}}`}
-                      // console.log("{{plts.song_name}}"+" clicked")
-              
+                        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
                     {% endfor %}
-                  {% else %}
-                    console.log("one"+" clicked")
-                  {% endif %}
+          
                   playMusic(0);
-                  console.log(musicData)
+                  
                   '><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
                 
                         <a href="{% url 'playlist' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
                       </div>
                     {% endfor %}
 
-                    <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+                    <div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
                   </div>
                   
                 </div>
@@ -75,13 +62,25 @@ Don't forget
                 <div class="swiper-wrapper">
                   {% for plt in playlist2 %}
                     <div class="swiper-slide">
-                      <button class="playlist-button" type="submit"><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+                      <button class="playlist-button" onclick='
+
+                queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
+                  
+                  
+                    {% for plts in plt.playlist.all %}
+                        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
+                    {% endfor %}
+          
+                  playMusic(0);
+                  
+                  '><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
               <a href="{% url 'playlist' plt.id %}">
                       <a href="{% url 'playlist' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
                     </div>
                   {% endfor %}
 
-                  <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+                  <div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
                 </div>
                 
               </div>
@@ -98,18 +97,20 @@ Don't forget
             <a href="#">See more &#8594</a>
           </div>
         </div>
+        <div class="category-holder">
+          {% for cat in category %}
+            <button class="category-boxes" style="background: {{cat.category_color}}">
+              {{ cat.category }}
+            </button>
+          {% endfor %}
+        </div>
         
-        {% for cat in category %}
-          <button class="category-boxes" style="background: {{cat.category_color}}">
-            {{ cat.category }}
-          </button>
-        {% endfor %}
 
       </div>
 
       <div class="carousel-field">
           <div class="carousel-header">
-          <h3>Trending now</h3>
+          <h3>Popular Albums</h3>
           <div class="carousel-icons">
             <div class="leftdirection third-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
             <div class="nextdirection third-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
@@ -120,15 +121,27 @@ Don't forget
             <div class="thirdslider"><!-- change the slide name also the slide icons -->
               <div class="swiper-container">
                 <div class="swiper-wrapper">
-                  {% for plt in playlist %}
+                  {% for alb in album %}
                     <div class="swiper-slide">
-                      <button class="playlist-button" type="submit"><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
-              <a href="{% url 'playlist' plt.id %}">
-                      <a href="{% url 'playlist' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
+                      <button class="playlist-button" onclick='
+
+                queue_playlist[0] = {id:"{{alb.id}}", name: "{{alb.name}}", img:"{{alb.album_img.url}}", artists: "{{alb.album_author}}"}
+                  
+                  
+                  {% for albms in alb.album_model.all %}
+                        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{albms.song_name}}", img:"{{albms.song_img.url}}", src:"{{albms.song_path.url}}", song_auther: "{{albms.song_auther}}", lyrics:`{{albms.lyrics}}`}
+
+                    {% endfor %}
+          
+                  playMusic(0);
+                  
+                  '><i class="far fa-play-circle fa-3x" id='play_icon'></i></button>
+              <a href="{% url 'album' alb.id %}">
+                      <a href="{% url 'album' alb.id %}"><img src="{{alb.album_img.url}}" alt="{{alb.name}}" id="plt_image"><h3 class="hometitle">Featuring {{alb.album_author}}</h3></a>
                     </div>
                   {% endfor %}
 
-                  <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+                  <div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
                 </div>
                 
               </div>
@@ -137,29 +150,68 @@ Don't forget
             </div>
           </div>
       </div>
+      <div class="carousel-field">
+        <div class="carousel-header">
+          <h3>Your Favorite Artists</h3>
+          <div class="carousel-icons">
+            <div class="leftdirection six-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
+            <div class="nextdirection six-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
+          </div>
 
+        </div>
+        <div class="all_slides">
+        <div class="sixthslider"><!-- change the slide name also the slide icons -->
+          <div class="swiper-container">
+          <div class="swiper-wrapper">
+            {% for art in artists %}
+            <div class="swiper-slide">
+              <a href="{% url 'artist_data' art.id %}" class="art_img"><img src="{{art.img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="artist-name">{{art.name}}</h3></a>
+            </div>
+            {% endfor %}
+
+            <div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
+          </div>
+          
+          </div>
+
+
+        </div>
+        </div>
+      </div>
         <div class="carousel-field">
           <div class="carousel-header">
           <h3>Made For you</h3>
           <div class="carousel-icons">
-            <div class="leftdirection fourth-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
-                <div class="nextdirection fourth-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
+            <div class="leftdirection forth-prev"><i class="fas fa-angle-left fa-2x"></i> </div>
+                <div class="nextdirection forth-next"><i class="fas fa-angle-right fa-2x ml-2"></i> </div>
           </div>
 
         </div>
           <div class="all_slides">
-            <div class="fourthslider"><!-- change the slide name also the slide icons -->
+            <div class="forthslider"><!-- change the slide name also the slide icons -->
               <div class="swiper-container">
                 <div class="swiper-wrapper">
                   {% for plt in playlist2 %}
                     <div class="swiper-slide">
-                      <button class="playlist-button" type="submit"><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+                      <button class="playlist-button" onclick='
+
+                queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
+                  
+                  
+                    {% for plts in plt.playlist.all %}
+                        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
+                    {% endfor %}
+          
+                  playMusic(0);
+                  
+                  '><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
               <a href="{% url 'playlist' plt.id %}">
                       <a href="{% url 'playlist' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
                     </div>
                   {% endfor %}
 
-                  <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+                  <div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
                 </div>
                 
               </div>
@@ -184,13 +236,25 @@ Don't forget
                 <div class="swiper-wrapper">
                   {% for plt in playlist %}
                     <div class="swiper-slide">
-                      <button class="playlist-button" type="submit"><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+                      <button class="playlist-button" onclick='
+
+                queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
+                  
+                  
+                    {% for plts in plt.playlist.all %}
+                        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
+                    {% endfor %}
+          
+                  playMusic(0);
+                  
+                  '><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
               <a href="{% url 'playlist' plt.id %}">
                       <a href="{% url 'playlist' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
                     </div>
                   {% endfor %}
 
-                  <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'main/img/others.png' %}"></a></div>
+                  <div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
                 </div>
                 
               </div>
@@ -199,8 +263,7 @@ Don't forget
             </div>
           </div>
       </div>
-      
-      
+
       
     </div>
   </div>

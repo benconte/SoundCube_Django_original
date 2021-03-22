@@ -38,7 +38,7 @@ def home(request):
 	return render(request, 'main/home.html', context)
 
 def test(request):
-	playlist = Playlist_songs.objects.all()
+	playlist = Song_model.objects.all()
 	playlista = Playlists.objects.all()
 	get_song = Song_model.objects.get(id=17)
 	context = {
@@ -46,7 +46,7 @@ def test(request):
 		'playlist':playlist,
 		'get_song': get_song
 	}
-	return render(request, 'main/test.html', context)
+	return render(request, 'main/audio.html', context)
 
 @login_required
 def discover(request):
@@ -341,8 +341,9 @@ def display_user_playlist_songs(request,id):
 		playlist_name_form = UserPlaylistsUpdate(request.POST, instance=playlist)
 		playlist_img_form = UserPlaylistsImgUpdate(request.POST, request.FILES, instance=playlist)
 
-		if playlist_form.is_valid():
-			playlist_form.save()
+		if playlist_name_form.is_valid() and playlist_img_form.is_valid():
+			playlist_name_form.save()
+			playlist_img_form.save()
 			messages.success(request, f"Playlist {playlist.name} was updated successfully")
 
 			return HttpResponseRedirect(reverse('display_user_playlist_songs', args=[str(playlist.id)]))

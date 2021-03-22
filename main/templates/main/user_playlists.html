@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 {% block title %} Home {% endblock %}
 {% block content %}
-	<div class="user_library" style="margin-bottom: 100px;">
+	<div class="user_library">
 		<div class="library_holder">
 			{% if user.user_created_playlists.exists %}
 			<div class="playlists_holder">
@@ -14,15 +14,12 @@
 				
 				{% for plt in user.user_created_playlists.all %}
 					<div class="playlists_box_holder" >
-						<!-- <div class="playlist_box_holder">
-							<a href="{% url 'display_user_playlist_songs' plt.id %}" style="text-decoration: none;">
-								<img src="{{plt.playlist_img.url}}" class="user_playlist_img">
-								<p class="plt_name">{{plt.name}}</p>
-								<small class="plt_name">{{plt.user}}</small>
+						<div class="">
+		                	
+		                	<a href="{% url 'display_user_playlist_songs' plt.id %}" style="text-decoration: none;">
+								<img src="{{plt.playlist_img.url}}">
 							</a>
-						</div> -->
-						<div class="swiper-slide">
-		                	<button class="playlist-button" type="submit" onclick='
+							<button class="playlist-button" type="submit" onclick='
 
 		                		queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.user.username}}"}
 									
@@ -36,11 +33,44 @@
 
 		                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
 		                	<a href="{% url 'display_user_playlist_songs' plt.id %}" style="text-decoration: none;">
-							<img src="{{plt.playlist_img.url}}"><h3 class="hometitle">{{plt.name}} - {{plt.user}}</h3></a>
+								<h3 class="title"><b>{{plt.name}} - {{plt.user}}</b></h3>
+							</a>
 		                </div>
 						
 						
-						<!-- <button class="playlists_box_button"><i class="fas fa-plus"></i></button> -->
+						
+					</div>
+				{% endfor %}
+				{% for plt in user.userInherited.all %}
+					<div class="playlists_box_holder" >
+
+						<div class="">
+							<a href="{% url 'playlist' plt.id %}" style="text-decoration: none;">
+								<img src="{{plt.playlist.playlist_img.url}}">
+							</a>
+		                	<button class="playlist-button" type="submit" onclick='
+
+		                		queue_playlist[0] = {id:"{{plt.playlist.id}}", name: "{{plt.playlist.name}}", img:"{{plt.playlist.playlist_img.url}}", artists: "{{plt.playlist.inspired}}"}
+									
+								// reference the userInherited playlist and since it is a foreign key from Playlist model then we get the playlist in Playlist_songs in models. From there we get the songs.(All in models.py)
+
+								{% for plts in plt.playlist.playlist.all %}
+							        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+
+							    {% endfor %}
+									playMusic(0);
+									console.log(musicData)
+
+
+		                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
+
+		                	<a href="{% url 'playlist' plt.id %}" style="text-decoration: none;">
+								<h3 class="title">{{plt.playlist.name}} - {{plt.user}}</h3>
+							</a>
+		                </div>
+						
+						
+						
 					</div>
 				{% endfor %}
 			</div>

@@ -106,12 +106,12 @@
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 							// ---------------------------------------------------------------------------------
 							queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.inspired}}"}
-							
-							{% for plt in playlist.playlist.all %}
-						        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
 
-						    {% endfor %}
-							playMusic({{forloop.counter0}});
+								    {% for plt in playlist.homepageplaylist.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
+
+								    {% endfor %}
+								playMusic({{forloop.counter0}})
 
 							console.log(musicData)
 							showLyrics({{forloop.counter0}});
@@ -129,22 +129,14 @@
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 							// -----------------------------------------------------------------------------------
 							queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.inspired}}"}
-							
-							noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}";
 
-							{% for plt in playlist.homepageplaylist.all %}
-						        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
+								    {% for plt in playlist.homepageplaylist.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
 
-						    {% endfor %}
-							playMusic({{forloop.counter0}});
+								    {% endfor %}
+								playMusic({{forloop.counter0}})
 
-							console.log(musicData)
-							
-								if (player.currentTime > 0) {
-									console.log("Greater");
-								} else {
-									playMusic({{forloop.counter0}});
-								}
+							noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
 
 								// ---------------------------------------------------------------------------------
 							' width="50" height="50"></td>

@@ -169,7 +169,7 @@ cursor: pointer;
 			{% endfor %}
 			//we pass in the index of 1 so tat it starts from the first song playing
 			console.log(musicData)
-			playMusic(1)
+			playMusic(0)
 			'>Play</button>
 		<div class="row">
 
@@ -181,7 +181,7 @@ cursor: pointer;
 				<audio src="{{song.song}}" controls="on" >not allowed</audio>
 			</div> -->
 
-			<div class="card" style="width: 17rem; border: none; margin-right: 20px;"><!-- add_data('{{song.id}}','{{song.name}}' ,'{{song.song}}') -->
+			<div class="card" style="width: 17rem; border: none; margin-right: 20px;display: flex;"><!-- add_data('{{song.id}}','{{song.name}}' ,'{{song.song}}') -->
 			  <img src="{{song.song_img.url}}" width="300" height="300" id="img"  class="card-img-top" alt="..." onclick="add_data('{{song.id}}','{{song.song_name}}' ,'{{song.song_path.url}}')">
 			  <div class="card-body">
 			    <h5 class="card-text" id="song" ><a href="{{song.song_path.url}}" style="color: black; text-decoration: none; cursor: pointer;">{{song.song_name}}</a></h5>

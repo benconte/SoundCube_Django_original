@@ -7,7 +7,7 @@
 		<div class="playlist-header" style="display: flex;">
 			<div class="playlist-img">
 				{% if playlist.user == user %}
-				<img src="{{playlist.playlist_img.url}}" alt="{{playlist.name}}">
+				<img class="user-playlist-img" src="{{playlist.playlist_img.url}}" alt="{{playlist.name}}">
 				<i class="fas fa-pencil-alt fa-4x" data-toggle="modal" data-target="#exampleModal-picture"></i>
 				<div class="modal fade" id="exampleModal-picture" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						<div class="modal-dialog" role="document">
@@ -15,12 +15,12 @@
 							
 							<div class="modal-header">
 							  <h5 class="modal-title" id="exampleModalLabel" style="color: #000;">Update Playlist (<b style="color: #1DB954;">{{playlist.name}}</b>)??</h5>
-							  <!-- <a href="{% url 'user_update_playlist' playlist.id %}">Update</a> -->
+							  
 							  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							  </button>
 							</div>
-							<form method="POST" action="{% url 'user_update_playlist' playlist.id %}" onsubmit="return check_form_input()" enctype="multipart/form-data">
+							<form method="POST" onsubmit="return check_form_input()" enctype="multipart/form-data">
 								  {% csrf_token %}
 									<div class="modal-body">
 										<label id="error_display" style="color: #000;font-weight: bold;font-size: 21px;margin-bottom: 15px;display: none;">No file chosen.The Field can not be <b style='color:red;'>Empty!</b></label>
@@ -36,7 +36,6 @@
 										  <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('error_display').style.display = 'none';">Cancel</button>
 										  
 										  <button type="submit" class="btn btn-success btn-sm" id="update">Update</button>
-										  <!-- <a href="{% url 'user_update_playlist' playlist.id %}" class="btn btn-success btn-sm">Update</a> -->
 
 									  
 									</div>
@@ -118,7 +117,7 @@
 				<i class="fas fa-ellipsis-h fa-2x" data-toggle="dropdown" style="cursor: pointer;"></i>
 				<div class="dropdown-menu" style="background: #333;">
 					<a class="dropdown-item" href="#" style="color: #fff;">Make Collaborative</a>
-					<a class="dropdown-item" href="#" style="color: #fff;">Edit Playlist</a>
+					<a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-picture">Edit Playlist</a>
 					<a class="dropdown-item" href="#" style="color: #fff;">Download</a>
 					<a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-{{playlist.id}}">Delete Playlist</a>
 					<div class="dropdown-divider"></div>
@@ -253,7 +252,21 @@
 							'
 							 width="50" height="50"></td>
 						{% else %}
-							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='showLyrics(`<center style="margin-top:100px;">No lyrics found for this song.<i class="far fa-grin-beam-sweat"></i><i class="far fa-frown ml-1"></i><center/>`,"{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");add_data("{{plt.song_model.id}}","{{plt.song_model.song_name}}","{{plt.song_model.song_path.url}}", "{{plt.song_model.song_auther}}");' width="50" height="50"></td>
+							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
+							
+							queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.user.name}}"}
+
+							{% for plt in playlist.userplaylists.all %}
+						        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", lyrics:`{{plt.song_model.lyrics}}`}
+
+						    {% endfor %}
+
+		
+						playMusic({{forloop.counter0}});
+						noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
+							
+
+							' width="50" height="50"></td>
 						{% endif %}
 
 						{% if plt.song_model.album %}
@@ -397,11 +410,12 @@
 			
 			<!-- if no playlist songs were found -->
 			{% else %}
+			
 			<div class="playlist-header" style="display: flex;">
 				<div class="playlist-img">
 					{% if playlist.user == user %}
 					
-					<img src="{{playlist.playlist_img.url}}" alt="{{playlist.name}}">
+					<img class="user-playlist-img" src="{{playlist.playlist_img.url}}" alt="{{playlist.name}}">
 					<i class="fas fa-pencil-alt fa-4x" data-toggle="modal" data-target="#exampleModal-picture"></i>
 					<div class="modal fade" id="exampleModal-picture" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 					  <div class="modal-dialog" role="document">
@@ -413,41 +427,45 @@
 					          <span aria-hidden="true">&times;</span>
 					        </button>
 					      </div>
-					      <form method="POST" onsubmit="return check_form_input()">
-					        	{% csrf_token %}
-							      <div class="modal-body">
-							      	<label id="error_display" style="color: #000;font-weight: bold;font-size: 21px;margin-bottom: 15px;display: none;">No file chosen.The Field can not be <b style='color:red;'>Empty!</b></label>
-					        		<div class="form-group" style="color: #000;">
-					        			<input type="file" id="file_input" name="playlist_img" accept="image/*" class=" form-control-file" id="id_playlist_img">
-					        		</div>     	
-							        	
-							      </div>
-							      <div class="modal-footer">
-							      	
-								        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('error_display').style.display = 'none';">Cancel</button>
-								        
-								        <button type="submit" class="btn btn-success btn-sm" id="update">Update</button>
-							        
-							      </div>
-							      <script type="text/javascript">
-							      	var update_btn = document.getElementById("update")
-							      	
+					      <form method="POST" onsubmit="return check_form_input()" enctype="multipart/form-data">
+								  {% csrf_token %}
+									<div class="modal-body">
+										<label id="error_display" style="color: #000;font-weight: bold;font-size: 21px;margin-bottom: 15px;display: none;">No file chosen.The Field can not be <b style='color:red;'>Empty!</b></label>
+									  <div class="form-group user-playlist-data" style="color: #000;">
+										  <!-- <input type="file" name="playlist_img" accept="image/*" class="clearablefileinput form-control-file" id="id_playlist_img"> -->
+										  {{ playlist_name_form|crispy }}
+										  {{ playlist_img_form|crispy }}
+									  </div>     	
+										  
+									</div>
+									<div class="modal-footer">
+										
+										  <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('error_display').style.display = 'none';">Cancel</button>
+										  
+										  <button type="submit" class="btn btn-success btn-sm" id="update">Update</button>
+										  
 
-							      	// if (update_input.value == "") {
-							      	// 	update_btn.setAttribute("disabled", "off")
-							      	// } else {
-							      	// 	update_btn.RemoveAttribute("disabled")
-							      	// }
-							      	function check_form_input(){
-							      		var update_input = document.getElementById("file_input").value;
-							      		var error_display = document.getElementById("error_display");
-							      		if (update_input == ""){
-							      			error_display.style.display = "block";
-							      			return false;
-							      		}
-							      	}
-							      </script>
-					      </form>
+									  
+									</div>
+									<script type="text/javascript">
+										var update_btn = document.getElementById("update")
+										
+  
+										// if (update_input.value == "") {
+										// 	update_btn.setAttribute("disabled", "off")
+										// } else {
+										// 	update_btn.RemoveAttribute("disabled")
+										// }
+										function check_form_input(){
+											var update_input = document.getElementById("file_input").value;
+											var error_display = document.getElementById("error_display");
+											if (update_input == ""){
+												error_display.style.display = "block";
+												return false;
+											}
+										}
+									</script>
+							</form>
 					      
 				      <!-- --------------------  -->
 					    </div>
@@ -455,7 +473,7 @@
 					</div>
 				</div>
 				{% else %}
-			
+					
 					<img src="{{playlist.playlist_img.url}}" alt="{{playlist.name}}">
 
 					
@@ -485,7 +503,7 @@
 					  <i class="fas fa-ellipsis-h fa-2x" data-toggle="dropdown" style="cursor: pointer;"></i>
 				      <div class="dropdown-menu" style="background: #333;">
 				      	<a class="dropdown-item" href="#" style="color: #fff;">Make Collaborative</a>
-				      	<a class="dropdown-item" href="#" style="color: #fff;">Edit Playlist</a>
+				      	<a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-picture">Edit Playlist</a>
 				      	<a class="dropdown-item" href="#" style="color: #fff;">Download</a>
 				      	<a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-{{playlist.id}}">Delete Playlist</a>
 				        <div class="dropdown-divider"></div>

@@ -43,6 +43,7 @@
         </div>
         <form action="" method="POST" class="form">
           {% csrf_token %}
+          
           {{ form|crispy }}
           <small>Don't have an account <span><a class="login-link" href="{% url 'register' %}">Registrer now?</a> </span></small>
           <button type="submit" class="submit">Login</button>

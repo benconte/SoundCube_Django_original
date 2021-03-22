@@ -107,7 +107,6 @@ const playMusic = async (i) => {
    data = musicData.find(m => m.id === i);// || musicData[1]
   
     player.src = data.src;
-    disabled = false;
     await player.load();
     player.play();
 
@@ -133,15 +132,34 @@ const playMusic = async (i) => {
 
 
 function noLyrics(song_name, song_auther){
+  var block_content = document.getElementById('block_content');
+
+  if (is_show_queue == true) {
+    show_queue_box.style.display = 'none';
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+
+  }
+  else {
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+  }
+  
+  lyrics_head.innerHTML = data.name;
+  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
+
   let msg = `
 
-        <center style="margin-top:100px;">
+        <center style="margin-top:200px;">
 
-          No lyrics found for this song.
+          This song has no lyrics.
           <i class="far fa-grin-beam-sweat"></i>
           <i class="far fa-frown ml-1"></i>
         <center/>
       `
+  lyrics.innerHTML = msg;
 }
 
 function showLyrics(){
@@ -206,7 +224,10 @@ function showQueueBox(){
 
   var queue_playlist_img = document.getElementById("queue_playlist_img");
   queue_playlist_img.setAttribute('src', queue_playlist[0].img);//since i added the playlist into an array, we have to pass in 0 because the playlist we want is the first one
-  document.getElementById("queue_playlist_name").innerHTML = queue_playlist[0].name;
+  document.getElementById("playlist_name").innerHTML = queue_playlist[0].name;
+  if(queue_playlist[0].artists){
+    document.getElementById("playlist_artists").innerHTML = "by. " + queue_playlist[0].artists;
+  }
   document.getElementById("tracks_length").innerHTML = musicData.length;
   var t_body = document.getElementById("queue_t_body");
   // adding songs to queue tables

@@ -28,14 +28,14 @@
 			              {% for plt in discover_playlist %}
 			                <div class="swiper-slide">
 			                	<button class="playlist-button" type="button" onclick='
-
+			                	
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
-									{% for plts in playlist.homepageplaylist.all %}
-										musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+								    {% for plts in plt.homepageplaylist.all %}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
 
-									{% endfor %}
-								     playMusic({{forloop.counter0}})
+								    {% endfor %}
+								    playMusic(0)
 			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
 								
 			                  <a href="{% url 'discover_playlists' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
@@ -68,14 +68,14 @@
 			              {% for plt in playlist %}
 			                <div class="swiper-slide">
 			                	<button class="playlist-button" type="button" onclick='
-
+			                	
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
 								    {% for plts in plt.homepageplaylist.all %}
 								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
-								    playMusic({{forloop.counter0}})
+								    playMusic(0)
 			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
 								
 			                  <a href="{% url 'discover_playlists' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
@@ -107,16 +107,16 @@
 			              {% for plt in discover_playlist %}
 			                <div class="swiper-slide">
 			                	<button class="playlist-button" type="button" onclick='
-
+			                	
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
 								    {% for plts in plt.homepageplaylist.all %}
 								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
-								     playMusic({{forloop.counter0}})
+								    playMusic(0)
 			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
-					
+								
 			                  <a href="{% url 'discover_playlists' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>
 			                </div>
 			              {% endfor %}
@@ -147,14 +147,14 @@
 			              {% for plt in playlist %}
 			                <div class="swiper-slide">
 			                	<button class="playlist-button" type="button" onclick='
-
+			                	
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
 								    {% for plts in plt.homepageplaylist.all %}
 								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
-								    playMusic({{forloop.counter0}})
+								    playMusic(0)
 			                	'><i class="far fa-play-circle fa-3x" style="" id='play_icon'></i></button>
 								
 			                  <a href="{% url 'discover_playlists' plt.id %}"><img src="{{plt.playlist_img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="hometitle">Featuring {{plt.inspired}}</h3></a>

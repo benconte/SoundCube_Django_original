@@ -1,16 +1,44 @@
 {% extends 'main/base.html' %}
 {% load static %}
+{% block title %} Home {% endblock %}
 
 {% block content %}
-  <!-- <div style="padding: 30px;color: #fff;">
-    <label>no like</label>
-    <i class="far fa-heart fa-2x"></i>
-    <br>
-    <label>Liked</label>
-    <i class="fas fa-heart fa-2x"></i>
-
-  </div> -->
-  <div>
-    {{get_song.lyrics}}
+  <div class="table-container">
+    
+      <div class="row-img">img</div>
+      <div class="row-name">name</div>
+      <div class="row-auther">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+      <div class="row-lyrics-icon">lyrics</div>
+      <div class="row-album">album</div>
+      <div class="row-heart">heart</div>
+      <div class="row-length">length</div>
+      <div class="row-cancel">cancel</div>
+    
   </div>
+
+
+
+  <!-- 
+  
+  <div class="table-container">
+    
+      <div class="row-img">img</div>
+      <div class="row-name">name</div>
+      <div class="row-auther">auther</div>
+      <div class="row-lyrics-icon"><img src="/static/main/img/black-2403543_640.png" class="lyrics-icon rounded-circle" width="50" height="50"></div>
+      <div class="row-album">album</div>
+      <div class="row-heart"><i class="far fa-heart fa-2x"></i></div>
+      <div class="row-length">3.12</div>
+      <div class="row-cancel"><button type='button'><i class="far fa-times-circle fa-2x queue_song_remove_icon"></i></button></div>
+    
+  </div>
+
+
+
+   -->
 {% endblock %}

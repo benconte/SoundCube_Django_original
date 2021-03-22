@@ -87,7 +87,6 @@
 							{% else %}
 								<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 								// -----------------------------------------------------------------------------------
-								noLyrics("{{song.song_name}}", "{{song.song_auther}}";
 								queue_playlist[0] = {id:"{{user.id}}", name: "{{user.username}}", img:"{{user.profile.image.url}}"}
 								{% for fav_song in user.favorite_song.all %}
 
@@ -97,18 +96,18 @@
 								playMusic({{forloop.counter0}});
 
 								console.log(musicData)
-								
-									if (player.currentTime > 0) {
-										console.log("Greater");
-									} else {
-										playMusic({{forloop.counter0}});
-									}
+
+								noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
 
 									// ---------------------------------------------------------------------------------
 								' width="50" height="50"></td>
 							{% endif %}
 
-								<td>Rollin</td>
+								{% if song.album %}
+									<td><a href="{% url 'album' song.album.id %}" class="table-content">{{song.album.name}}</a></td>
+								{% else %}
+									<td><p style="margin-left: 30%;font-size: 22px;">-</p></td>
+								{% endif %}
 								<td>3.12</td>
 								<td>{{song.total_likes}}</td>
 								<td><a href="{% url 'favorite_song' song.id %}" class="btn btn-danger" >Remove</a></td>

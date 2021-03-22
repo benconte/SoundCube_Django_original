@@ -76,6 +76,8 @@ body{
   color: #bdb8d7;
   display: block;
   font-size: 20px;
+  width: 100%;
+  height: 100%;
   
 }
 
@@ -295,10 +297,22 @@ body{
   left: 0;
   right: 0;
   border-radius: 8px;
+}
+
+.playlist-img .user-playlist-img{
+  object-fit: cover;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 8px;
   
 }
 
-.playlist-img:hover img{
+.playlist-img:hover .user-playlist-img{
     opacity: 0.2;
 }
 
@@ -901,17 +915,69 @@ cursor: pointer;
 
 /*----------------------------------------------------*/
 
+.library_holder {
+  
+}
 .playlists_holder{
   margin-left: 10px;
-  display: inline-block;
+  float: left;
+  margin-bottom: 150px;
 }
 
 .playlists_box_holder{
   display: inline-block;
+  position: relative;
+  width: 295px;
+  height: 316px;
+  border-radius: 10px;
+  color: #fff;
+  /*background-color: red;*/
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.playlists_box_holder img{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.playlists_box_holder:hover img{
+  opacity: 0.3;
+  position: absolute;
+}
+
+.playlists_box_holder .title{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /*left: 10px;*/
+  bottom: 0;
+  line-height: 1.3;
+  font-weight: bold;
+  background-color: rgba(0,0,0,0.8);
+  color: #fff;
+  right: 0;
+  padding: 7px;
+  font-size: 14px;
+  word-wrap: break-word;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.playlists_box_holder .playlist-button{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .playlists_box_button_holder{
   float: left;
+  display: inline-flex;
+  position: relative;
 }
 
 .playlists_holder .playlists_box_button{
@@ -1459,3 +1525,100 @@ cursor: pointer;
   background-color: #717171;
   color: #fff;
 }
+
+
+/* custom creating my own table from sratch */
+
+.table-container {
+  width: 95%;
+  height: 70px;
+  display: inline-flex;
+  /*background-color: #000;*/
+  color: #fff;
+  position: relative;
+  padding-top: 10px;
+
+  border-bottom: 1px solid #717171;
+}
+
+
+/*.table-container div{
+  float: left;
+}*/
+.table-container .row-img{
+  width: 7%;
+  height: 100%;
+  background-color:red;
+
+}
+
+.table-container .row-name{
+  width: 20%;
+  height: 100%;
+  background-color: green;
+  display: flex;
+}
+
+.table-container .row-auther{
+  width: 32%;
+  height: 100%;
+  padding: 0 10px;
+  /*background-color: yellow;*/
+  display: inline-flex;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.table-container .row-lyrics-icon{
+  width: 6%;
+  height: 100%;
+  background-color: purple;
+  display: flex;
+}
+
+.table-container .row-album{
+  width: 15%;
+  height: 100%;
+  background-color: orange;
+  display: flex;
+}
+
+.table-container .row-heart{
+  width: 5%;
+  height: 100%;
+  background-color: chocolate;
+  display: flex;
+}
+
+.table-container .row-length{
+  width: 5%;
+  height: 100%;
+  background-color: brown;
+  display: flex;
+}
+
+.table-container .row-cancel{
+  width: 5%;
+  height: 100%;
+  background-color: blue;
+  display: flex;
+}
+
+.table-container .row-cancel button{
+  padding: 16px;
+}
+
+/*
+
+row-img
+row-name
+row-auther
+row-lyrics-icon
+row-album
+row-heart
+row-length
+row-cancel
+
+
+*/
+/* end of custom table */
