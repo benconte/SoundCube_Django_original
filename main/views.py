@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
 from .models import (
-		Playlists, Playlist_songs, Song_Categories, Albums, HomePagePlaylists, HomePagePlaylists_songs, 
+		Playlists, Playlist_songs, Song_Categories, Albums, HomePagePlaylists, HomePagePlaylists_songs,
 		Artists, UserArtists, UserPlaylists, UserPlaylists_songs, UserInheritedPlaylists, Song_model,
 		DiscoverPage_UserInheritedPlaylists
 		)
@@ -23,7 +23,7 @@ def home(request):
 	playlist = Playlists.objects.all()
 	playlist2 = Playlists.objects.order_by('-date_created')#[:5]
 	album = Albums.objects.all()
-	artist = Artists.objects.all()[:10]
+	artist = UserArtists.objects.filter(user=request.user)
 	category = Song_Categories.objects.all()[:12]
 	playlist_length = len(playlist)
 	# pltlist = json.dumps(playlist)
@@ -46,7 +46,7 @@ def test(request):
 		'playlist':playlist,
 		'get_song': get_song
 	}
-	return render(request, 'main/audio.html', context)
+	return render(request, 'main/test.html', context)
 
 @login_required
 def discover(request):
@@ -54,12 +54,12 @@ def discover(request):
 	discover_playlist = HomePagePlaylists.objects.order_by('-date_created')
 	category = Song_Categories.objects.all()
 
-	
+
 	context = {
 		'category': category,
 		'discover_playlist': discover_playlist,
 		'playlist':playlist,
-		
+
 	}
 	return render(request, 'main/discover.html', context)
 
@@ -67,7 +67,7 @@ def discover(request):
 # def test(request):#,id
 # 	# playlist = Playlist_songs.objects.all()#playlist = Playlists.objects.get(id=id)
 # 	context = {
-		
+
 # 	}
 # 	return render(request, 'main/test.html', context)
 
@@ -101,33 +101,38 @@ def favorite_song(request, id):
 @login_required
 def display_playlist_songs(request,id):
 	playlist = Playlists.objects.get(id=id)
-	
+
 	if playlist:
 		# first we get the playlist using filter.This will get a specific playlist
 		stuff = Playlist_songs.objects.filter(playlist=playlist).all()
-		# liked = False
-		# song_liked_dict = {}
+
+		favorite_songs = []
+		for song in stuff:
+			if song.song_model.favorite.filter(id=request.user.id).all():
+				favorite_songs.append(song.song_model.song_name)
+
+
 		# we create an array to hold the liked songs
 		song_liked_list = []
-		
 		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
 		for song in stuff:
 			if song.song_model.likes.filter(id=request.user.id).all():
 				# liked = True
 				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
 				song_liked_list.append(f"{song.song_model.song_name}")
-		
+
 		# check if playlist exist in user_inherited
 		is_playlist_inherited = False
 
 		if (UserInheritedPlaylists.objects.filter(user=request.user, playlist=playlist)).exists():
 			is_playlist_inherited = True
-		
+
 
 		context = {
 			'playlist': playlist,
 			'song_liked_list':song_liked_list,
 			'is_playlist_inherited': is_playlist_inherited,
+			'favorite_songs':favorite_songs
 
 		}
 		return render(request, 'main/display_playlist.html', context)
@@ -135,33 +140,38 @@ def display_playlist_songs(request,id):
 @login_required
 def display_album_songs(request,id):
 	album = Albums.objects.get(id=id)
-	
+
 	if album:
 		# first we get the playlist using filter.This will get a specific playlist
 		stuff = Song_model.objects.filter(album=album).all()
-		# liked = False
-		# song_liked_dict = {}
+
+		favorite_songs = []
+		for song in stuff:
+			if song.favorite.filter(id=request.user.id).all():
+				favorite_songs.append(song.song_name)
+
 		# we create an array to hold the liked songs
 		song_liked_list = []
-		
+
 		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
 		for song in stuff:
 			if song.likes.filter(id=request.user.id).all():
 				# liked = True
 				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
 				song_liked_list.append(f"{song.song_name}")
-		
+
 		# check if playlist exist in user_inherited
 		is_playlist_inherited = False
 
 		# if (UserInheritedPlaylists.objects.filter(user=request.user, playlist=playlist)).exists():
 		# 	is_playlist_inherited = True
-		
+
 
 		context = {
 			'album': album,
 			'song_liked_list':song_liked_list,
 			'is_playlist_inherited': is_playlist_inherited,
+			'favorite_songs': favorite_songs,
 
 		}
 		return render(request, 'main/display_album.html', context)
@@ -170,31 +180,37 @@ def display_album_songs(request,id):
 def display_discover_playlist_songs(request,id):
 	# playlist = HomePagePlaylists.objects.get(id=id)
 	playlist = get_object_or_404(HomePagePlaylists, id=id)
-	
+
 
 	if playlist:
 		# first we get the playlist using filter.This will get a specific playlist
 		stuff = HomePagePlaylists_songs.objects.filter(playlist=playlist).all()
-		# song_liked_dict = {}
+
+		favorite_songs = []
+		for song in stuff:
+			if song.song_model.favorite.filter(id=request.user.id).all():
+				favorite_songs.append(song.song_model.song_name)
+
 		# we create an array to hold the liked songs
 		song_liked_list = []
-		
+
 		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
 		for song in stuff:
 			if song.song_model.likes.filter(id=request.user.id).all():
 
 				# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
 				song_liked_list.append(f"{song.song_model.song_name}")
-		
+
 		is_playlist_inherited = False
 		if (DiscoverPage_UserInheritedPlaylists.objects.filter(user=request.user, playlist=playlist)).exists():
 			is_playlist_inherited = True
-		
+
 
 		context = {
 			'playlist': playlist,
 			'song_liked_list':song_liked_list,
 			"is_playlist_inherited":is_playlist_inherited,
+			'favorite_songs': favorite_songs
 
 		}
 		return render(request, 'main/display_discover_playlist_songs.html', context)
@@ -228,53 +244,69 @@ def search(request):
 
 @login_required
 def show_favorite(request):
+	# song_liked_list = []
+	# stuff = Song_model.favorite.filter(id=request.user.id).all()
+	# # then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
+	# for song in stuff:
+	# 	if song.likes.filter(id=request.user.id).all():
+	# 		# liked = True
+	# 		# song_liked_dict[f"{request.user.username}"] = f"{song.song_model.song_name}/liked"
+	# 		song_liked_list.append(f"{song.song_name}")
 
+	# context = {
+	# 	'stuff': stuff,
+
+	# }
 	return render(request, 'main/favorites.html', {})
 
 @login_required
 def user_choose_fav_artist(request):
-    artist = Artists.objects.all()
-    arts = request.POST.get('check_box')
-    if request.method == 'POST' and arts:
-    	arts = request.POST.get('check_box')
-    	plt = Artists.objects.get(name=arts)
-    	userFavs = UserArtists(userartist=plt, user=request.user)
-    	userFavs.save()
-    	return redirect('/')
-    else:
-    	return redirect('/')
+	artist = Artists.objects.all()
+	#arts = request.POST.get('check_box')
 
-    	# plt = Artists.objects.get(name=arts)
-    	# print(plt)
+	if request.method == 'POST':
+		arts = request.POST.getlist('check_box')
 
-    context = {
-    	'artists':artist
-    }
-    return render(request, 'main/choose_artists_page.html', context)
+		for art in arts:
+			plt = Artists.objects.get(name=art)
+			if UserArtists.objects.filter(userartist=plt, user=request.user).exists():
+				messages.warning(request, f"{plt.name} already exists in your favorite artists!!")
+			else:
+				userFavs = UserArtists(userartist=plt, user=request.user)
+				userFavs.save()
+				print(art, "saved successfully")
+		messages.success(request, f"Artists save successfully!!")
+		return redirect('/')
 
+
+	context = {
+		'artists':artist
+	}
+
+	return render(request, 'main/choose_artists_page.html', context)
 @login_required
 def user_choose_fav_artist_search(request):
-    if request.method == "GET":
-    	query = request.GET.get('query')
+	if request.method == "GET":
+		query = request.GET.get('query')
 
-    	if query:
-    		match = Artists.objects.filter(name__icontains=query)
+		if query:
+			match = Artists.objects.filter(name__icontains=query)
 
-    		if match:
-    			print("match found")
-    			context = {
-    				'artists': match,
-    			}
-    			return render(request, "main/choose_searched_artists_page.html", context)
-    		else:
-    			messages.warning(request, 'no artist found with that name')
-    			return HttpResponseRedirect("choose_artist")
+			if match:
+				print("match found")
+				context = {
+					'artists': match,
+				}
+				return render(request, "main/choose_searched_artists_page.html", context)
+			else:
+				messages.warning(request, 'no artist found with that name')
+				return HttpResponseRedirect("choose_artist")
 
-    	else:
-    		messages.warning(request, 'Enter a search')
-    		return HttpResponseRedirect('choose_artist')
+		else:
+			messages.warning(request, 'Enter a search')
+			return HttpResponseRedirect('choose_artist')
 
-    return HttpResponseRedirect('choose_artist')
+	return HttpResponseRedirect('choose_artist')
 
 
 @login_required
@@ -355,11 +387,14 @@ def display_user_playlist_songs(request,id):
 	if playlist:
 		# first we get the playlist using filter.This will get a specific playlist
 		stuff = UserPlaylists_songs.objects.filter(playlist=playlist).all()
-		
-		# song_liked_dict = {}
+
+		favorite_songs = []
+		for song in stuff:
+			if song.song_model.favorite.filter(id=request.user.id).all():
+				favorite_songs.append(song.song_model.song_name)
+
 		# we create an array to hold the liked songs
 		song_liked_list = []
-		
 		# then we loop through each song checking if the authenticated user has a like. If so we append it to the song_liked_list
 		for song in stuff:
 			if song.song_model.likes.filter(id=request.user.id).all():
@@ -372,8 +407,9 @@ def display_user_playlist_songs(request,id):
 				'playlist': playlist,
 				"song_liked_list": song_liked_list,
 				"playlist_name_form":playlist_name_form,
-				'playlist_img_form': playlist_img_form
-				
+				'playlist_img_form': playlist_img_form,
+				'favorite_songs':favorite_songs
+
 		}
 
 		return render(request, 'main/display_user_playlist.html', context)
@@ -470,8 +506,8 @@ def settings(request):
 	return render(request, "main/settings.html", {})
 
 @login_required
-def get_artists_data(request, id):
-	get_artists = get_object_or_404(Artists, id=id)
+def get_artists_data(request, name):
+	get_artists = Artists.objects.filter(name=name).first()
 
 	if get_artists:
 		is_favorite = False
@@ -480,10 +516,10 @@ def get_artists_data(request, id):
 		context = {
 			'artist_data': get_artists,
 			'is_favorite': is_favorite
-				
+
 		}
 
 		return render(request, 'main/artist_data.html', context)
-	
-	messages.error(request, "Error getting artists. Check your spelling and try again after a while!!")
+
+	messages.error(request, "Artist not found. Please try again after a while!!")
 	return redirect('home')

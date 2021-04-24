@@ -3,20 +3,22 @@
 {% block title %}Favorites{% endblock %}
 {% block content %}
 	<div class="" style="padding: 5px;color: #fff;margin-bottom: 100px;">
-		<div class="content-section mt-4">
-			{% if user.favorite_song.exists %}
-			<center>
-				<h1>Favorites Songs</h1>
-				<p style="color: #717171; font-size: 21px; margin-top: 10px;font-family: 'Pattaya';" id="playlist_songs_length"></p>
-				<button class="playlist-songs" id="playlist-songs"  onclick='
+		<script type="text/javascript">
+			window.onload = function(){
 				queue_playlist[0] = {id:"{{user.id}}", name: "{{user.username}}", img:"{{user.profile.image.url}}"}
 				{% for fav_song in user.favorite_song.all %}
 
 					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{fav_song.song_name}}", img:"{{fav_song.song_img.url}}", src:"{{fav_song.song_path.url}}", song_auther: "{{fav_song.song_auther}}", lyrics:`{{fav_song.lyrics}}`}
 
 				{% endfor %}
-				playMusic(0)
-			'><i class="far fa-play-circle fa-1x"></i> Listen</button>
+			}
+		</script>
+		<div class="content-section mt-4">
+			{% if user.favorite_song.exists %}
+			<center>
+				<h1>Favorites Songs</h1>
+				<p style="color: #717171; font-size: 21px; margin-top: 10px;font-family: 'Pattaya';" id="playlist_songs_length"></p>
+				<button class="playlist-songs" id="playlist-songs"  onclick='playMusic(0)'><i class="far fa-play-circle fa-1x"></i> Listen</button>
 			</center>
 			
 			
@@ -31,28 +33,21 @@
 						<th>Album</th>
 						<th>Length</th>
 						<th>Likes</th>
+						<th>Toal Likes</th>
 						<th>Remove</th>
 						<th>more</th>
 					</thead>
 					<tbody>
 						{% for song in user.favorite_song.all %}
-						<tr>
+						<tr class="tr">
 							
 							<td>
 								<img src="{{song.song_img.url}}" class="song_img" width="50" height="50">
 								<i class="fa fa-play-circle fa-3x " onclick='
 
 									// -------------------------------------------------------------------------------
-									queue_playlist[0] = {id:"{{user.id}}", name: "{{user.username}}", img:"{{user.profile.image.url}}"}
-								{% for fav_song in user.favorite_song.all %}
-
-									musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{fav_song.song_name}}", img:"{{fav_song.song_img.url}}", src:"{{fav_song.song_path.url}}", song_auther: "{{fav_song.song_auther}}", lyrics:`{{fav_song.lyrics}}`}
-
-								{% endfor %}
-								playMusic({{forloop.counter0}});
-									playMusic({{forloop.counter0}})
-									
-
+									playMusic({{forloop.counter0}});
+								
 									// ------------------------------------------------------------------------------
 
 								' id='{{song.id}}'></i>
@@ -64,40 +59,15 @@
 							<td>
 								<img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 							// ---------------------------------------------------------------------------------
-								queue_playlist[0] = {id:"{{user.id}}", name: "{{user.username}}", img:"{{user.profile.image.url}}"}
-								{% for fav_song in user.favorite_song.all %}
-
-									musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{fav_song.song_name}}", img:"{{fav_song.song_img.url}}", src:"{{fav_song.song_path.url}}", song_auther: "{{fav_song.song_auther}}", lyrics:`{{fav_song.lyrics}}`}
-
-								{% endfor %}
 								playMusic({{forloop.counter0}});
-
-								console.log(musicData)
 								showLyrics();
-
-								
-									if (player.currentTime > 0) {
-										console.log("Greater");
-									} else {
-										playMusic({{forloop.counter0}});
-									}
-								
 								// ----------------------------------------------------------------------------------
 								' width="50" height="50"></td>
 							{% else %}
 								<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 								// -----------------------------------------------------------------------------------
-								queue_playlist[0] = {id:"{{user.id}}", name: "{{user.username}}", img:"{{user.profile.image.url}}"}
-								{% for fav_song in user.favorite_song.all %}
-
-									musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{fav_song.song_name}}", img:"{{fav_song.song_img.url}}", src:"{{fav_song.song_path.url}}", song_auther: "{{fav_song.song_auther}}", lyrics:`{{fav_song.lyrics}}`}
-
-								{% endfor %}
 								playMusic({{forloop.counter0}});
-
-								console.log(musicData)
-
-								noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
+								noLyrics("{{song.song_name}}", "{{song.song_auther}}");
 
 									// ---------------------------------------------------------------------------------
 								' width="50" height="50"></td>
@@ -109,6 +79,23 @@
 									<td><p style="margin-left: 30%;font-size: 22px;">-</p></td>
 								{% endif %}
 								<td>3.12</td>
+								<td>
+									<form action="{% url 'like_song' song.pk %}" method="post">
+						        		{% csrf_token %}
+
+							        	{% if user.is_authenticated %}
+						                  {% if song.song_name in song_liked_list %}
+										  		<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ song.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;color: #1DB954;"><i class="fas fa-heart fa-2x"></i></button>
+
+								          {% else %}
+										  		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ song.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x " id="fa_heart"></i></button>
+								          {% endif %}
+							           	{% else %}
+							        		<p>Can't like</p>
+							          	{% endif %}
+
+									</form>
+								</td>
 								<td>{{song.total_likes}}</td>
 								<td><a href="{% url 'favorite_song' song.id %}" class="btn btn-danger" >Remove</a></td>
 								<td>

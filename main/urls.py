@@ -10,7 +10,7 @@ urlpatterns = [
 	path('remove_song_playlist/<int:playlist>/<int:id>', views.remove_song_from_playlist, name="remove_song_from_playlist"),
 	path(f'library/<str:username>', views.user_playlist, name='user_playlist'),
 	path('choose_artist', views.user_choose_fav_artist, name="choose_artist"),
-	path('choose_searched_artist', views.user_choose_fav_artist_search, name="user_choose_fav_artist_search"),
+	path("user_choose_fav_artist_search", views.user_choose_fav_artist_search, name="user_choose_fav_artist_search"),
 	path('discover', views.discover, name="discover"),
 	path('search', views.search, name="search"),
 	path('test', views.test, name="test"),#path('test/<int:id>', views.test, name="test"),
@@ -24,6 +24,6 @@ urlpatterns = [
     path('create_user_playlist/<int:id>', views.CreateUserPlaylistView.as_view(), name='create_playlist'),			
     path('delete_user_playlist/<int:pk>', views.DeleteUserPlaylistView.as_view(), name='delete_user_playlist'),
     path('settings', views.settings, name="settings"),
-	path("artist/<int:id>", views.get_artists_data, name="artist_data"),
+	path("artist/<str:name>", views.get_artists_data, name="artist_data"),
 	# path("user_update_playlist/<int:pk>", views.UserPlaylistUpdateView.as_view(), name="user_update_playlist")
 ]

@@ -107,7 +107,6 @@ const playMusic = async (i) => {
    data = musicData.find(m => m.id === i);// || musicData[1]
   
     player.src = data.src;
-    disabled = false;
     await player.load();
     player.play();
 
@@ -133,25 +132,47 @@ const playMusic = async (i) => {
 
 
 function noLyrics(song_name, song_auther){
-  let msg = `
-
-        <center style="margin-top:100px;">
-
-          No lyrics found for this song.
-          <i class="far fa-grin-beam-sweat"></i>
-          <i class="far fa-frown ml-1"></i>
-        <center/>
-      `
-}
-
-function showLyrics(){
   var block_content = document.getElementById('block_content');
+
   if (is_show_queue == true) {
     show_queue_box.style.display = 'none';
     is_show_lyrics = true;
     show_lyrics.style.display = 'block';
     block_content.style.display = 'none';
-  } else {
+
+  }
+  else {
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+  }
+  
+  lyrics_head.innerHTML = data.name;
+  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
+
+  let nolyrics_msg = `
+
+        <center style="margin-top:200px;">
+
+          This song has no lyrics.
+          <i class="far fa-grin-beam-sweat"></i>
+          <i class="far fa-frown ml-1"></i>
+        <center/>
+      `
+  lyrics.innerHTML = nolyrics_msg;
+}
+
+function showLyrics(){
+  var block_content = document.getElementById('block_content');
+
+  if (is_show_queue == true) {
+    show_queue_box.style.display = 'none';
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+
+  }
+  else {
     is_show_lyrics = true;
     show_lyrics.style.display = 'block';
     block_content.style.display = 'none';
@@ -203,7 +224,10 @@ function showQueueBox(){
 
   var queue_playlist_img = document.getElementById("queue_playlist_img");
   queue_playlist_img.setAttribute('src', queue_playlist[0].img);//since i added the playlist into an array, we have to pass in 0 because the playlist we want is the first one
-  document.getElementById("queue_playlist_name").innerHTML = queue_playlist[0].name;
+  document.getElementById("playlist_name").innerHTML = queue_playlist[0].name;
+  if(queue_playlist[0].artists){
+    document.getElementById("playlist_artists").innerHTML = "by. " + queue_playlist[0].artists;
+  }
   document.getElementById("tracks_length").innerHTML = musicData.length;
   var t_body = document.getElementById("queue_t_body");
   // adding songs to queue tables
@@ -216,7 +240,7 @@ function showQueueBox(){
     <td>Rollin</td>
     <td><i class="far fa-heart fa-2x"></i></td>
     <td>3.12</td>
-    <td><button onclick="`+queue_remove_song(musicData[q_song]) +`"><i class="far fa-times-circle fa-2x queue_song_remove_icon"></i></button></td>`;
+    <td><button type='button' onclick='`+queue_remove_song(musicData[q_song].id)+`'><i class="far fa-times-circle fa-2x queue_song_remove_icon"></i></button></td>`;
     t_body.appendChild(tableData)//adding the looped data to the html body tag
     
   }
@@ -235,28 +259,9 @@ function cancelQueueBox(){
 }
 
 function queue_remove_song(q_song){
-   delete q_song;
+   musicData[q_song] = {}
   //  console.log(q_song)
 }
-
-function add_data(id, name, song, auther, lyrics_song) {
-  musicData['id'] = [id];
-  musicData['name']=[name];
-  musicData['src'] = [song];
-  musicData['auther'] = [auther];
-  musicData['lyrics_song'] = [lyrics_song]
-  
-  // console.log(musicData)
-  // console.log(auther)
-  // var table_pause = document.getElementById(id);
-  playMusic();
-
-  // table_pause.className = "fas fa-pause-circle fa-3x";
-  playing_song_name.innerHTML = name + ' - '+ auther;//+ ':' + auther
-  document.getElementById('own').style.display = 'flex';
-  
-}
-
 
 const nextPlay = () => {
   index++;
@@ -353,13 +358,18 @@ function change_vol()
       }
 }
 
-// var playlistObj = {};
-// const gettingPlaylistSongs = (playlist) => {
-//   for(let plt = 0;plt <= playlist.length; plt++){
-//     playlistObj[name] = playlist[0].name
-//   }
+// switching next song with song selected by the user
+function switch_song(song_to_switch){
+  var current_song_id = data.id;
 
-//   console.log(playlist);
-// }
+  var song_to_switch_id = musicData[song_to_switch].id;
+  var temp; // let's say song id is 9
+  temp = musicData[current_song_id + 1];
+  // first switching the songs then there ids.
+  musicData[current_song_id + 1] = musicData[song_to_switch];
+  musicData[current_song_id + 1].id = temp.id;
 
+  musicData[song_to_switch] = temp;
+  musicData[song_to_switch].id = song_to_switch;
 
+}

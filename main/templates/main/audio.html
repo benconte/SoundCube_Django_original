@@ -1,457 +1,457 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	  <meta name="description" content="">
-	  <meta name="author" content="">
+document.addEventListener("DOMContentLoaded", function() { startplayer(); }, false);
+var player = new Audio; //document.getElementById('music_player');
+var isPlaying = false;
+var re_playying = document.getElementById("re_play");
+var own = document.getElementById('own');
+let index = 0;//we use index to get the songs from musicData according to the skip
 
-	  {% if title %}
-			<title>{{ title }}</title>
-		{%else%}
-			<title>Display</title>
-		{% endif %}
-	<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css"> 
 
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-	
-	<style type="text/css">
-		.row{
-display: inline-block;
-		}
-
-		.card{
-			margin-right: 20px;
-			padding-right: 10px;
-			margin-bottom: 20px;
-			
-
-		}
-		.song{
-			width: 250px;
-		}
-
-		.own{
-			width: 100%;
-			height: 90px;
-
-			min-height: 10px;
-			background-color: #F3F4F5;
-			margin-top: 50%;
-			display: flex;
-			border-top: 1px solid grey;
-			border-bottom: none;
-			border-left: none;
-			border-right: none;
-			position: fixed;
-			bottom: 0;
-			left: 0;
-
-		}
-		.prev-track{
-			margin-right: 20px;
-			margin-left: 30px;
-		}
-
-		.buttons { 
-			display: flex; 
-			flex-direction: row; 
-			align-items: center; 
-		}
-		.playpause-track{
-			margin-right: 20px;
-		} 
-
-		.slider_container { 
-			width: 50%; 
-			
-			display: flex; 
-			justify-content: center; 
-			align-items: center; 
-			margin-left: 100px;
-		} 
-		/* Modify the appearance of the slider thumb */
-.seek_slider::-webkit-slider-thumb, 
-.volume_slider::-webkit-slider-thumb { 
--webkit-appearance: none; 
--moz-appearance: none; 
-appearance: none; 
-width: 15px; 
-height: 15px; 
-background: white; 
-cursor: pointer; 
-border-radius: 50%; 
-} 
-
-/* Change the opacity when mouse is hovered */
-.seek_slider:hover, 
-.volume_slider:hover { 
-opacity: 1.0; 
-} 
-
-.seek_slider { 
-width: 500px;
-} 
-
-.volume_slider { 
-width: 60%; 
-} 
-
-.current-time, 
-.total-duration { 
-padding: 10px; 
-} 
-
-i.fa-volume-down, 
-i.fa-volume-up { 
-padding: 10px; 
-} 
-
-/* Change the mouse cursor to a pointer 
-when hovered over */
-i.fa-play-circle, 
-i.fa-pause-circle, 
-i.fa-step-forward, 
-i.fa-step-backward { 
-cursor: pointer; 
-} 
+var song_path = 'static/uploads/Syn Cole - Feel Good - (Music Video).mp3';
+let repeatMusic = false;
+var rep_on = false;
+var img = document.getElementById('img');
+var son = document.getElementById('song');
+var playing_song_name = document.getElementById("playing_song_name");
 
 
 
-.re-play{
-	margin-left: 15px;
-	font-size: 30px;
-}
-.re-play:hover{
-	color: red;
-	cursor: pointer;
+var plt_image = document.getElementById('plt_image');
+var carousel_image_holder = document.getElementById('carousel_image_holder');
+
+var lyrics_head = document.getElementById('lyrics_head');
+var lyrics_artist = document.getElementById('lyrics_artist');
+var lyrics = document.getElementById('lyrics');
+var show_lyrics = document.getElementById('show_lyrics');
+var show_queue_box = document.getElementById('queue_box');
+var arrow_down = document.getElementById('arrow_down');
+
+var is_show_lyrics = false;
+var is_show_queue = false;
+
+// --------------------------------------------------------------------------
+var step_forwad = document.getElementById('step_forwad');
+var step_backward = document.getElementById('step_backward');
+var pausing = document.getElementById('pause');
+var pause_btn = document.getElementById('pause_btn');
+const progress = document.getElementById("progress");
+var volumeBar = document.getElementById('volumeBar');
+var volumedown_btn = document.getElementById("volumedown");
+var volumeup_btn = document.getElementById("volumeup");
+var mic = document.getElementById("mic");
+var shufle = document.getElementById("shufle");
+var queue = document.getElementById("queue");
+
+let disabled = true;
+// --------------------------------------------------------------------------
+const musicData = [];
+const queue_playlist = [];
+
+// disabling buttons
+pause_btn.setAttribute("disabled", disabled);
+step_forwad.setAttribute("disabled", disabled);
+step_backward.setAttribute("disabled", disabled);
+progress.setAttribute("disabled", disabled);
+volumeBar.setAttribute("disabled", disabled);
+volumedown_btn.setAttribute("disabled", disabled);
+volumeup_btn.setAttribute("disabled", disabled);
+mic.style.visibility = "hidden";
+shufle.setAttribute("disabled", disabled);
+queue.setAttribute("disabled", disabled);
+re_playying.style.visibility = "hidden";
+
+// end of disabling buttons
+player.type = 'audio/mpeg';
+   
+
+function startplayer() 
+{
+ 
+ player.controls = false;
 }
 
-.container .row{
-	margin-bottom: 90px;
+function re_play(){
+if (rep_on == false){
+  rep_on = true;
+  re_playying.style.color = 'red';
+}
+else{
+  rep_on = false;
+  re_playying.style.color = none;
 }
 
-.card-img-top:hover{
-
-cursor: pointer;
-}
-
-.card-img-top:hover{
-	width: 270px;
-}
-
-/*#main{
-	display: none;
-}*/
-
-#progress{
-	width: 830px;
 }
 
 
+function play(){
+  if (musicData !== {}){
+    if (isPlaying == false){
+      isPlaying = true
+      
+      player.play();
+      
+      pausing.className = "fas fa-pause-circle fa-3x";
 
+    }else{
+      isPlaying = false
+      player.pause();
+      
+      pausing.className = "fa fa-play-circle fa-3x";
+    }
+  }
+}
 
-	</style>
-</head>
-<body>
+let data = {};
 
-	<div class="container">
-		<h2>Audio Page</h2><a href="{% url 'home' %}" class="btn btn-outline-primary" style="margin-bottom: 20px;">Home Page</a><a href="#" class="btn btn-outline-primary" style="margin-bottom: 20px; margin-left: 10px;">Display Page</a><br>
+const playMusic = async (i) => {
+    data = musicData.find(m => m.id === i);// || musicData[1]
+  
+    player.src = data.src;
+    await player.load();
+    player.play();
 
-		<button class="btn btn-outline-success" onclick='
+    isPlaying = true;
+    playing_song_name.innerHTML = data.name + ' - '+ data.song_auther;
+  
+    pausing.className = "fas fa-pause-circle fa-3x";
+    
+    pause_btn.removeAttribute("disabled");
+    step_forwad.removeAttribute("disabled");
+    step_backward.removeAttribute("disabled");
+    progress.removeAttribute("disabled");
+    volumeBar.removeAttribute("disabled");
+    volumedown_btn.removeAttribute("disabled");
+    volumeup_btn.removeAttribute("disabled");
+    mic.style.visibility = "visible";
+    shufle.removeAttribute("disabled");
+    queue.removeAttribute("disabled");
+    re_playying.style.visibility = "visible";
+}
 
-			{% for song in playlist %}
+/* 
+if(data.id != i){
+      
+      data = musicData.find(m => m.id === i);// || musicData[1]
+      player.src = data.src;
+      await player.load();
+      player.play();
 
-				musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, img:"{{plt.song_img.url}}", src:"{{plt.song_path.url}}"}
+      playing_song_name.innerHTML = data.name + ' - '+ data.song_auther;
+  
+      pausing.className = "fas fa-pause-circle fa-3x";
+    }else{
+      if (isPlaying == false){
+        isPlaying = true;
+        
+        player.play();
+        
+        pausing.className = "fas fa-pause-circle fa-3x";
+        
 
-			{% endfor %}
-			//we pass in the index of 1 so tat it starts from the first song playing
-			console.log(musicData)
-			playMusic(0)
-			'>Play</button>
-		<div class="row">
+      }else{
+        isPlaying = false
+        player.pause();
+        
+        pausing.className = "fa fa-play-circle fa-3x";
 
+      }
 
-				{% for song in playlist %}
-			
-<!-- 			<div class="song">
-				<label>{{song.name}}</label>
-				<audio src="{{song.song}}" controls="on" >not allowed</audio>
-			</div> -->
-
-			<div class="card" style="width: 17rem; border: none; margin-right: 20px;display: flex;"><!-- add_data('{{song.id}}','{{song.name}}' ,'{{song.song}}') -->
-			  <img src="{{song.song_img.url}}" width="300" height="300" id="img"  class="card-img-top" alt="..." onclick="add_data('{{song.id}}','{{song.song_name}}' ,'{{song.song_path.url}}')">
-			  <div class="card-body">
-			    <h5 class="card-text" id="song" ><a href="{{song.song_path.url}}" style="color: black; text-decoration: none; cursor: pointer;">{{song.song_name}}</a></h5>
-
-				</div>
-
-		{% endfor %}
-
-		</div>
-
-		
-	</div>
-	
-
-	<div id="main" >
-		<div>
-
-			<div class="row">
-				<div class="own" id="own" style="display: none;">
-						<div class="buttons"> 
-							<div class="prev-track" onclick="prevPlay()"> 
-								<i class="fa fa-step-backward fa-2x"></i> 
-							</div> 
-							<div class="playpause-track" onclick="play()"> 
-								<i class="fa fa-play-circle fa-4x" id='pause'></i> 
-							</div>
-							<div class="next-track" onclick="nextPlay()"> 
-								<i class="fa fa-step-forward fa-2x"></i> 
-							</div> 
-						</div>
-
-						<div class="slider_container"> 
-							<div class="current-time" id="ctview">00:00</div> 
-							<input type="range" min="1" max="1000"
-								value="0" class="seek_slider" id="progress" oninput="changeProgressBar()"> 
-							<div class="total-duration" id="ttview">00:00</div> 
-
-							<div class="re-play" ><i class="fas fa-retweet" id="re_play" onclick="repeat()" ></i></div>
-						</div>
-
-						<div class="slider_container"> 
-							<i class="fa fa-volume-down" onclick="volumeDown()"></i> 
-							<input type="range" min="0" max="100"
-								value="50"  class="volume_slider" id="volumeBar" oninput="player.volume = this.value/100"> 
-						<i class="fa fa-volume-up" onclick="volumeUp()"></i> 
-					</div>  
-				</div>
-				
-			</div>
-		</div>
-	</div>
-
-
-	<script>
-		document.addEventListener("DOMContentLoaded", function() { startplayer(); }, false);
-		var player = new Audio; //document.getElementById('music_player');
-		var isPlaying = false;
-		var re_playying = document.getElementById("re_play");
-		var own = document.getElementById('own');
-		// var main = document.getElementById('main');
-		var volumeBar = document.getElementById('volumeBar');
-		let index = 1;
-		var pausing = document.getElementById('pause');
-		var song_path = 'static/uploads/Syn Cole - Feel Good - (Music Video).mp3';
-		let repeatMusic = false;
-		var rep_on = false;
-		var img = document.getElementById('img');
-		var son = document.getElementById('song');
-		let data;
-		const musicData = [
-
-					// {
-					// 	id:1,
-					// 	src: 'static/uploads/Syn Cole - Feel Good - (Music Video).mp3',
-					// },
-					// {
-					// 	id:1,
-					// 	src: 'static/uploads/Key__Peele_-_Pirate_Chantey_192_kbps.mp3',
-					// }
-			];
-		
-
-		player.type = 'audio/mpeg';
-		
-
-		function startplayer() 
-		{
-			 
-			 player.controls = false;
-		}
-
-		 function re_play(){
-		 	if (rep_on == false){
-		 		rep_on = true;
-		 		re_playying.style.color = 'red';
-		 	}
-		 	else{
-		 		rep_on = false;
-		 		re_playying.style.color = none;
-		 	}
-		 	
-		 }
-
-		 const progress = document.getElementById("progress");
-		function play(){
-			if (musicData !== {}){
-				if (isPlaying == false){
-				isPlaying = true
-				
-			 	player.play();
-			 	
-			 	pausing.className = "fas fa-pause-circle fa-4x";
-
-			 	
-
-
-			}else{
-				isPlaying = false
-			 	player.pause();
-			 	
-				pausing.className = "fa fa-play-circle fa-4x";
-			}
-			}
-			
-
-		}
+      // use for loop to check with id matches data.id from there change the icons. and also change the previous one
+      document.getElementById(i).className = "fas fa-pause-circle fa-3x";
+      document.getElementById(i).className = "fa fa-play-circle fa-3x";
+    }
+   
+*/
 
 
 
-		const playMusic = async (i) => {
-			  
-			   data = musicData.find(m => m.id === i) ;//|| musicData[1]
-			  	console.log(data)
-			  	  player.src = data.src;
-				  await player.load();
-				  player.play();
+function noLyrics(song_name, song_auther){
+  var block_content = document.getElementById('block_content');
 
-				  isPlaying = true
-			 	
-			 	  pausing.className = "fas fa-pause-circle fa-3x"
+  if (isPlaying == false){
+      isPlaying = true;
+      
+      player.play();
+      
+      pausing.className = "fas fa-pause-circle fa-3x";
 
-			  
-			}
+    }else{
+      isPlaying = false;
+      player.pause();
+      
+      pausing.className = "fa fa-play-circle fa-3x";
+    }
 
-			function add_data(id, name, song) {
-				musicData['id'] = [id];
-				musicData['name']=[name];
-				musicData['src'] = [song];
-				// musicData.push(musicData['src'] = [song]);
-				
+  if (is_show_queue == true) {
+    show_queue_box.style.display = 'none';
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
 
-				
-				// console.log(id+ ', ' + name+', '+ song);
-				console.log(musicData)
-				playMusic();
-				document.getElementById('own').style.display = 'flex';
-				
-			}
-	
+  }
+  else {
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+  }
+  
+  lyrics_head.innerHTML = data.name;
+  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
 
-		const nextPlay = () => {
-		  index++;
-		  if (index > musicData.length) {
-		   index = 1;
-		  }
-		  playMusic(index);
-		  // if (isPlaying == false){
-		  // 	isPlaying = true;
-		  // 	pausing.className = "fas fa-pause-circle fa-4x"
+  let nolyrics_msg = `
 
-		  // }
-		  // else{
-		  // 	isPlaying = false;
-		  // 	pausing.className = "fas fa-play-circle fa-4x"
-		  // }
-		 }
+        <center style="margin-top:200px;">
 
-		 const prevPlay = () => {
-		  index--;
-		  if (index <= 0) {
-		  index = musicData.length;
-		  }
-		  playMusic(index);
-		  // if (isPlaying == false){
-		  // 	isPlaying = true;
-		  // 	pausing.className = "fas fa-pause-circle fa-4x"
+          This song has no lyrics.
+          <i class="far fa-grin-beam-sweat"></i>
+          <i class="far fa-frown ml-1"></i>
+        <center/>
+      `
+  lyrics.innerHTML = nolyrics_msg;
+}
 
-		  // }
-		  // else{
-		  // 	isPlaying = false;
-		  // 	pausing.className = "fas fa-play-circle fa-4x"
-		  // }
-		 }
+function showLyrics(i){
+  var block_content = document.getElementById('block_content');
+
+  if(data.id == i){
+    if (isPlaying == true){
+      isPlaying = false;
+    }else{
+      isPlaying = true;
+      player.pause();
+      
+      pausing.className = "fa fa-play-circle fa-3x";
+    }
+  }else{
+      isPlaying = true;
+      
+      player.play();
+      
+      pausing.className = "fas fa-pause-circle fa-3x";
+  }
+  // if (isPlaying == false){
+  //     isPlaying = true;
+      
+  //     player.play();
+      
+  //     pausing.className = "fas fa-pause-circle fa-3x";
+
+  //   }else{
+  //     isPlaying = false;
+  //     player.pause();
+      
+  //     pausing.className = "fa fa-play-circle fa-3x";
+  //   }
+  if (is_show_queue == true) {
+    show_queue_box.style.display = 'none';
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+
+  }
+  else {
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+  }
+  
+  lyrics_head.innerHTML = data.name;
+  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
+  let counter = 0;
+  // let s_lyrics = "";//1 line maximum 55
+  // let lyrics_holder = data.lyrics;
+
+  // // getting the lyrics length for the loop
+  // for(var s = 0; s <= lyrics_holder.length; s++){
+  //   s_lyrics += lyrics_holder[s];
+  //   counter += 1;
+    
+  //   // check if counter is >= 55 if so the we add a new line if not we keep looping until we see a space
+  //   if(counter >= 55){
+  //     if(lyrics_holder[s] === ' '){
+  //       counter = 0;
+  //       s_lyrics += '<br />';
+  //       continue;
+  //     }
+  //     else{
+  //       counter +=1;
+  //       continue;
+  //     }
+      
+  //   }
+  // }
+  
+  lyrics.innerHTML = data.lyrics;
+
+}
+function cancelLyrics(){
+  var block_content = document.getElementById('block_content');
+  is_show_lyrics = false;
+  block_content.style.display = 'flex';
+  show_lyrics.style.display = 'none';
+}
+
+// showing queue
+
+function showQueueBox(){
+  var block_content = document.getElementById('block_content');
+  show_queue_box.style.display = 'block';
+  block_content.style.display = 'none';
+  is_show_queue = true;
+
+  var queue_playlist_img = document.getElementById("queue_playlist_img");
+  document.getElementById("tracks_length").innerHTML = musicData.length;
+  queue_playlist_img.setAttribute('src', queue_playlist[0].img);//since i added the playlist into an array, we have to pass in 0 because the playlist we want is the first one
+  document.getElementById("playlist_name").innerHTML = queue_playlist[0].name;
+  if(queue_playlist[0].artists){
+    document.getElementById("playlist_artists").innerHTML = "by. " + queue_playlist[0].artists;
+  }
+  
+
+  var t_body = document.getElementById("queue_t_body");
+  // adding songs to queue tables
+  for(let q_song = 0; q_song <= musicData.length; q_song++){
+    var tableData = document.createElement("tr");
+    // document.getElementById("t_img").src = musicData[q_song].img;
+    // tableData.innerHTML = `<td><img src='` + musicData[q_song].img + `' class='queue_table_img'>`
+    tableData.innerHTML = `<td><img src='` + musicData[q_song].img + `' class='queue_table_img'><i class="fa fa-play-circle"></i></td>
+    <td>`+musicData[q_song].name+ `</td>
+    <td><div  class='marquee'><p>`+musicData[q_song].song_auther+`</p></div></td>
+    <td><img src="/static/main/img/black-2403543_640.png" class="lyrics-icon rounded-circle" width="50" height="50" showLyrics();'></td>
+    <td>Rollin</td>
+    <td><i class="far fa-heart fa-2x"></i></td>
+    <td>3.12</td>
+    <td><button type='button' onclick='queue_remove_song(musicData[q_song].id)'><i class="far fa-times-circle fa-2x queue_song_remove_icon"></i></button></td>`;
+    t_body.appendChild(tableData)//adding the looped data to the html body tag
+    
+  }
+
+
+}
+function cancelQueueBox(){
+  var block_content = document.getElementById('block_content');
+  if (is_show_lyrics == true) {
+    show_queue_box.style.display = 'none';
+  } else {
+    block_content.style.display = 'flex';
+    show_queue_box.style.display = 'none';
+  }
+  
+}
+
+function queue_remove_song(q_song){
+   musicData[q_song] = {}
+  //  console.log(q_song)
+}
+
+const nextPlay = () => {
+  index++;
+  if (index >= musicData.length) {
+   index = 0;
+  }
+  playMusic(index);
+}
+
+const prevPlay = () => {
+  if (index <= 0) {
+    index = musicData.length;
+  }
+  index--;
+  playMusic(index);
+
+}
 
 
 
-		  // eventListners 
-		 player.addEventListener("ended", () => {
-		  nextPlay();
-		 })
+// eventListners 
+player.addEventListener("ended", () => {
+  nextPlay();
+});
 
-		const volumeDown = () => {
-		  volumeBar.value = Number(volumeBar.value) - 20
-		  player.volume = volumeBar.value / 100
-		 }
-		 const volumeUp = () => {
-		  volumeBar.value = Number(volumeBar.value) + 20
-		  player.volume = volumeBar.value / 100
-		 }
+const volumeDown = () => {
+volumeBar.value = Number(volumeBar.value) - 20
+player.volume = volumeBar.value / 100
+}
+const volumeUp = () => {
+volumeBar.value = Number(volumeBar.value) + 20
+player.volume = volumeBar.value / 100
+}
 
-		 const repeat = e => {
-		  repeatMusic = !repeatMusic;
-		  player.loop = repeatMusic;
+const repeat = e => {
+repeatMusic = !repeatMusic;
+player.loop = repeatMusic;
 
-		  if (rep_on == false){
-		 		rep_on = true;
-		 		re_playying.style.color = 'red';
-		 	}
-		 	else{
-		 		rep_on = false;
-		 		re_playying.style.color = 'black';
-		 	}
-		 }
+if (rep_on == false){
+  rep_on = true;
+  re_playying.style.color = '#1DB954';
+}
+else{
+  rep_on = false;
+  re_playying.style.color = '#333';
+}
+}
 
-		player.onloadeddata = () =>  {
-		 progress.max = player.duration
-		 const ds = parseInt(player.duration % 60)
-		 const dm = parseInt((player.duration / 60) % 60)
-		 ttview.textContent = dm + ':' + ds;
-		 }
-		 player.ontimeupdate =  () =>  { 
-		   progress.value = player.currentTime 
-		 }
-		 player.addEventListener('timeupdate', () => {
-		 //progress.value = player.currentTime;
-		 var cs = parseInt(player.currentTime % 60)
-		 var cm = parseInt((player.currentTime / 60) % 60)
-		  ctview.textContent = cm + ':' + cs;
-		 }, false);
-
-		
-		const changeProgressBar = () => { 
-		   player.currentTime = progress.value;
-		 }
-
-		 var vol = document.getElementById("change_vol");
-		 const changeVolume = () => { 
-		   player.volume = vol.value;
-		 }
-
-		function stop_aud() 
-		{
-			 player.pause();
-			 player.currentTime = 0;
-		}
-		function change_vol()
-		{
-			 
-			  if (player.volume < 1) {
-                player.volume += 0.1;
-                console.log(player.volume);
-            } else {
-                player.volume = 1;
-            }
-		}
-	</script>
+player.onloadeddata = () =>  {
+  progress.max = player.duration
+  const ds = parseInt(player.duration % 60)//getting seconds
+  const dm = parseInt((player.duration / 60) % 60)//getting minutes
+  ttview.textContent = dm + ':' + ds;
+}
+player.ontimeupdate =  () =>  { 
+  progress.value = player.currentTime ;
+}
+player.addEventListener('timeupdate', () => {
+  progress.value = player.currentTime;
+  var cs = parseInt(player.currentTime % 60)
+  var cm = parseInt((player.currentTime / 60) % 60)
+  ctview.textContent = cm + ':' + cs;
+}, false);
 
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-</body>
-</html>
+// const changeProgressBar = () => { 
+//  player.currentTime = progress.value;
+// }
+function changeProgressBar(rangeElement){ 
+  // player.currentTime = parseInt(player.duration*rangeElement.value/100);
+  // player.currentTime = player.duration*rangeElement.value/100;
+  player.currentTime = progress.value;
+
+}
+
+var vol = document.getElementById("change_vol");
+const changeVolume = () => { 
+ player.volume = vol.value;
+}
+
+function stop_aud() 
+{
+ player.pause();
+ player.currentTime = 0;
+}
+function change_vol()
+{
+ 
+  if (player.volume < 1) {
+          player.volume += 0.1;
+          console.log(player.volume);
+      } else {
+          player.volume = 1;
+      }
+}
+
+// switching next song with song selected by the user
+function switch_song(song_to_switch){
+  var current_song_id = data.id;
+
+  var song_to_switch_id = musicData[song_to_switch].id;
+  var temp; // let's say song id is 9
+  temp = musicData[current_song_id + 1]; //getting the next song
+
+  // first switching the songs then there ids.
+  musicData[current_song_id + 1] = musicData[song_to_switch];
+  //when we do this the id doesn't change so we need to change manually
+  musicData[current_song_id + 1].id = temp.id; 
+
+  musicData[song_to_switch] = temp;
+  musicData[song_to_switch].id = song_to_switch;
+
+}

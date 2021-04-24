@@ -25,7 +25,7 @@
 								queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
 								    {% for plts in plt.playlist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}, 
 
 								    {% endfor %}
 					
@@ -68,7 +68,7 @@
 									
 									
 										{% for plts in plt.playlist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
 					
@@ -129,7 +129,7 @@
 									
 									
 									{% for albms in alb.album_model.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{albms.song_name}}", img:"{{albms.song_img.url}}", src:"{{albms.song_path.url}}", song_auther: "{{albms.song_auther}}", lyrics:`{{albms.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{albms.song_name}}", img:"{{albms.song_img.url}}", src:"{{albms.song_path.url}}", song_auther: "{{albms.song_auther}}",album_id: "{{alb.id}}",album: "{{alb.name}}", lyrics:`{{albms.lyrics}}`}
 
 								    {% endfor %}
 					
@@ -162,19 +162,27 @@
 				<div class="all_slides">
 				<div class="sixthslider"><!-- change the slide name also the slide icons -->
 					<div class="swiper-container">
+					{% if artists %}
 					<div class="swiper-wrapper">
-						{% for art in artists %}
-						<div class="swiper-slide">
-							<a href="{% url 'artist_data' art.id %}" class="art_img"><img src="{{art.img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="artist-name">{{art.name}}</h3></a>
-						</div>
-						{% endfor %}
+						
+							{% for art in artists %}
+							<div class="swiper-slide">
+								<a href="{% url 'artist_data' art.userartist.name %}" class="art_img"><img src="{{art.userartist.img.url}}" alt="{{plt.name}}" id="plt_image"><h3 class="artist-name">{{art.userartist.name}}</h3></a>
+							</div>
+							{% endfor %}
+							<div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
+						
+						
+					</div>
+					{% else %}
+							<center style="margin-top: 150px;">
+								<h3><b>Looks like you have no favorite artists</b></h3>
+								<a href="{% url 'choose_artist' %}" class="btn btn-outline-success" style="margin-top: 10px;">Get Artists</a>
+							</center>
 
-						<div class="swiper-slide"><a href="#"><img src="{% static 'main/img/others.png' %}"></a></div>
+					{% endif %}
 					</div>
 					
-					</div>
-
-
 				</div>
 				</div>
 			</div>
@@ -199,7 +207,7 @@
 									
 									
 										{% for plts in plt.playlist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
 					
@@ -242,7 +250,7 @@
 									
 									
 										{% for plts in plt.playlist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
 					

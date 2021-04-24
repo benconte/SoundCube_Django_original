@@ -100,20 +100,42 @@ function play(){
   }
 }
 
-let data;
+let data = {};
 
 const playMusic = async (i) => {
-  
-   data = musicData.find(m => m.id === i);// || musicData[1]
-  
-    player.src = data.src;
-    await player.load();
-    player.play();
+    if(data.id != i){
+      index = i;
+      data = musicData.find(m => m.id === i);// || musicData[1]
+      player.src = data.src;
+      await player.load();
+      player.play();
 
-    isPlaying = true;
-    playing_song_name.innerHTML = data.name + ' - '+ data.song_auther;
+      playing_song_name.innerHTML = data.name + ' - '+ data.song_auther;
   
-    pausing.className = "fas fa-pause-circle fa-3x";
+      pausing.className = "fas fa-pause-circle fa-3x";
+    }else{
+      if (isPlaying == false){
+        isPlaying = true;
+        
+        player.play();
+        
+        pausing.className = "fas fa-pause-circle fa-3x";
+        
+
+      }else{
+        isPlaying = false
+        player.pause();
+        
+        pausing.className = "fa fa-play-circle fa-3x";
+
+      }
+
+      // use for loop to check with id matches data.id from there change the icons. and also change the previous one
+      document.getElementById(i).className = "fas fa-pause-circle fa-3x";
+      document.getElementById(i).className = "fa fa-play-circle fa-3x";
+    }
+   
+
     
     pause_btn.removeAttribute("disabled");
     step_forwad.removeAttribute("disabled");
@@ -129,10 +151,25 @@ const playMusic = async (i) => {
 }
 
 
-
-
-function noLyrics(song_name, song_auther){
+function showLyrics(i){
   var block_content = document.getElementById('block_content');
+
+  if(data.id == i){
+    if (isPlaying == true){
+      isPlaying = false;
+    }else{
+      isPlaying = true;
+      player.pause();
+      
+      pausing.className = "fa fa-play-circle fa-3x";
+    }
+  }else{
+      isPlaying = true;
+      
+      player.play();
+      
+      pausing.className = "fas fa-pause-circle fa-3x";
+  }
 
   if (is_show_queue == true) {
     show_queue_box.style.display = 'none';
@@ -147,40 +184,16 @@ function noLyrics(song_name, song_auther){
     block_content.style.display = 'none';
   }
   
-  lyrics_head.innerHTML = data.name;
-  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
-
-  let msg = `
-
-        <center style="margin-top:200px;">
-
-          This song has no lyrics.
-          <i class="far fa-grin-beam-sweat"></i>
-          <i class="far fa-frown ml-1"></i>
-        <center/>
-      `
-  lyrics.innerHTML = msg;
-}
-
-function showLyrics(){
-  var block_content = document.getElementById('block_content');
-
-  if (is_show_queue == true) {
-    show_queue_box.style.display = 'none';
-    is_show_lyrics = true;
-    show_lyrics.style.display = 'block';
-    block_content.style.display = 'none';
-
-  }
-  else {
-    is_show_lyrics = true;
-    show_lyrics.style.display = 'block';
-    block_content.style.display = 'none';
+  if(data.lyrics){
+    lyrics_head.innerHTML = data.name;
+    lyrics_artist.innerHTML = 'by. ' + data.song_auther;
+    lyrics.innerHTML = data.lyrics;
+  }else{
+    noLyrics(data.name, data.song_auther);
   }
   
-  lyrics_head.innerHTML = data.name;
-  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
-  let counter = 0;
+
+  // let counter = 0;
   // let s_lyrics = "";//1 line maximum 55
   // let lyrics_holder = data.lyrics;
 
@@ -204,7 +217,7 @@ function showLyrics(){
   //   }
   // }
   
-  lyrics.innerHTML = data.lyrics;
+  
 
 }
 function cancelLyrics(){
@@ -213,6 +226,55 @@ function cancelLyrics(){
   block_content.style.display = 'flex';
   show_lyrics.style.display = 'none';
 }
+
+
+
+
+function noLyrics(song_name, song_auther){
+  var block_content = document.getElementById('block_content');
+
+  if (isPlaying == false){
+      isPlaying = true;
+      
+      player.play();
+      
+      pausing.className = "fas fa-pause-circle fa-3x";
+
+    }else{
+      isPlaying = false;
+      player.pause();
+      
+      pausing.className = "fa fa-play-circle fa-3x";
+    }
+
+  if (is_show_queue == true) {
+    show_queue_box.style.display = 'none';
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+
+  }
+  else {
+    is_show_lyrics = true;
+    show_lyrics.style.display = 'block';
+    block_content.style.display = 'none';
+  }
+  
+  lyrics_head.innerHTML = data.name;
+  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
+
+  let nolyrics_msg = `
+
+        <center style="margin-top:200px;">
+
+          This song has no lyrics.
+          <i class="far fa-grin-beam-sweat"></i>
+          <i class="far fa-frown ml-1"></i>
+        <center/>
+      `
+  lyrics.innerHTML = nolyrics_msg;
+}
+
 
 // showing queue
 
@@ -235,16 +297,16 @@ function showQueueBox(){
     var tableData = document.createElement("tr");
     tableData.innerHTML = `<td><img src='` + musicData[q_song].img +`' class='queue_table_img'><i class="fa fa-play-circle" onclick='playMusic(`+q_song+`)'></i></td>
     <td>`+musicData[q_song].name+ `</td>
-    <td><div  class='marquee'><p>`+musicData[q_song].song_auther+`</p></div></td>
-    <td><img src="/static/main/img/black-2403543_640.png" class="lyrics-icon rounded-circle" width="50" height="50" onclick='playMusic(`+q_song+`);showLyrics();'></td>
-    <td>Rollin</td>
+    <td><div><a href='/artist_data/`+ musicData[q_song].song_auther +`' class='queue-table-content'>`+musicData[q_song].song_auther+`</p></div></td>
+    <td><img src="/static/main/img/mic_microphone.jpg" class="lyrics-icon rounded-circle" width="55" height="55" onclick='playMusic(`+q_song+`);showLyrics();'></td>
+    <td><a href='/album/`+ musicData[q_song].album_id + `' class='queue-table-content'>`+ musicData[q_song].album +`</a></td>
     <td><i class="far fa-heart fa-2x"></i></td>
     <td>3.12</td>
-    <td><button type='button' onclick='`+queue_remove_song(musicData[q_song].id)+`'><i class="far fa-times-circle fa-2x queue_song_remove_icon"></i></button></td>`;
+    <td><button type='button'><i class="far fa-times-circle fa-2x queue_song_remove_icon"></i></button></td>`;
     t_body.appendChild(tableData)//adding the looped data to the html body tag
     
   }
-// onclick='`showLyrics();`'
+
 
 }
 function cancelQueueBox(){
@@ -364,10 +426,12 @@ function switch_song(song_to_switch){
 
   var song_to_switch_id = musicData[song_to_switch].id;
   var temp; // let's say song id is 9
-  temp = musicData[current_song_id + 1];
+  temp = musicData[current_song_id + 1]; //getting the next song
+
   // first switching the songs then there ids.
   musicData[current_song_id + 1] = musicData[song_to_switch];
-  musicData[current_song_id + 1].id = temp.id;
+  //when we do this the id doesn't change so we need to change manually
+  musicData[current_song_id + 1].id = temp.id; 
 
   musicData[song_to_switch] = temp;
   musicData[song_to_switch].id = song_to_switch;

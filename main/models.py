@@ -48,6 +48,12 @@ class Song_model(models.Model):
     def __str__(self):
         return f"Song({self.song_name}, {self.song_auther}, {self.song_category})"
 
+    def authers_as_list(self):
+        import re
+        # return re.split('ft. , &\n',self.song_auther)
+        # self.song_auther.replace(', ', ' ft.', '&')
+        # self.song_auther.split(",")
+        return self.song_auther.split(",")
     def get_absolute_url(self):
         return reverse('home')
 
@@ -135,8 +141,8 @@ class Artists(models.Model):
         return self.followers_fans.count()
 
 class UserArtists(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="user_choose_artists")
     userartist = models.ForeignKey(Artists, on_delete=models.CASCADE, null=True, blank=True, related_name='user_artist')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
 
     def __str__(self):
         return f"UserArtists({self.userartist}, {self.user.username})"

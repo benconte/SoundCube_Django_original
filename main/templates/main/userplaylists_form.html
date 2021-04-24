@@ -2,13 +2,13 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
-        <form method="POST" enctype="multipart/form-data" onsubmit="return check_form_input()">
+        <form method="POST" enctype="multipart/form-data" ><!-- onsubmit="return check_form_input()" -->
             {% csrf_token %}<!-- hidden tag. it defends our form from attacks -->
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4" style="color: #fff;">User Playlist</legend>
                 <b style="color: red;display: none;padding: 10px;" id="msg-info">Invalid info. Check if both fields are completed</b>
                 {{ form|crispy }}
-                <script type="text/javascript">
+                <!-- <script type="text/javascript">
                     function check_form_input(){
                         var id_name = document.getElementById("id_name").value;
                         var id_playlist_img = document.getElementById("id_playlist_img").value;
@@ -23,10 +23,9 @@
                             msg_info.style.display = 'block';
                             return false;
                         }
-                        // input type text id: id_name
-                        // input type file id: id_playlist_img
+                        
                     }
-                </script>
+                </script> -->
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit" id="update">Create</button>

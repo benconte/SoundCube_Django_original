@@ -12,12 +12,23 @@ body{
    background-color: #222;
    overflow-x: hidden;
    /*background-color: #333;*/
+   
 }
 
 
 /* changing scrollbar width */
 ::-webkit-scrollbar {
   width: 10px;
+  border-radius: 10px;
+}
+
+::-moz-scrollbar{
+  width: 10px;
+  border-radius: 10px;
+}
+
+::-moz-scrollbar-track {
+  box-shadow: inset 0 0 5px #717171; 
   border-radius: 10px;
 }
 
@@ -134,7 +145,12 @@ body{
 /*.search_header .dropdown-menu{
   width: 200px !important;
   height: 200px !important;
-}*/
+}
+*/
+.dropdown-menu .dropdown-item .play-next:hover{
+  cursor: pointer;
+}
+
 .wrapper .main_content .search_header{
   width: 100%;
   height: 80px;
@@ -258,7 +274,7 @@ body{
 
 /*----------------------------------------------------------*/
  .album-header img{
-  object-fit: cover;
+  object-fit: fill;
 
 } 
 
@@ -288,7 +304,7 @@ body{
 
 }
 .playlist-img img{
-  object-fit: cover;
+  object-fit: fill;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -300,7 +316,7 @@ body{
 }
 
 .playlist-img .user-playlist-img{
-  object-fit: cover;
+  object-fit: fill;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -313,7 +329,7 @@ body{
 }
 
 .playlist-img:hover .user-playlist-img{
-    opacity: 0.2;
+    opacity: 0.3;
 }
 
 /*
@@ -434,6 +450,11 @@ table tbody tr:hover td .fa-play-circle{
 table tbody tr:hover td .fa-ellipsis-h{
   visibility: visible;
 }
+
+.fa-heart:hover{
+  color: #1DB954;
+  /*background-color: #1DB954;*/
+}
 .fa-microphone{
   transform: rotate(-308deg);
 }
@@ -522,7 +543,28 @@ table tbody tr:hover td .fa-ellipsis-h{
   cursor: pointer; 
   border-radius: 50%; 
   outline: none;
+  color: red;
 } 
+
+/*.seek_slider::-moz-slider-thumb, 
+.volume_slider::-moz-slider-thumb { 
+  -moz-appearance: none; 
+  -moz-appearance: slider-vertical;
+  -o-appearance: none;
+  -ms-appearance: none; 
+  appearance: none; 
+  width:15px; 
+  height: 10px; 
+  background: white; 
+  cursor: pointer; 
+  border-radius: 50%; 
+  outline: none;
+  color: red;
+} */
+
+/*.seek_slider[type="range"]::-webkit-slider-thumb{
+  background-color: red;
+}*/
 
 /* Change the opacity when mouse is hovered */
 .seek_slider:hover, 
@@ -677,6 +719,8 @@ cursor: pointer;
 
 .lyrics-icon{
   background-color: #fff;
+  color: #000;
+  
 }
 
 .lyrics-icon:hover{
@@ -1279,7 +1323,7 @@ cursor: pointer;
 .queue-box-body{
   width: 100%;
   background: #fff;
-  margin-top: 119px;
+  margin-top: 121px;
 }
 
 .queue-box-body .queue-left-box{
@@ -1342,6 +1386,7 @@ cursor: pointer;
 }
 
 .queue-box-body .queue-right-box{
+  position: relative; 
   width: 72em;
   height: 100vh;
   margin-right: 30px;
@@ -1349,12 +1394,12 @@ cursor: pointer;
   background-color: #fff;
   overflow-x: hidden;
   overflow-y: scroll;
-  margin-top: 0px;
+
 }
 
 .queue-box-body .queue-right-box .right-queue-table{
-  color: #fff;
-  /* position: relative; */
+   color: #000;
+   margin-bottom: 280px;
 }
 
 
@@ -1370,26 +1415,72 @@ cursor: pointer;
 } */
 
 .queue-box-body .queue-right-box .right-queue-table table{
-  width: 100%;
-  margin-top: 0px;
+  width: 71em;
   margin-bottom: 280px;
+  margin-top: 60px;
+}
+.queue-box-body .queue-right-box .right-queue-table table thead{
+  	position: fixed;
+    top: 121px;
+    width: 71em;
+    background: #dcdcdc;
+    opacity: 1;
+    /*display: none;*/
+}
+.queue-box-body .queue-right-box .right-queue-table table thead th{
+  border-top: none;
+  /*border-bottom: 1px solid #989898;*/
+  font-size: 18px;
+  font-weight: bold;
+  color: #000;
+  padding-left: 8px;
+  height: 60px;
+  
+}
+/*.queue-box-body .queue-right-box .right-queue-table table tbody {
+  position: absolute;
+  margin-top: 60px;
+}*/
+
+.queue-box-body .queue-right-box .right-queue-table table tbody{
+  
+  /*margin-top: 265px;*/
+  width: 71em;
+  margin-right: 10px;
+  
+
+
+}
+
+.queue-box-body .queue-right-box .right-queue-table table tbody tr{
+  
+  font-size: 16px;
+  border-color: #000;
+  height: 60px;
+  
 }
 
 .queue-box-body .queue-right-box .right-queue-table table tbody tr td{
+  color: #000;
   border-bottom: none;
   border-top: 1px solid #989898;
-  font-size: 16px;
-  color: #000;
-  height: 60px;
-  
-
 }
-
 .queue-box-body .queue-right-box .right-queue-table table tbody tr:hover{
-  background-color:#F0F0F0;
+  background-color: #F0F0F0;
   color: #fff;
 }
 
+.queue-box-body .queue-right-box .right-queue-table table tbody tr td .queue-table-content{
+	color: #000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.queue-box-body .queue-right-box .right-queue-table table tbody tr td .queue-table-content:hover{
+  text-decoration: none;
+  color: #1DB954;
+  font-weight: 500;
+}
 .queue-box-body .queue-right-box .right-queue-table .queue_table_img{
   width: 40px;
   height: 40px;
@@ -1416,9 +1507,11 @@ cursor: pointer;
 
 
 .queue-box-body .queue-right-box .right-queue-table table tbody tr td button:hover{
-  font-size: 18px;
+  padding: 8px;
   color: rgb(199, 10, 10);
   transition: all ease-in-out 250ms;
+  align-items: center;
+  justify-content: center;
 }
 
 /*.queue-box-body .queue-right-box .right-queue-table table tbody tr td button .queue_song_remove_icon:hover{
@@ -1426,7 +1519,8 @@ cursor: pointer;
 }
 */
 
-.queue-box-body .queue-right-box .right-queue-table table tbody tr .marquee{
+/*in base.js i remove the class marquee bcs it looked ugly*/
+/*.queue-box-body .queue-right-box .right-queue-table table tbody tr .marquee{
   display: flex;
   overflow: hidden;
   white-space: nowrap;
@@ -1439,7 +1533,7 @@ cursor: pointer;
 .queue-box-body .queue-right-box .right-queue-table table tbody tr .marquee p:hover{
   padding-left: 80%;
   animation: marque 4s linear infinite;
-}
+}*/
 
 @keyframes marque{
   100%{
@@ -1622,3 +1716,37 @@ row-cancel
 
 */
 /* end of custom table */
+
+
+/*.middle{
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  background-color: #e5e5e5;
+}
+
+.slider_container .range{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 5px;
+  outline: none;
+}
+
+.slider_container .range::webkit-slider-thumb{
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 30px;
+  height: 30px;
+  background-color: #6200ee;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 0 0 0 rgba(98,0,238,.1);
+  transition: .3s ease-in-out;
+}
+
+.slider_container .range::webkit-slider-thumb:hover{
+  box-shadow: 0 0 0 20px rgba(98,0,238,.1);
+}*/

@@ -5,40 +5,31 @@
 	<div class="home-show-playlist" style="color: #fff;margin-bottom: 80px; padding: 6px 10px; ">
 		<script type="text/javascript">
 			window.onload = function(){
-				queue_playlist[0] = {id:"{{album.id}}", name: "{{album.name}}", img:"{{album.album_img.url}}", artists: "{{playlist.inspired}}"}
+				queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.inspired}}"}
 
-				{% for plt in album.album_model.all %}
+				{% for plt in playlist.homepageplaylist.all %}
 
-					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_name}}", img:"{{plt.song_img.url}}", src:"{{plt.song_path.url}}", song_auther: "{{plt.song_auther}}", album_id: "{{album.id}}", album: "{{album.name}}", lyrics:`{{plt.lyrics}}`}
+					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", album_id: "{{plt.song_model.album.id}}", album: "{{plt.song_model.album.name}}", lyrics:`{{plt.song_model.lyrics}}`}
 
 				{% endfor %}
 			}
 		</script>
-		<div class="album-header" style="display: flex;">
-			<img src="{{album.album_img.url}}">
+		<div class="playlist-header" style="display: flex;">
+			<img src="{{playlist.playlist_img.url}}" width="300" height="300" style="border-radius: 5px;">
 			<div class="playlist-header-content ml-2">
-				<h2 style="margin-left: 25px;">{{album.name}}</h2><br>
-				<p class="featuring" style="color: #717171; font-size: 25px;">Inspired by <a href="#" class="show_profile">{{album.album_author}}</a></p>
+				<h2>{{playlist.name}}</h2><br>
+				<p class="featuring" style="color: #717171; font-size: 25px;">Inspired by <a href="#" class="show_profile">{{playlist.inspired}}</a></p>
 				<br>
 				<h3 class="ml-4">Discover new, popular music similar to the artists you've been listening to lately</h3>
-				{% if album.album_model.all %}
-					<p style="color: #717171; font-size: 25px; margin-top: 20px;font-family: 'Pattaya';" id="playlist_songs_length"></p>
-				{% endif %}
+				<p style="color: #717171; font-size: 25px; margin-top: 20px;font-family: 'Pattaya';" id="playlist_songs_length"></p>
 			</div>
 
 			
 		</div>
-		{% if album.album_model.all %}
-		<button class="playlist-songs" id="playlist-songs" style="" onclick='
+		
+		{% if playlist.homepageplaylist.all%}
+		<button class="playlist-songs" id="playlist-songs" style="" onclick='playMusic(0);'><i class="far fa-play-circle fa-1x"></i> Listen</button>
 
-			playMusic(0);
-			console.log(musicData)
-			'
-
-		><i class="far fa-play-circle fa-1x"></i> Listen</button>
-		{% else %}
-		<button class="playlist-songs" id="playlist-songs" disabled><i class="far fa-play-circle fa-1x"></i> Listen</button>
-		{% endif %}
 		<button class="user_playlists_ellpsis" id="playlist-songs" style="border: none;">
 			<div class="btn-group">
 			    <div class="btn-group">
@@ -46,7 +37,21 @@
 			      <div class="dropdown-menu" style="background: #333;">
 			      	<a class="dropdown-item" href="#" style="color: #fff;">Add to Queue</a>
 			      	<a class="dropdown-item" href="#" style="color: #fff;">Go to Artist</a>
-			      	
+			      	<!-- <a class="dropdown-item" href="{% url 'savePlaylistToLibrary' playlist.id %}" style="color: #fff;">Save to your Library</a> -->
+			      	{% if user.userInherited.exists %}
+                  		
+	                  		{% if is_playlist_inherited %}
+
+				      			<a class="dropdown-item" href="{% url 'saveDiscoverPlaylistToLibrary' playlist.id %}" style="color: #fff;">Remove from library</a>
+
+				      		{% else %}
+				      			<a class="dropdown-item" href="{% url 'saveDiscoverPlaylistToLibrary' playlist.id %}" style="color: #fff;">Save to your Library</a>
+
+				      		{% endif %}
+			      		
+			      	{% else %}
+				      	<a class="dropdown-item" href="{% url 'savePlaylistToLibrary' playlist.id %}" style="color: #fff;">Save to your Library</a>
+			      	{% endif %}
 			        <div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#" style="color: #fff;">Share</a>
 			      </div>
@@ -54,15 +59,13 @@
 
 			</div>
 		</button>
-        
-		{% if album.album_model.all %}
-		
 			<table class="table mt-3" style="margin-bottom: 100px;color: #fff;width: 100%;border-color: red;">
 				<thead>
 					<th>#</th>
 					<th>Track</th>
-					<th>Artist</th>
+					<th>Artists</th>
 					<th>Lyrics</th>
+					<th>Album</th>
 					<th>Like</th>
 					<th>Total Likes</th>
 					<!-- <th>Favorites</th> -->
@@ -70,64 +73,70 @@
 					<th>More</th>
 					</thead>
 				<tbody>
-                    
-                {% for plt in album.album_model.all %}
+					{% for plt in playlist.homepageplaylist.all %}
 					<tr class="tr">
 						<td>
-							<img src="{{plt.song_img.url}}" class="song_img" width="50" height="50">
+							<img src="{{plt.song_model.song_img.url}}" class="song_img" width="50" height="50">
 							<i class="fa fa-play-circle fa-3x " onclick='
 
 								// -------------------------------------------------------------------------------
 								
 								playMusic({{forloop.counter0}})
+								if ({{forloop.counter0}} == data.id) {
+									console.log(true) 
+								} else {
+									console.log(false) 
+								}
 
 								// ------------------------------------------------------------------------------
 
-							' id='{{plt.id}}'></i>
+							' id='{{plt.song_model.id}}'></i>
 						</td>
-						<td>{{plt.song_name}}</td>
-						<td  class='marquee'><a href="#" class="table-content">{{plt.song_auther}}</a></td>
-						{% if plt.lyrics %}
+						<td>{{plt.song_model.song_name}}</td>
+						<td  class='marquee'>{{plt.song_model.song_auther}}</td>
+						{% if plt.song_model.lyrics %}
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 							// ---------------------------------------------------------------------------------
-
-							playMusic({{forloop.counter0}});
-
-							console.log(musicData)
+							
+							playMusic({{forloop.counter0}})
 							showLyrics({{forloop.counter0}});
 							
 							// ----------------------------------------------------------------------------------
 							' width="50" height="50"></td>
 						{% else %}
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
-							// ----------------------------------------------------------------------------------
-							
-							noLyrics("{{plt.song_name}}", "{{plt.song_auther}}";
+							// -----------------------------------------------------------------------------------
+								playMusic({{forloop.counter0}})
 
-							playMusic({{forloop.counter0}});
-
-							console.log(musicData)
+								noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
 
 								// ---------------------------------------------------------------------------------
 							' width="50" height="50"></td>
 						{% endif %}
+						
+						{% if plt.song_model.album %}
+							<td><a href="{% url 'album' plt.song_model.album.id %}" class="table-content">{{plt.song_model.album.name}}</a></td>
+						{% else %}
+							<td><p style="margin-left: 30%;font-size: 22px;">-</p></td>
+						{% endif %}
+						
 						<td>
-							<form action="{% url 'like_song' plt.pk %}" method="post">
+							<form action="{% url 'like_song' plt.song_model.pk %}" method="post">
 				        		{% csrf_token %}
 					        	<!-- {% if liked %}
-					        			<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ plt.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="fas fa-heart fa-2x"></i></button>
+					        			<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="fas fa-heart fa-2x"></i></button>
 
 					        	{% else %}
-					        		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ plt..id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button>
+					        		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button>
 					        	{% endif %} -->
 					        	<!-- ------------------------------------------------- -->
 					        	
 					        	{% if user.is_authenticated %}
-				                  {% if plt.song_name in song_liked_list %}
-								  		<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ plt.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;color: #1DB954;"><i class="fas fa-heart fa-2x"></i></button>
+				                  {% if plt.song_model.song_name in song_liked_list %}
+								  		<button class="btn btn-danger our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;color: #1DB954;"><i class="fas fa-heart fa-2x"></i></button>
 
 						          {% else %}
-								  		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ plt.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button>
+								  		<button class="btn btn-primary mb-1 our-button" name="song_id" type="submit" value="{{ plt.song_model.id}}" style="width: 50px;height: 50px;border: none;background: no-repeat;border-radius: 8px;"><i class="far fa-heart fa-2x"></i></button>
 						          {% endif %}
 					           	{% else %}
 					        		<p>Can't like</p>
@@ -135,20 +144,20 @@
 
 							</form>
 						</td>
-						<td>{{plt.total_likes}}</td>
+						<td>{{plt.song_model.total_likes}}</td>
 						<td>3.12</td>
 						<td>
 							<div class="btn-group">
 							    <div class="btn-group">
 								  <i class="fas fa-ellipsis-h fa-2x" data-toggle="dropdown" style="cursor: pointer;"></i>
 							      <div class="dropdown-menu" style="background: #333;">
-							        <a class="dropdown-item" style="color: #fff;cursor: pointer;" onclick="switch_song({{forloop.counter0}})">Add to Queu</a>
-							        {% if plt.song_name in favorite_songs %}
-							        	<a href="{% url 'favorite_song' plt.id %}" class="dropdown-item" name="song_favorite" style="color: #fff;">Remove from Favorites</a>
+							        <a class="dropdown-item" onclick="switch_song({{forloop.counter0}})" style="color: #fff;">Play next</a>
+							        {% if is_favorite %}
+							        	<a href="{% url 'favorite_song' plt.song_model.id %}" class="dropdown-item" name="song_favorite" style="color: #fff;">Remove from Favorites</a>
 							        {% else %}
-							        	<a href="{% url 'favorite_song' plt.id %}" class="dropdown-item" name="song_favorite" style="color: #fff;">Add To Favorites</a>
+							        	<a href="{% url 'favorite_song' plt.song_model.id %}" class="dropdown-item" name="song_favorite" style="color: #fff;">Add To Favorites</a>
 							        {% endif %}
-							        <a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-{{plt.id}}">Add to playlist</a>
+							        <a class="dropdown-item" href="#" style="color: #fff;" data-toggle="modal" data-target="#exampleModal-{{plt.song_model.id}}">Add to playlist</a>
 							        <div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="#" style="color: #fff;">Share</a>
 							      </div>
@@ -159,7 +168,7 @@
 						
 						
 					</tr>
-					<div class="modal fade" id="exampleModal-{{plt.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="exampleModal-{{plt.song_model.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 						  <div class="modal-dialog" role="document">
 						    <div class="modal-content">
 						      <div class="modal-header">
@@ -173,7 +182,7 @@
 					              {% if user.user_created_playlists.exists %}
 					              <div class="modal-body-data">
 					                {% for playlist in user.user_created_playlists.all %}
-					                <form action="{% url 'add_song_to_playlist' playlist=playlist.id id=plt.id  %}" method="post" enctype="multipart/form-data">
+					                <form action="{% url 'add_song_to_playlist' playlist=playlist.id id=plt.song_model.id  %}" method="post" enctype="multipart/form-data">
 					                	{% csrf_token %}
 					                	<div class="song_container">
 						                  	<button type="submit" name="submit_button">
@@ -213,7 +222,7 @@
 		{% else %}
 			<center style="display: block;">
 				<div>
-					<h3 style="margin-top: 10px;margin-bottom: 10px;">This playlist is currently empty.</h3>
+					<h3 style="margin-top: 50px;margin-bottom: 10px;">This playlist is currently empty.</h3>
 					<h6>Find songs from our new releases from your favorite Artists and others.</h6>
 					<br>
 					<a href="{% url 'discover' %}" class="btn btn-outline-success">Discover</a>
@@ -225,3 +234,12 @@
 	</div>
 {% endblock %}
 
+<!-- 
+1. Ella ist an einer Kürbisstation. Sie macht Fotos, weil sie über Vertrauen berichten will
+
+2. Der Mann nimmt einen großen Kürbis, steckt ihn in sein Auto und will wegfahren, ohne zu bezahlen
+
+3. Ella fragt den Mann, dass er den Kürbis nicht bezahlt hat
+
+4. Er sagt, es ein Unfall gewesen. weil er zu spät kam
+ -->
