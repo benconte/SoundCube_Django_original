@@ -9,7 +9,7 @@
 
 				{% for plt in playlist.homepageplaylist.all %}
 
-					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", album_id: "{{plt.song_model.album.id}}", album: "{{plt.song_model.album.name}}", lyrics:`{{plt.song_model.lyrics}}`}
+					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther_written: "{{plt.song_model.song_auther_written}}", album_id: "{{plt.song_model.album.id}}", album: "{{plt.song_model.album.name}}", lyrics:`{{plt.song_model.lyrics}}`}
 
 				{% endfor %}
 			}
@@ -93,7 +93,17 @@
 							' id='{{plt.song_model.id}}'></i>
 						</td>
 						<td>{{plt.song_model.song_name}}</td>
-						<td  class='marquee'>{{plt.song_model.song_auther}}</td>
+						<td  class='marquee'>	
+							{% if plt.song_model.authers_as_list %}
+								{% for auther in plt.song_model.authers_as_list %}
+
+							          <a href="{% url 'artist_data' auther %}" class="table-content">{{auther}},</a>
+
+							    {% endfor %}
+							{% else %}
+								{{plt.song_model.song_auther_written}}
+							{% endif %}
+						</td>
 						{% if plt.song_model.lyrics %}
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 							// ---------------------------------------------------------------------------------
@@ -108,7 +118,7 @@
 							// -----------------------------------------------------------------------------------
 								playMusic({{forloop.counter0}})
 
-								noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
+								noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther_written}}");
 
 								// ---------------------------------------------------------------------------------
 							' width="50" height="50"></td>
@@ -152,7 +162,7 @@
 								  <i class="fas fa-ellipsis-h fa-2x" data-toggle="dropdown" style="cursor: pointer;"></i>
 							      <div class="dropdown-menu" style="background: #333;">
 							        <a class="dropdown-item" onclick="switch_song({{forloop.counter0}})" style="color: #fff;">Play next</a>
-							        {% if plt.song_model.song_name in favorite_songs %}
+							        {% if is_favorite %}
 							        	<a href="{% url 'favorite_song' plt.song_model.id %}" class="dropdown-item" name="song_favorite" style="color: #fff;">Remove from Favorites</a>
 							        {% else %}
 							        	<a href="{% url 'favorite_song' plt.song_model.id %}" class="dropdown-item" name="song_favorite" style="color: #fff;">Add To Favorites</a>

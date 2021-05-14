@@ -32,7 +32,7 @@
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
 								    {% for plts in plt.homepageplaylist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther_written: "{{plts.song_model.song_auther_written}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
 								    playMusic(0)
@@ -72,7 +72,7 @@
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
 								    {% for plts in plt.homepageplaylist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}",  song_auther_written: "{{plts.song_model.song_auther_written}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
 								    playMusic(0)
@@ -111,7 +111,7 @@
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
 								    {% for plts in plt.homepageplaylist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther_written: "{{plts.song_model.song_auther_written}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
 								    playMusic(0)
@@ -151,7 +151,7 @@
 			                	queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.inspired}}"}
 
 								    {% for plts in plt.homepageplaylist.all %}
-								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
+								        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther_written: "{{plts.song_model.song_auther_written}}",album_id: "{{plts.song_model.album.id}}",album: "{{plts.song_model.album.name}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 								    {% endfor %}
 								    playMusic(0)

@@ -9,9 +9,15 @@
             <div class="artist-data-buttons">
                 <button type="button" class="randomize-btn"><i class="far fa-play-circle fa-1x"></i> Mix</button>
                 {% if is_favorite %}
-                    <button type="button" class="follow-btn"><i class="far fa-heart"></i> Unfollow</button>
+                    <a href="{% url 'add_artist_followers' artist_data.name %}">
+                        <button type="button" class="follow-btn"><i class="far fa-heart"></i> Unfollow</button>
+                    </a>
+                    
                 {% else %}
-                    <button type="button" class="follow-btn"><i class="fa fa-heart"></i> Follow</button>
+                    <a href="{% url 'add_artist_followers' artist_data.name %}">
+                        <button type="button" class="follow-btn"><i class="fa fa-heart"></i> Follow</button>
+                    </a>
+                    
                 {% endif %}
                 <button type="button" class="more-btn"><i class="fa fa-ellipsis-h fa-2x"></i></button>
             </div>

@@ -9,7 +9,7 @@
 
 				{% for plt in playlist.playlist.all %}
 
-					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", album_id: "{{plt.song_model.album.id}}", album: "{{plt.song_model.album.name}}", lyrics:`{{plt.song_model.lyrics}}`}
+					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther_written: "{{plt.song_model.song_auther_written}}", album_id: "{{plt.song_model.album.id}}", album: "{{plt.song_model.album.name}}", lyrics:`{{plt.song_model.lyrics}}`}
 
 				{% endfor %}
 			}
@@ -95,10 +95,16 @@
 						</td>
 						<td>{{plt.song_model.song_name}}</td>
 						<td  class='marquee'>
-							{% for auther in plt.song_model.authers_as_list %}
-						          <a href="{% url 'artist_data' auther %}" class="table-content">{{auther}}</a>
+							
+							{% if plt.song_model.authers_as_list %}
+								{% for auther in plt.song_model.authers_as_list %}
 
-						    {% endfor %}
+							          <a href="{% url 'artist_data' auther %}" class="table-content">{{auther}},</a>
+
+							    {% endfor %}
+							{% else %}
+								{{plt.song_model.song_auther_written}}
+							{% endif %}
 						</td>
 
 						{% if plt.song_model.lyrics %}
@@ -106,13 +112,6 @@
 							// ---------------------------------------------------------------------------------
 							playMusic({{forloop.counter0}});
 							showLyrics({{forloop.counter0}});
-
-							
-								if (player.currentTime > 0) {
-									console.log("Greater");
-								} else {
-									playMusic({{forloop.counter0}});
-								}
 							
 							// ----------------------------------------------------------------------------------
 							' width="50" height="50"></td>
@@ -120,7 +119,7 @@
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 							// -----------------------------------------------------------------------------------
 							playMusic({{forloop.counter0}});
-							noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
+							noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther_written}}");
 						
 								// ---------------------------------------------------------------------------------
 							' width="50" height="50"></td>

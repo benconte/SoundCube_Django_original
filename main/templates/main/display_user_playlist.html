@@ -9,7 +9,7 @@
 				queue_playlist[0] = {id:"{{playlist.id}}", name: "{{playlist.name}}", img:"{{playlist.playlist_img.url}}", artists: "{{playlist.user.name}}"}
 
 			{% for plt in playlist.userplaylists.all %}
-				musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther: "{{plt.song_model.song_auther}}", album_id: "{{plt.song_model.album.id}}",album: "{{plt.song_model.album.name}}", lyrics:`{{plt.song_model.lyrics}}`}
+				musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_model.song_name}}", img:"{{plt.song_model.song_img.url}}", src:"{{plt.song_model.song_path.url}}", song_auther_written: "{{plt.song_model.song_auther_written}}", album_id: "{{plt.song_model.album.id}}",album: "{{plt.song_model.album.name}}", lyrics:`{{plt.song_model.lyrics}}`}
 
 			{% endfor %}
 			}
@@ -200,7 +200,17 @@
 						</td>
 						
 						<td>{{plt.song_model.song_name}}</td>
-						<td>{{plt.song_model.song_auther}}</td>
+						<td>
+							{% if plt.song_model.authers_as_list %}
+								{% for auther in plt.song_model.authers_as_list %}
+
+							          <a href="{% url 'artist_data' auther %}" class="table-content">{{auther}},</a>
+
+							    {% endfor %}
+							{% else %}
+								{{plt.song_model.song_auther_written}}
+							{% endif %}
+						</td>
 
 						{% if plt.song_model.lyrics %}
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
@@ -215,7 +225,7 @@
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 		
 						playMusic({{forloop.counter0}});
-						noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther}}");
+						noLyrics("{{plt.song_model.song_name}}", "{{plt.song_model.song_auther_written}}");
 							
 
 							' width="50" height="50"></td>

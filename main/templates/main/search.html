@@ -10,7 +10,7 @@
                 	<button class="playlist-button" type="button" onclick='
 					{% for playlist_plt in match %}
 
-							musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{playlist_plt.song_name}}", img:"{{playlist_plt.song_img.url}}", src:"{{playlist_plt.song_path.url}}", song_auther: "{{playlist_plt.song_auther}}", lyrics:`{{playlist_plt.lyrics}}`}
+							musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{playlist_plt.song_name}}", img:"{{playlist_plt.song_img.url}}", src:"{{playlist_plt.song_path.url}}", song_auther_written: "{{playlist_plt.song_auther_written}}", album_id: "{{playlist_plt.album.id}}", album: "{{playlist_plt.album.name}}", lyrics:`{{playlist_plt.lyrics}}`}
 
 						{% endfor %}
 						playMusic({{forloop.counter0}})
@@ -19,7 +19,7 @@
 					<img src="{{song.song_img.url}}" onclick='
 						{% for playlist_plt in match %}
 
-								musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{playlist_plt.song_name}}", img:"{{playlist_plt.song_img.url}}", src:"{{playlist_plt.song_path.url}}", song_auther: "{{playlist_plt.song_auther}}", lyrics:`{{playlist_plt.lyrics}}`}
+								musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{playlist_plt.song_name}}", img:"{{playlist_plt.song_img.url}}", src:"{{playlist_plt.song_path.url}}", song_auther_written: "{{playlist_plt.song_auther_written}}", album_id: "{{playlist_plt.album.id}}", album: "{{playlist_plt.album.name}}", lyrics:`{{playlist_plt.lyrics}}`}
 
 							{% endfor %}
 							playMusic({{forloop.counter0}})

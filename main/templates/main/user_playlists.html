@@ -24,7 +24,7 @@
 		                		queue_playlist[0] = {id:"{{plt.id}}", name: "{{plt.name}}", img:"{{plt.playlist_img.url}}", artists: "{{plt.user.username}}"}
 									
 								{% for plts in plt.userplaylists.all %}
-							        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+							        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther_written: "{{plts.song_model.song_auther_written}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 							    {% endfor %}
 									playMusic(0);
@@ -55,7 +55,7 @@
 								// reference the userInherited playlist and since it is a foreign key from Playlist model then we get the playlist in Playlist_songs in models. From there we get the songs.(All in models.py)
 
 								{% for plts in plt.playlist.playlist.all %}
-							        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther: "{{plts.song_model.song_auther}}", lyrics:`{{plts.song_model.lyrics}}`}
+							        musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plts.song_model.song_name}}", img:"{{plts.song_model.song_img.url}}", src:"{{plts.song_model.song_path.url}}", song_auther_written: "{{plts.song_model.song_auther_written}}", lyrics:`{{plts.song_model.lyrics}}`}
 
 							    {% endfor %}
 									playMusic(0);

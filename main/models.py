@@ -14,9 +14,22 @@ class Song_Categories(models.Model):
     def __str__(self):
         return f'Song_Categories({self.category}, {self.category_color})'
 
+class Artists(models.Model):
+    name = models.CharField(max_length=200)
+    img = models.ImageField(upload_to='art_img')
+    followers_fans = models.ManyToManyField(User, related_name="followers_fans", blank=True)
+    biography = models.TextField(null=True)
+
+    def __str__(self):
+        return f"Artists({self.name})"
+
+    def total_followers(self):
+        return self.followers_fans.count()
+
 class Albums(models.Model):
     name = models.CharField(max_length=200)
     album_author = models.CharField(max_length=200)
+    album_artist = models.ManyToManyField(Artists, blank=True, related_name="album_artist")
     album_img = models.ImageField(upload_to='album_imgs', default='playlist_icon.jpg')
     date_created = models.DateTimeField(default=timezone.now)
     likes = models.ManyToManyField(User, related_name="album_name", blank=True)
@@ -33,9 +46,10 @@ class Albums(models.Model):
         return reverse('home')
 
 class Song_model(models.Model):
-    album = models.ForeignKey(Albums, on_delete=models.CASCADE, related_name='album_model',null=True)
+    album = models.ForeignKey(Albums, on_delete=models.CASCADE, related_name='album_model',null=True, blank=True)
     song_name = models.CharField(max_length=200)
-    song_auther = models.CharField(max_length=200)
+    song_auther_written = models.CharField(max_length=200)
+    song_authers = models.ManyToManyField(Artists, blank=True,  related_name="song_authers")
     song_img = models.ImageField(upload_to='song_model_images')
     song_path = models.FileField(upload_to='song_model_songs')
     reference_name = models.CharField(max_length=200, null=True)
@@ -46,14 +60,15 @@ class Song_model(models.Model):
     favorite = models.ManyToManyField(User, related_name="favorite_song", blank=True)
 
     def __str__(self):
-        return f"Song({self.song_name}, {self.song_auther}, {self.song_category})"
+        return f"Song({self.song_name}, {self.song_auther_written}, {self.song_category})"
 
     def authers_as_list(self):
-        import re
-        # return re.split('ft. , &\n',self.song_auther)
-        # self.song_auther.replace(', ', ' ft.', '&')
-        # self.song_auther.split(",")
-        return self.song_auther.split(",")
+        artists_list = []
+        for artists in self.song_authers.all():
+            artists_list.append(artists.name)
+
+        return artists_list
+        
     def get_absolute_url(self):
         return reverse('home')
 
@@ -66,7 +81,7 @@ class Album_songs(models.Model):
     song_model = models.ForeignKey(Song_model, on_delete=models.CASCADE, null=True, related_name="album_songs")
 
     def __str__(self):
-        return f"Album_songs({self.album.name}, {self.song_model.song_name}, {self.song_model.song_auther})"
+        return f"Album_songs({self.album.name}, {self.song_model.song_name}, {self.song_model.song_auther_written})"
 
     def get_absolute_url(self):
         return reverse('home')
@@ -96,7 +111,7 @@ class Playlist_songs(models.Model):
     song_model = models.ForeignKey(Song_model, on_delete=models.CASCADE, null=True, related_name="playlist_songs")
 
     def __str__(self):
-        return f"Playlist_songs({self.playlist.name}, {self.song_model.song_name}, {self.song_model.song_auther})"
+        return f"Playlist_songs({self.playlist.name}, {self.song_model.song_name}, {self.song_model.song_auther_written})"
 
     def get_absolute_url(self):
         return reverse('home')
@@ -122,23 +137,11 @@ class HomePagePlaylists_songs(models.Model):
     song_model = models.ForeignKey(Song_model, on_delete=models.CASCADE, null=True, related_name="home_page_playlist_songs")
 
     def __str__(self):
-        return f"HomePagePlaylists_songs({self.playlist.name}, {self.song_model.song_name}, {self.song_model.song_auther})"
+        return f"HomePagePlaylists_songs({self.playlist.name}, {self.song_model.song_name}, {self.song_model.song_auther_written})"
 
     def get_absolute_url(self):
         return reverse('home')
 
-
-class Artists(models.Model):
-    name = models.CharField(max_length=200)
-    img = models.ImageField(upload_to='art_img')
-    followers_fans = models.ManyToManyField(User, related_name="followers_fans", blank=True)
-    biography = models.TextField(null=True)
-
-    def __str__(self):
-        return f"Artists({self.name})"
-
-    def total_followers(self):
-        return self.followers_fans.count()
 
 class UserArtists(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name="user_choose_artists")
@@ -180,7 +183,7 @@ class UserPlaylists_songs(models.Model):
     song_model = models.ForeignKey(Song_model, on_delete=models.CASCADE, null=True, related_name="user_playlist_songs")
 
     def __str__(self):
-        return f"UserPlaylists_songs({self.playlist.name}, {self.song_model.song_name}, {self.song_model.song_auther})"
+        return f"UserPlaylists_songs({self.playlist.name}, {self.song_model.song_name}, {self.song_model.song_auther_written})"
 
     def get_absolute_url(self):
         return reverse('home')
@@ -205,3 +208,50 @@ class DiscoverPage_UserInheritedPlaylists(models.Model):
 
     def get_absolute_url(self):
         return reverse('home')
+
+
+class Test(models.Model):
+    art = models.ManyToManyField(Artists, blank=False, related_name="test_art")
+
+    # def __str__(self):
+    #     return ', '.join([a.name for a in self.art.all()])
+
+    def all_artists(self):
+        art_list = []
+        for a in self.art.all():
+            art_list.append(a.name)
+
+        return art_list
+
+class UserFriends(models.Model):
+    user_friends = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name='user_friends')
+    friends = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='friends')
+
+    def __str__(self):
+        return f"UserFriends(user: {self.user_friends.username}, friends: {self.friends})"
+
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, related_name='notification_receiver')
+    sender_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='notification_sender_user')
+    subject = models.CharField(max_length=500)
+    msg = models.TextField()
+    date_sent = models.DateTimeField(default=timezone.now)
+    notification_read = models.BooleanField(default=False)
+    
+    class Meta:
+        ordering = ['-date_sent']
+
+    def __str__(self):
+        return f"Notification(receiver: {self.user.username}, sender: {self.sender_user.username}, {self.subject}, {self.date_sent}, {self.notification_read})"
+
+
+
+
+
+"""
+Jean Kayiranga
+RWUNDP\jean.kayiranga
+
+"""     

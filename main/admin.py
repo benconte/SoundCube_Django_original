@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models import (
 		Playlists, Playlist_songs, Song_Categories, Albums, Album_songs, HomePagePlaylists, HomePagePlaylists_songs, 
 		Artists, UserArtists, UserPlaylists, UserPlaylists_songs, UserInheritedPlaylists, Song_model,
-		DiscoverPage_UserInheritedPlaylists
+		DiscoverPage_UserInheritedPlaylists, Test, Notification, UserFriends
 		)
 # Register your models here.
 
@@ -20,3 +20,6 @@ admin.site.register(UserPlaylists_songs)
 admin.site.register(UserInheritedPlaylists)
 admin.site.register(Song_model)
 admin.site.register(DiscoverPage_UserInheritedPlaylists)
+admin.site.register(Test)
+admin.site.register(Notification)
+admin.site.register(UserFriends)

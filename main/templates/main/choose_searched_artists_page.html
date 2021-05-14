@@ -26,6 +26,7 @@
 				{% csrf_token %}
 				<input type="search" name="query" placeholder="Search artist" class="header-input-field" autocomplete="on">
 				<button class="search_button" type="submit">Search</button>
+				<a href="{% url 'choose_artist' %}" class="header-back-button btn btn-outline-secondary">Back</a>
 				<a href="{% url 'home' %}" class="header-back-button">Cancel</a>
 			</form>
 			

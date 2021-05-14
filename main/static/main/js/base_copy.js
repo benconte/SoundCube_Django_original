@@ -100,20 +100,46 @@ function play(){
   }
 }
 
-let data;
+let data = {};
 
 const playMusic = async (i) => {
+    if(data.id != i){
+      index = i;
+      data = musicData.find(m => m.id === i);// || musicData[1]
+      player.src = data.src;
+      await player.load();
+      player.play();
+      if(is_show_lyrics == true){
+        lyrics_head.innerHTML = data.name;
+        lyrics_artist.innerHTML = 'by. ' + data.song_auther_written;
+        lyrics.innerHTML = data.lyrics;
+      }
+      playing_song_name.innerHTML = data.name + ' - '+ data.song_auther_written;
   
-   data = musicData.find(m => m.id === i);// || musicData[1]
-  
-    player.src = data.src;
-    await player.load();
-    player.play();
+      pausing.className = "fas fa-pause-circle fa-3x";
+    }else{
+      if (isPlaying == false){
+        isPlaying = true;
+        
+        player.play();
+        
+        pausing.className = "fas fa-pause-circle fa-3x";
+        
 
-    isPlaying = true;
-    playing_song_name.innerHTML = data.name + ' - '+ data.song_auther;
-  
-    pausing.className = "fas fa-pause-circle fa-3x";
+      }else{
+        isPlaying = false
+        player.pause();
+        
+        pausing.className = "fa fa-play-circle fa-3x";
+
+      }
+
+      // use for loop to check with id matches data.id from there change the icons. and also change the previous one
+      document.getElementById(i).className = "fas fa-pause-circle fa-3x";
+      document.getElementById(i).className = "fa fa-play-circle fa-3x";
+    }
+   
+
     
     pause_btn.removeAttribute("disabled");
     step_forwad.removeAttribute("disabled");
@@ -128,59 +154,74 @@ const playMusic = async (i) => {
     re_playying.style.visibility = "visible";
 }
 
-
-
-
-function noLyrics(song_name, song_auther){
-  var block_content = document.getElementById('block_content');
-
-  if (is_show_queue == true) {
-    show_queue_box.style.display = 'none';
-    is_show_lyrics = true;
-    show_lyrics.style.display = 'block';
-    block_content.style.display = 'none';
-
+function check_song_lyrics(){
+  if(data.lyrics != ''){
+    return showLyrics(data.id);
+  }else{
+    return noLyrics(data.song_name, data.song_auther_written);
   }
-  else {
-    is_show_lyrics = true;
-    show_lyrics.style.display = 'block';
-    block_content.style.display = 'none';
-  }
-  
-  lyrics_head.innerHTML = data.name;
-  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
-
-  let nolyrics_msg = `
-
-        <center style="margin-top:200px;">
-
-          This song has no lyrics.
-          <i class="far fa-grin-beam-sweat"></i>
-          <i class="far fa-frown ml-1"></i>
-        <center/>
-      `
-  lyrics.innerHTML = nolyrics_msg;
 }
 
-function showLyrics(){
+
+function showLyrics(i){
   var block_content = document.getElementById('block_content');
+
+  // if(data.id == i){
+  //   if (isPlaying == true){
+  //     isPlaying = false;
+  //   }else{
+  //     isPlaying = true;
+  //     player.pause();
+      
+  //     pausing.className = "fa fa-play-circle fa-3x";
+  //   }
+  // }else{
+  //     isPlaying = true;
+      
+  //     player.play();
+      
+  //     pausing.className = "fas fa-pause-circle fa-3x";
+  // }
 
   if (is_show_queue == true) {
     show_queue_box.style.display = 'none';
-    is_show_lyrics = true;
-    show_lyrics.style.display = 'block';
-    block_content.style.display = 'none';
+
+    if(is_show_lyrics != true){
+      is_show_lyrics = true;
+      // show_lyrics.style.display = 'block';
+      show_lyrics.classList.toggle('active');
+      block_content.style.display = 'none';
+    }else{
+      is_show_lyrics = false;
+      show_lyrics.classList.toggle('active');
+      block_content.style.display = 'block';
+    }
 
   }
   else {
-    is_show_lyrics = true;
-    show_lyrics.style.display = 'block';
-    block_content.style.display = 'none';
+    if(is_show_lyrics != true){
+      is_show_lyrics = true;
+      // show_lyrics.style.display = 'block';
+      show_lyrics.classList.toggle('active');
+      block_content.style.display = 'none';
+    }else{
+      is_show_lyrics = false;
+      show_lyrics.classList.toggle('active');
+      block_content.style.display = 'block';
+    }
+    
   }
   
-  lyrics_head.innerHTML = data.name;
-  lyrics_artist.innerHTML = 'by. ' + data.song_auther;
-  let counter = 0;
+  if(data.lyrics){
+    lyrics_head.innerHTML = data.name;
+    lyrics_artist.innerHTML = 'by. ' + data.song_auther_written;
+    lyrics.innerHTML = data.lyrics;
+  }else{
+    noLyrics(data.name, data.song_auther_written);
+  }
+  
+
+  // let counter = 0;
   // let s_lyrics = "";//1 line maximum 55
   // let lyrics_holder = data.lyrics;
 
@@ -204,20 +245,87 @@ function showLyrics(){
   //   }
   // }
   
-  lyrics.innerHTML = data.lyrics;
+  
 
 }
 function cancelLyrics(){
   var block_content = document.getElementById('block_content');
   is_show_lyrics = false;
   block_content.style.display = 'flex';
-  show_lyrics.style.display = 'none';
+  // show_lyrics.style.display = 'none';
+  show_lyrics.classList.toggle('active');
 }
+
+
+
+
+function noLyrics(song_name, song_auther_written){
+  var block_content = document.getElementById('block_content');
+
+  // if (isPlaying == false){
+  //     isPlaying = true;
+      
+  //     player.play();
+      
+  //     pausing.className = "fas fa-pause-circle fa-3x";
+
+  //   }else{
+  //     isPlaying = false;
+  //     player.pause();
+      
+  //     pausing.className = "fa fa-play-circle fa-3x";
+  //   }
+
+  if (is_show_queue == true) {
+    show_queue_box.style.display = 'none';
+    
+    if(is_show_lyrics != true){
+      is_show_lyrics = true;
+      // show_lyrics.style.display = 'block';
+      show_lyrics.classList.toggle('active');
+      block_content.style.display = 'none';
+    }else{
+      is_show_lyrics = false;
+      show_lyrics.classList.toggle('active');
+      block_content.style.display = 'block';
+    }
+
+  }
+  else {
+    if(is_show_lyrics != true){
+      is_show_lyrics = true;
+      // show_lyrics.style.display = 'block';
+      show_lyrics.classList.toggle('active');
+      block_content.style.display = 'none';
+    }else{
+      is_show_lyrics = false;
+      show_lyrics.classList.toggle('active');
+      block_content.style.display = 'block';
+    }
+    
+  }
+  
+  lyrics_head.innerHTML = data.name;
+  lyrics_artist.innerHTML = 'by. ' + data.song_auther_written;
+
+  let nolyrics_msg = `
+
+        <center style="margin-top:200px;">
+
+          This song has no lyrics.
+          <i class="far fa-grin-beam-sweat"></i>
+          <i class="far fa-frown ml-1"></i>
+        <center/>
+      `
+  lyrics.innerHTML = nolyrics_msg;
+}
+
 
 // showing queue
 
 function showQueueBox(){
   var block_content = document.getElementById('block_content');
+  
   show_queue_box.style.display = 'block';
   block_content.style.display = 'none';
   is_show_queue = true;
@@ -235,16 +343,16 @@ function showQueueBox(){
     var tableData = document.createElement("tr");
     tableData.innerHTML = `<td><img src='` + musicData[q_song].img +`' class='queue_table_img'><i class="fa fa-play-circle" onclick='playMusic(`+q_song+`)'></i></td>
     <td>`+musicData[q_song].name+ `</td>
-    <td><div  class='marquee'><p>`+musicData[q_song].song_auther+`</p></div></td>
-    <td><img src="/static/main/img/black-2403543_640.png" class="lyrics-icon rounded-circle" width="50" height="50" onclick='playMusic(`+q_song+`);showLyrics();'></td>
-    <td>Rollin</td>
+    <td><div><a href='/artist_data/`+ musicData[q_song].song_auther_written +`' class='queue-table-content'>`+musicData[q_song].song_auther_written+`</p></div></td>
+    <td><img src="/static/main/img/mic_microphone.jpg" class="lyrics-icon rounded-circle" width="55" height="55" onclick='playMusic(`+q_song+`);showLyrics();'></td>
+    <td><a href='/album/`+ musicData[q_song].album_id + `' class='queue-table-content'>`+ musicData[q_song].album +`</a></td>
     <td><i class="far fa-heart fa-2x"></i></td>
     <td>3.12</td>
-    <td><button type='button' onclick='`+queue_remove_song(musicData[q_song].id)+`'><i class="far fa-times-circle fa-2x queue_song_remove_icon"></i></button></td>`;
+    <td><button type='button'><i class="far fa-times-circle fa-2x queue_song_remove_icon"></i></button></td>`;
     t_body.appendChild(tableData)//adding the looped data to the html body tag
     
   }
-// onclick='`showLyrics();`'
+
 
 }
 function cancelQueueBox(){
@@ -272,6 +380,11 @@ const nextPlay = () => {
 }
 
 const prevPlay = () => {
+  // if(progress.value > 0){
+  //   progress.value = 0;
+  //   player.currentTime = 0;
+  //   player.play()
+  // }
   if (index <= 0) {
     index = musicData.length;
   }
@@ -296,7 +409,7 @@ volumeBar.value = Number(volumeBar.value) + 20
 player.volume = volumeBar.value / 100
 }
 
-const repeat = e => {
+const repeat = () => {
 repeatMusic = !repeatMusic;
 player.loop = repeatMusic;
 
@@ -330,7 +443,7 @@ player.addEventListener('timeupdate', () => {
 // const changeProgressBar = () => { 
 //  player.currentTime = progress.value;
 // }
-function changeProgressBar(rangeElement){ 
+function changeProgressBar(){ 
   // player.currentTime = parseInt(player.duration*rangeElement.value/100);
   // player.currentTime = player.duration*rangeElement.value/100;
   player.currentTime = progress.value;
@@ -364,12 +477,133 @@ function switch_song(song_to_switch){
 
   var song_to_switch_id = musicData[song_to_switch].id;
   var temp; // let's say song id is 9
-  temp = musicData[current_song_id + 1];
+  temp = musicData[current_song_id + 1]; //getting the next song
+
   // first switching the songs then there ids.
   musicData[current_song_id + 1] = musicData[song_to_switch];
-  musicData[current_song_id + 1].id = temp.id;
+  //when we do this the id doesn't change so we need to change manually
+  musicData[current_song_id + 1].id = temp.id; 
 
   musicData[song_to_switch] = temp;
   musicData[song_to_switch].id = song_to_switch;
 
 }
+
+
+const show_notification = document.querySelector('.bell-dropdown');
+document.querySelector('.fa-bell').onclick = function(){
+   //this.classList.toggle('active')
+
+   if(show_notification.classList.contains('active')){
+    
+      show_notification.classList.toggle('active');
+    }else{
+      show_notification.classList.toggle('active');
+    }
+   
+}
+
+const hide_notification = document.querySelector('.hide-notification');
+
+document.querySelector('.hide-notification').onclick = function(){
+  show_notification.classList.toggle('active');
+}
+
+// cutting long notifications
+let notif_header = document.getElementsByClassName("notif_header");
+
+for(let x = 0; x < notif_header.length; x++){
+  //console.log(notif_header[x].innerHTML + " = "+x+" length " +notif_header[x].innerHTML.length);
+  if(notif_header[x].innerHTML.length < 43){
+    document.getElementsByClassName("notif_header")[x].innerHTML = notif_header[x].innerHTML;
+    //console.log("added")
+  }else{
+    let not_holder = "";
+    let iterator = 0;
+    let s = document.getElementsByClassName("notif_header")[x].innerHTML;
+    while(iterator < 40){
+      not_holder = not_holder + s[iterator];
+      iterator = iterator + 1;
+    }
+
+    document.getElementsByClassName("notif_header")[x].innerHTML = not_holder + '...';
+  }
+}
+
+
+// ---------------------------------------------------------
+
+let notif_txt = document.getElementsByClassName("notif-msg");
+
+for(let x = 0; x < notif_txt.length; x++){
+  //console.log(notif_txt[x].innerHTML + " = "+x+" length " +notif_txt[x].innerHTML.length);
+  if(notif_txt[x].innerHTML.length < 110){
+    document.getElementsByClassName("notif-msg")[x].innerHTML = notif_txt[x].innerHTML;
+  }else{
+    let not_msg_holder = "";
+    let iter = 0;
+    let s = document.getElementsByClassName("notif-msg")[x].innerHTML;
+    while(iter < 110){
+      not_msg_holder = not_msg_holder + s[iter];
+      iter = iter + 1;
+    }
+    
+    document.getElementsByClassName("notif-msg")[x].innerHTML = not_msg_holder + '...';
+  }
+}
+
+
+// if (notif_txt.length < 115) {
+
+//   document.getElementById("msg").innerHTML = notif_txt;
+// } else {
+//   var content_txt = '';
+//   for (var i = 0; i < notif_txt.length; i++) {
+//     content_txt = content_txt + notif_txt[i];
+    
+//     if (i === 110) {
+//       break;
+//     } else if (i < 110) {
+//       continue;
+//     }
+//     else{
+//       break;
+//     }
+//   }
+//   content_txt = content_txt + "....";
+//   document.getElementById("msg").innerHTML = content_txt;
+// }
+
+// let notifications_holder = document.getElementById("notifications_holder");
+let notifications_holder = document.getElementsByClassName("notification-content not-read");
+let total_notifications = document.getElementById("total_notifications");
+
+if(notifications_holder.length > 0){
+  total_notifications.innerHTML = notifications_holder.length;
+}
+
+
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+function clear_notif(){
+  var xhttp = new XMLHttpRequest();
+
+  xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+      const notification_section = document.querySelector('.notification-section');
+      removeAllChildNodes(notification_section);
+      console.log("Notifications cleared");
+      total_notifications.innerHTML = "";
+    }
+  };
+
+  xhttp.open("GET", "clear_notifications", true);
+  xhttp.send();
+
+}
+
+// document.querySelector('.clear-all').addEventListener('click', clear_notif());

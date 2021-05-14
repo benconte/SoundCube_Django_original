@@ -9,7 +9,7 @@
 
 				{% for plt in album.album_model.all %}
 
-					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_name}}", img:"{{plt.song_img.url}}", src:"{{plt.song_path.url}}", song_auther: "{{plt.song_auther}}", album_id: "{{album.id}}", album: "{{album.name}}", lyrics:`{{plt.lyrics}}`}
+					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{plt.song_name}}", img:"{{plt.song_img.url}}", src:"{{plt.song_path.url}}", song_auther_written: "{{plt.song_auther_written}}", album_id: "{{album.id}}", album: "{{album.name}}", lyrics:`{{plt.lyrics}}`}
 
 				{% endfor %}
 			}
@@ -86,7 +86,19 @@
 							' id='{{plt.id}}'></i>
 						</td>
 						<td>{{plt.song_name}}</td>
-						<td  class='marquee'><a href="#" class="table-content">{{plt.song_auther}}</a></td>
+						<td  class='marquee'>
+							
+							{% if plt.authers_as_list %}
+								{% for auther in plt.authers_as_list %}
+
+							          <a href="{% url 'artist_data' auther %}" class="table-content">{{auther}},</a>
+
+							    {% endfor %}
+							{% else %}
+								{{plt.song_auther_written}}
+							{% endif %}
+						</td>
+
 						{% if plt.lyrics %}
 							<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 							// ---------------------------------------------------------------------------------

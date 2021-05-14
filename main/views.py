@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
@@ -10,11 +10,10 @@ from django.contrib.messages.views import SuccessMessageMixin
 from .models import (
 		Playlists, Playlist_songs, Song_Categories, Albums, HomePagePlaylists, HomePagePlaylists_songs,
 		Artists, UserArtists, UserPlaylists, UserPlaylists_songs, UserInheritedPlaylists, Song_model,
-		DiscoverPage_UserInheritedPlaylists
+		DiscoverPage_UserInheritedPlaylists, Test, Notification, UserFriends
 		)
 from .forms import CreateUserPlaylists, UserPlaylistsUpdate, UserPlaylistsImgUpdate
 import json
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # Create your views here.
 
@@ -39,10 +38,10 @@ def home(request):
 
 def test(request):
 	playlist = Song_model.objects.all()
-	playlista = Playlists.objects.all()
+	test = Artists.objects.get(id=1)
 	get_song = Song_model.objects.get(id=17)
 	context = {
-		'playlista':playlista,
+		'test':test,
 		'playlist':playlist,
 		'get_song': get_song
 	}
@@ -274,8 +273,8 @@ def user_choose_fav_artist(request):
 			else:
 				userFavs = UserArtists(userartist=plt, user=request.user)
 				userFavs.save()
-				print(art, "saved successfully")
-		messages.success(request, f"Artists save successfully!!")
+				# print(art, "saved successfully")
+				messages.success(request, f"Artist ({plt.name}) was added to your favorites successfully!!")
 		return redirect('/')
 
 
@@ -422,12 +421,14 @@ def savePlaylistToLibrary(request, id):
 			db = UserInheritedPlaylists.objects.get(user= request.user, playlist=get_playlist)
 			db.delete()
 			messages.success(request, f'Playlist ({get_playlist.name}) removed from library successfully!')
+			return HttpResponseRedirect(reverse('playlist', args=[str(get_playlist.id)]))
 		else:
 			db = UserInheritedPlaylists(user= request.user, playlist=get_playlist)
 			db.save()
 			messages.success(request, f'Playlist ({get_playlist.name}) added to library successfully!')
+			return HttpResponseRedirect(reverse('playlist', args=[str(get_playlist.id)]))
 
-		return redirect("home")
+		# return redirect("home")
 
 	else:
 		messages.error(request, f'Error adding ({get_playlist.name}) to library, Please Try again after a while!')
@@ -489,12 +490,12 @@ def remove_song_from_playlist(request, playlist, id):
 		# Checking if a playlist aleardy has the song before adding it
 		if(song):
 			song.delete()
-			messages.success(request, f'Song removed from playlist ({user_returned_playlist.name}) successfully!')
+			messages.success(request, f'Song ({song.song_model.song_name}) removed from playlist ({user_returned_playlist.name}) successfully!')
 
-			return redirect("home")
+			return HttpResponseRedirect(reverse('display_user_playlist_songs', args=[str(user_returned_playlist.id)]))
 		else:
 			messages.error(request, f'Error removing ({user_returned_playlist.name}) from playlist!')
-			return redirect("home")
+			return HttpResponseRedirect(reverse('display_user_playlist_songs', args=[str(user_returned_playlist.id)]))
 	else:
 		messages.error(request, f'Error adding {get_song.song_name} to playlist, Please Try again after a while!')
 		return redirect("home")
@@ -508,6 +509,8 @@ def settings(request):
 @login_required
 def get_artists_data(request, name):
 	get_artists = Artists.objects.filter(name=name).first()
+
+	
 
 	if get_artists:
 		is_favorite = False
@@ -523,3 +526,66 @@ def get_artists_data(request, name):
 
 	messages.error(request, "Artist not found. Please try again after a while!!")
 	return redirect('home')
+
+@login_required
+def add_artist_followers(request, name):
+	get_artists = Artists.objects.filter(name=name).first()
+
+	if get_artists:
+		if get_artists.followers_fans.filter(id=request.user.id).exists():
+			get_artists.followers_fans.remove(request.user)
+			return HttpResponseRedirect(reverse('artist_data', args=[str(get_artists.name)]))
+		else:
+			get_artists.followers_fans.add(request.user)
+			return HttpResponseRedirect(reverse('artist_data', args=[str(get_artists.name)]))
+
+
+@login_required
+def sending_notification(request):
+	pass
+
+
+@login_required
+def clear_notifications(request):
+	get_user_notifications = Notification.objects.filter(user=request.user).all()
+	if request.method == 'GET':
+		# get_user_notifications.delete()
+		# get_user_notifications.save()
+		Notification.objects.filter(user=request.user).all().delete()
+
+	return HttpResponse('/')
+
+@login_required
+def clear_specific_notifications(request, id):
+	get_user_notifications = Notification.objects.filter(id=id, user=request.user).all()
+	if request.method == 'GET':
+		# get_user_notifications.delete()
+		# get_user_notifications.save()
+		Notification.objects.filter(id=id, user=request.user).first().delete()
+
+	return HttpResponse('/')
+
+# @login_required
+# def sharing(request):
+
+@login_required
+def get_new_notifications(request):
+	get_user_new_notifications = Notification.objects.filter(user=request.user).all()
+
+	notification_dict = {}
+	for i, notif in enumerate(get_user_new_notifications):
+		notification_dict[notif.id] = {
+			'subject ':notif.subject,
+			'Sender_user ':notif.sender_user.username,
+			'subject ':notif.subject,
+			#'msg ':notif.msg,
+			'date_sent ':notif.date_sent,
+			'notification_read ':notif.notification_read
+
+		}
+
+	print('\n' , notification_dict , '\n')
+	print(JsonResponse(json.dumps(notification_dict, default=str), safe=False))
+	return JsonResponse(notification_dict, safe=False)
+
+# 4.vor 5.zu 6.in 7.nach 8.

@@ -12,6 +12,9 @@ urlpatterns = [
 	path('choose_artist', views.user_choose_fav_artist, name="choose_artist"),
 	path("user_choose_fav_artist_search", views.user_choose_fav_artist_search, name="user_choose_fav_artist_search"),
 	path('discover', views.discover, name="discover"),
+	path('clear_notifications', views.clear_notifications, name='clear_notifications'),
+	path('clear_specific_notifications/<int:id>', views.clear_specific_notifications, name='clear_specific_notifications'),
+	path('get_new_notifications', views.get_new_notifications, name='get_new_notifications'),
 	path('search', views.search, name="search"),
 	path('test', views.test, name="test"),#path('test/<int:id>', views.test, name="test"),
 	path('playlist/<int:id>', views.display_playlist_songs, name="playlist"),
@@ -25,5 +28,6 @@ urlpatterns = [
     path('delete_user_playlist/<int:pk>', views.DeleteUserPlaylistView.as_view(), name='delete_user_playlist'),
     path('settings', views.settings, name="settings"),
 	path("artist/<str:name>", views.get_artists_data, name="artist_data"),
+	path("add_artist_followers/<str:name>", views.add_artist_followers, name="add_artist_followers"),
 	# path("user_update_playlist/<int:pk>", views.UserPlaylistUpdateView.as_view(), name="user_update_playlist")
 ]

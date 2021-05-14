@@ -8,7 +8,7 @@
 				queue_playlist[0] = {id:"{{user.id}}", name: "{{user.username}}", img:"{{user.profile.image.url}}"}
 				{% for fav_song in user.favorite_song.all %}
 
-					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{fav_song.song_name}}", img:"{{fav_song.song_img.url}}", src:"{{fav_song.song_path.url}}", song_auther: "{{fav_song.song_auther}}", lyrics:`{{fav_song.lyrics}}`}
+					musicData[{{forloop.counter0}}] = {id:{{forloop.counter0}}, name: "{{fav_song.song_name}}", img:"{{fav_song.song_img.url}}", src:"{{fav_song.song_path.url}}", song_auther_written: "{{fav_song.song_auther_written}}", lyrics:`{{fav_song.lyrics}}`}
 
 				{% endfor %}
 			}
@@ -53,7 +53,17 @@
 								' id='{{song.id}}'></i>
 							</td>
 								<td>{{song.song_name}}</td>
-								<td>{{song.song_auther}}</td>
+								<td>
+									{% if song.authers_as_list %}
+										{% for auther in song.authers_as_list %}
+
+									          <a href="{% url 'artist_data' auther %}" class="table-content">{{auther}},</a>
+
+									    {% endfor %}
+									{% else %}
+										{{song.song_auther_written}}
+									{% endif %}
+								</td>
 
 							{% if song.lyrics %}
 							<td>
@@ -67,7 +77,7 @@
 								<td><img src="{% static '/main/img/black-2403543_640.png' %}" class="lyrics-icon rounded-circle" onclick='
 								// -----------------------------------------------------------------------------------
 								playMusic({{forloop.counter0}});
-								noLyrics("{{song.song_name}}", "{{song.song_auther}}");
+								noLyrics("{{song.song_name}}", "{{song.song_auther_written}}");
 
 									// ---------------------------------------------------------------------------------
 								' width="50" height="50"></td>

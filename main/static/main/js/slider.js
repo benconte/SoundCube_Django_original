@@ -5,7 +5,7 @@ $(document).ready(function(){
 		nextButton: '.recent-next',
 		prevButton: '.recent-prev',
 		slidesPerView: 5,
-		paginationClickable: false,
+		paginationClickable: true,
 		preventClicks:false,
 		preventClicksPropagation:false,
 		spaceBetween: 7,
@@ -26,6 +26,10 @@ $(document).ready(function(){
 			},
 			1024: {//on the width of 1024, we show only 6 slides per view
 				slidesPerView: 3,
+				spaceBetween: 10
+			},
+			1100: {
+				slidesPerView: 4,
 				spaceBetween: 10
 			}
 		}

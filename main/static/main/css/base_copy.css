@@ -207,12 +207,17 @@ body{
 } */
 
 .search{
-  padding: 10px;
+  width: 60%;
+  height: 60px;
+  margin-top: 10px;
+  position: relative;
+  margin-left: 10px;
 }
 
 .search-input{
-  width: 60%;
-  height: 40px;
+  position: absolute;
+  width: 90%;
+  height: 95%;
   border: none;
   box-shadow: none;
   text-align: center;
@@ -244,6 +249,25 @@ body{
   box-shadow: 0 3px 5px #1DB954;
 }
 
+.search-btn{
+  position: absolute;
+  right: 10px;
+  width: 80px;
+  height: 95%;
+  border: none;
+  box-shadow: none;
+  text-align: center;
+  background: #1DB954;
+  color: #fff;
+  padding-left: 10px;
+  border-radius: 8px;
+
+}
+
+.search-btn:focus{
+  outline: none;
+}
+
 .textinput{
   color: #000;
 }
@@ -260,7 +284,147 @@ body{
 
 .fa-bell:hover{
   color: #1DB954;
+  cursor: pointer;
 }
+
+/*custon notification bar*/
+
+.bell-dropdown{
+  width: 450px;
+  height: 70%;
+  position: fixed;
+  top: 110px;
+  right: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  transition: 0.5s;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 2px 2px 3px 0 #bdb8d7;
+}
+
+.bell-dropdown.active{
+  top: 85px;
+  opacity: 1;
+  visibility: visible;
+}
+.bell-dropdown .bell-dropdown-content{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  
+}
+.bell-dropdown .top-box{
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 40px;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+  box-shadow: 0px 2px 3px 0 #bdb8d7;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.bell-dropdown .top-box i{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 20px;
+  transition: 0.5s;
+}
+
+.bell-dropdown .top-box i:hover{
+  cursor: pointer;
+  color: #1DB954;
+  right: 15px;
+
+}
+
+.bell-dropdown .bottom-box{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background-color: #fff;
+  border-top: 1px solid #d4d4d4;
+  box-shadow: 0px -2px 3px 0 #bdb8d7;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+}
+
+.bell-dropdown .bottom-box label{
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  font-size: 20px;
+  transition: 0.5s;
+  color: #bdb8d7;
+}
+
+.bell-dropdown .bottom-box label:hover{
+  cursor: pointer;
+  color: #1DB954;
+  right: 15px;
+  font-size: 20px;
+}
+
+.bell-dropdown .notification-section{
+  position: absolute;
+  width: 100%;
+  /*height: 85%;*/
+  height: auto;
+  top: 40px;
+  bottom: 40px;
+  overflow: auto;
+  /*padding-bottom: 20px;*/
+  display: block;
+}
+
+.bell-dropdown .notification-section a{
+  text-decoration: none;
+
+}
+
+.bell-dropdown .notification-section .notification-content{
+  width: 100%;
+  height: 100px;
+  /*background-color: red;*/
+  border-bottom: 1px solid #d4d4d4;
+  margin-top: 5px;
+}
+
+.bell-dropdown .notification-section .notification-content:hover{
+  background-color: #dddddd;
+  cursor: pointer;
+}
+
+.bell-dropdown .notification-section .notification-content div{
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.bell-dropdown .notification-section .notification-content div span{
+  font-family: 'Chonburi';
+  font-weight: bold;
+  padding-left: 10px;
+  color: #000;
+}
+
+.bell-dropdown .notification-section .notification-content div p{
+  font-family: serif;
+  font-weight: bold;
+  margin-left: 10px;
+  color: #717171;
+
+}
+
+.bell-dropdown .notification-section .notification-content #msg{
+  color: #717171;
+}
+/*end of custom notification bar*/
 
 .content-section{
   padding: 20px;
@@ -719,6 +883,8 @@ cursor: pointer;
 
 .lyrics-icon{
   background-color: #fff;
+  color: #000;
+  
 }
 
 .lyrics-icon:hover{
@@ -1180,14 +1346,21 @@ cursor: pointer;
   width: 100%;
   height: 100%;
   position: fixed;
-  top: 0;
+  top: 200px;
   left: 0;
   right: 0;
   background-color: #fff;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  display: none;
-  transition: all ease-in-out 250ms;
+  overflow: auto;
+  /*display: none;*/
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.4s;
+}
+
+.lyrics.active{
+  top: 0;
+  opacity: 1;
+  visibility: visible;
 }
 
 .lyrics .show_lyrics{
@@ -1201,10 +1374,15 @@ cursor: pointer;
   height: 120px;
   background: #F3F4F5;
   position: fixed;
-  top: 0;
+  top: 200px;
   border-bottom: 1px solid #1DB954;
-
+  transition: 0.4s;
 }
+
+.lyrics.active .lyrics-head{
+  top: 0;
+}
+
 
 .show_lyrics .lyrics-head center{
   padding-top: 30px;
@@ -1240,10 +1418,10 @@ cursor: pointer;
   color: #000;
 }
 
-.show_lyrics .lyrics-head .fa-times-circle{
+.show_lyrics .lyrics-head .fa-chevron-down{
   padding-right: 30px;
 }
-.show_lyrics .lyrics-head .fa-times-circle:hover{
+.show_lyrics .lyrics-head .fa-chevron-down:hover{
   cursor: pointer;
   color: #1DB954;
 }
@@ -1276,12 +1454,12 @@ cursor: pointer;
   width: 100%;
   height: 100%;
   position: fixed;
-  top: 0;
+  top: 0px;
   left: 0;
   right: 0;
   background-color: #fff;
   display: none;
-  transition: all ease-in-out 250ms;
+  transition: all ease-in-out 200ms;
 }
 
 .queue-box .show-queue-box{
@@ -1321,7 +1499,7 @@ cursor: pointer;
 .queue-box-body{
   width: 100%;
   background: #fff;
-  margin-top: 119px;
+  margin-top: 121px;
 }
 
 .queue-box-body .queue-left-box{
@@ -1384,19 +1562,19 @@ cursor: pointer;
 }
 
 .queue-box-body .queue-right-box{
+  position: relative; 
   width: 72em;
   height: 100vh;
   margin-right: 30px;
   float: right;
   background-color: #fff;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  margin-top: 0px;
+  overflow: auto;
+
 }
 
 .queue-box-body .queue-right-box .right-queue-table{
-  color: #000;
-   position: relative; 
+   color: #000;
+   margin-bottom: 280px;
 }
 
 
@@ -1413,16 +1591,16 @@ cursor: pointer;
 
 .queue-box-body .queue-right-box .right-queue-table table{
   width: 71em;
-  margin-top: 0px;
   margin-bottom: 280px;
+  margin-top: 60px;
 }
 .queue-box-body .queue-right-box .right-queue-table table thead{
-  position: fixed;
-    top: 119px;
+    position: fixed;
+    top: 121px;
     width: 71em;
-    background: grey;
-    border-radius: 8px;
+    background: #dcdcdc;
     opacity: 1;
+    /*display: none;*/
 }
 .queue-box-body .queue-right-box .right-queue-table table thead th{
   border-top: none;
@@ -1430,7 +1608,7 @@ cursor: pointer;
   font-size: 18px;
   font-weight: bold;
   color: #000;
-  
+  padding-left: 8px;
   height: 60px;
   
 }
@@ -1440,31 +1618,44 @@ cursor: pointer;
 }*/
 
 .queue-box-body .queue-right-box .right-queue-table table tbody{
-  position: absolute;
-  margin-top: 65px;
+  
+  /*margin-top: 265px;*/
   width: 71em;
-  height: auto;
   margin-right: 10px;
-  overflow: hidden;
-  background-color: red;
+  
+
+
 }
+
 .queue-box-body .queue-right-box .right-queue-table table tbody tr{
-  border-bottom: none;
-  border-top: 1px solid #989898;
+  
   font-size: 16px;
   border-color: #000;
   height: 60px;
- 
+  
 }
 
 .queue-box-body .queue-right-box .right-queue-table table tbody tr td{
   color: #000;
+  border-bottom: none;
+  border-top: 1px solid #989898;
 }
 .queue-box-body .queue-right-box .right-queue-table table tbody tr:hover{
-  background-color:#F0F0F0;
+  background-color: #F0F0F0;
   color: #fff;
 }
 
+.queue-box-body .queue-right-box .right-queue-table table tbody tr td .queue-table-content{
+  color: #000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.queue-box-body .queue-right-box .right-queue-table table tbody tr td .queue-table-content:hover{
+  text-decoration: none;
+  color: #1DB954;
+  font-weight: 500;
+}
 .queue-box-body .queue-right-box .right-queue-table .queue_table_img{
   width: 40px;
   height: 40px;
@@ -1503,7 +1694,8 @@ cursor: pointer;
 }
 */
 
-.queue-box-body .queue-right-box .right-queue-table table tbody tr .marquee{
+/*in base.js i remove the class marquee bcs it looked ugly*/
+/*.queue-box-body .queue-right-box .right-queue-table table tbody tr .marquee{
   display: flex;
   overflow: hidden;
   white-space: nowrap;
@@ -1516,7 +1708,7 @@ cursor: pointer;
 .queue-box-body .queue-right-box .right-queue-table table tbody tr .marquee p:hover{
   padding-left: 80%;
   animation: marque 4s linear infinite;
-}
+}*/
 
 @keyframes marque{
   100%{
@@ -1570,7 +1762,7 @@ cursor: pointer;
 }
 
 .artist-data .artist-data-buttons .follow-btn{
-  padding: 9px 14px;
+  padding: 15px 14px;
   background-color: #e05353;
   color: #000;
   border-radius: 8px;
@@ -1685,19 +1877,6 @@ cursor: pointer;
   padding: 16px;
 }
 
-/*
-
-row-img
-row-name
-row-auther
-row-lyrics-icon
-row-album
-row-heart
-row-length
-row-cancel
-
-
-*/
 /* end of custom table */
 
 
@@ -1733,3 +1912,13 @@ row-cancel
 .slider_container .range::webkit-slider-thumb:hover{
   box-shadow: 0 0 0 20px rgba(98,0,238,.1);
 }*/
+
+
+
+
+/*@media (max-width: 690px){
+  .wrapper .sidebar{
+    display: none;
+  }
+}*/
+

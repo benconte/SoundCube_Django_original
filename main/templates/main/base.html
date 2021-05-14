@@ -14,8 +14,8 @@
   <script src="https://kit.fontawesome.com/b99e675b6e.js"></script>
   <link rel="shortcut icon" type="image/png" href="{% static '/main/img/favicon.png' %}">
   
-  
-      
+
+
     {% if title %}
       <title>Soundcube {{title}}</title>
     {% else %}
@@ -39,31 +39,31 @@
               <li><a href="{% url 'home' %}"><i class="fas fa-home"></i>Home</a></li>
               <li><a href="{% url 'discover' %}"><i class="far fa-newspaper"></i>Discover</a></li>
               <li><a href="#"><i class="fas fa-satellite-dish"></i>Radio</a></li>
-          </ul> 
+          </ul>
           <div class="library">
             <header style="color: #fff;margin-left: 10px;">Your Library</header>
             <ul>
-                <li><a href="{% url 'show_favorite' %}"><i class="far fa-bookmark"></i>Favorites tracks</a></li>
+                <li><a href="{% url 'show_favorite' %}" onclick="move(2);"><i class="far fa-bookmark"></i>Favorites tracks</a></li>
                 {% if user.is_authenticated %}
                 <li><a href="{% url 'user_playlist' user.username%}" style="display: flex;"><div style="background-color: #fff;border-color: #fff;width: 30px; height: 30px;margin-right: 10px;border-radius: 8px;"><img src="{% static '/main/img/music-album.png' %}" style="width: 25px; height: 25px; margin-left: 2px;"></div> Playlists</a></li>
                 {% endif %}
-            </ul> 
+            </ul>
             <header style="color: #fff;margin-left: 10px;margin-bottom: 8px;">Your Playlists</header>
 
             <div class="side-playlists">
-              
+
               <div class="sidebar-playlists">
-                
-                <ul>  
+
+                <ul>
                   <!-- user added to library playlist -->
                   {% if user.userInherited.exists %}
                     {% for plt in user.userInherited.all %}
                       <li><a href="{% url 'playlist' plt.playlist.id %}">
                         <p class="plt_name">{{plt.playlist.name}}</p>
                       </a></li>
-                    {% endfor %}              
-                  
-                  {% else %} 
+                    {% endfor %}
+
+                  {% else %}
 
                   {% endif %}
 
@@ -72,9 +72,9 @@
                       <li><a href="{% url 'discover_playlists' plt.playlist.id %}">
                         <p class="plt_name">{{plt.playlist.name}}</p>
                       </a></li>
-                    {% endfor %}              
-                  
-                  {% else %} 
+                    {% endfor %}
+
+                  {% else %}
 
                   {% endif %}
 
@@ -85,56 +85,109 @@
                       <p class="plt_name">{{plt.name}}</p>
                     </a></li>
                   {% endfor %}
-                  {% else %} 
+                  {% else %}
 
-                  {% endif %} 
+                  {% endif %}
 
                 </ul>
               </div>
-              
-              
-              
+
+
+
             </div>
-            
+
           </div>
-          
+
           <!-- <div class="social_media">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-instagram"></i></a>
         </div> -->
       </div>
+
       <div class="main_content">
-      
+
         <div class="info">
           <div class="container">
             <div class="col-md-8">
                 {% if messages %}
                   {% for message in messages %}
-                    <div class="alert {{message.tags}}">
+                    <div class="alert {{message.tags}} alert-dismissible fade show" role="alert">
                       {{ message }}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
                     </div>
                   {% endfor %}
                 {% endif %}
-                
-                
+
+
             </div>
           </div>
-          
+
           <div class="" style="margin-bottom: 90px;">
+            
             <div id="block_content">
               {% block content %}{% endblock %}
             </div>
-              
-
-
-              <!-- start of search header -->
+            <!-- start of search header -->
               <div class="search_header">
                 <div class="header-left">
                   <div class="nav-item dropdown profile d-flex">
-                     <a href="#"><i class="fas fa-bell fa-fw fa-2x mr-2" style=" margin-top: 20px;"></i></a>
+                    <!-- ------------------------------------- -->
+                    <div id="bell_dropdown">
+                     <div class="bell"> 
+                       <i class="fas fa-bell fa-2x" style=" margin-top: 20px;"></i>
+                       <sup class="badge badge-success" id="total_notifications"></sup>
+                     </div>
+                     
+                     <div class="bell-dropdown">
+                       <div class="bell-dropdown-content">
+                        <span class="top-box">
+                          <i class="far fa-times-circle hide-notification" ></i>
+                          
+                        </span>
+                        <div class="notification-section" id="notification_section">
+                          {% if user.notification_receiver.exists %}
+                          {% for notif in user.notification_receiver.all %}
+                            {% if notif.notification_read %}
+                            <a href="#">
+                              <div class="notification-content read" id="notifications_holder">
+                                <div id="notification_header">
+                                  <i class="far fa-times-circle delete-notification" onclick="delete_specific_notification('{{notif.id}}', '{{forloop.counter}}')"></i>
+                                  <span class="notif_header" id="notif_header">{{notif.subject}}</span>
+                                  <p>@{{notif.sender_user.username}}</p>
+                                </div>
+                                <p class="notif-msg" id="msg" style="padding-left: 10px;">{{notif.msg}} </p>
+                              </div>
+                            </a>
+                            {% else %}
+                              <a href="#">
+                                <div class="notification-content not-read" id="notifications_holder">
+                                  <div id="notification_header">
+                                    <i class="far fa-times-circle delete-notification" onclick="delete_specific_notification('{{notif.id}}', '{{forloop.counter}}')"></i>
+                                    <span class="notif_header" id="notif_header">{{notif.subject}}</span>
+                                    <p>@{{notif.sender_user.username}}</p>
+                                  </div>
+                                  <p class="notif-msg" id="msg" style="padding-left: 10px;">{{notif.msg}} </p>
+                                </div>
+                              </a>
+                            {% endif %}
+                          {% endfor %}
+                          {% else %}
+                            <center><h3 class="notifications-center">No new notifications</h3></center>
+                          {% endif %}      
+                        </div>
+                        <span class="bottom-box">
+                          <label class="clear-all" onclick="clear_all_notif()">Clear all notifications</label>
+                        </span>
+                        <!--   -->
+                        </div>
+                     </div>
+                    </div>
+                    <!-- ------------------------------------------- -->
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                   
+
                     {% if user.is_authenticated %}
                       <span class="mr-1 d-none d-lg-inline" style="color: #fff;">{{user.username}}</span>
                       <img class="img-profile rounded-circle" src="{{user.profile.image.url}}" width="60" height="60">
@@ -145,7 +198,7 @@
                       <p>Hey there</p>
                     {% endif %}
                     <!-- {% static 'main/default.png' %} -->
-                      
+
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background: #333;">
                       <a class="dropdown-item" href="{% url 'profile' %}" style="color: #fff;"><i class="far fa-id-badge mr-2"></i>Profile</a>
@@ -160,12 +213,14 @@
                   <div class="search">
                     {% csrf_token %}
                     <input type="search" name="query" placeholder="search song, artist, album" required class="search-input">
-                    <button class="btn btn-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i></button>
+                    <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
                   </div>
-                </form>       
-              </div> 
+                </form>
+              </div>
 
               <!-- end of search header -->
+
+              
 
           </div>
 
@@ -174,19 +229,19 @@
             <div class="lyrics" id="show_lyrics">
               <div class="show_lyrics">
                 <div class="lyrics-head">
-                  <i class="far fa-times-circle fa-3x" id="arrow_down" style="float: right; margin-top: 20px;" onclick="cancelLyrics();"></i>
+                  <i class="fas fa-chevron-down fa-3x" id="arrow_down" style="float: right; margin-top: 20px;" onclick="cancelLyrics();"></i>
                   <center>
-                    <header id="lyrics_head">head</header> 
+                    <header id="lyrics_head">head</header>
                     <h5 id="lyrics_artist"></h5>
                   </center>
 
-                  
-                  
+
+
                 </div>
                 <div class="lyrics-body">
                   <div id="lyrics"></div>
                 </div>
-                
+
 
               </div>
             </div>
@@ -213,21 +268,21 @@
                           <i class="fas fa-ellipsis-h"></i>
 
                         </center>
-                        
+
                       </div>
                     </div>
                     <center class="queue-playlist-name" id="queue_playlist_name">
                       <p id="playlist_name">Playlist name</p>
                       <p id="playlist_artists"></p>
                     </center>
-                    
+
                   </div>
                   <div class="queue-right-box">
                     <div class="right-queue-table" id="queue_table">
-                      
+
                       <table>
-                        
-                        
+
+
                         <thead>
                           <th>#</th>
                           <th>Name</th>
@@ -240,7 +295,7 @@
                         </thead>
                         <tbody id="queue_t_body">
                           <!-- <div class="queue_t_body" id="queue_t_body"></div> -->
-                          
+
                         </tbody>
                       </table>
                     </div>
@@ -249,7 +304,7 @@
               </div>
             </div>
           </div>
-          
+
       </div>
 
     </div>
@@ -257,51 +312,52 @@
     </div>
     <div class="row">
         <div class="own" id="own">
-            <div class="buttons"> 
-              <button class="prev-track" id="step_backward" onclick="prevPlay()"> 
-                <i class="fa fa-step-backward fa-2x" ></i> 
-              </button> 
-              <button class="playpause-track" onclick="play()" id="pause_btn"> 
-                <i class="fa fa-play-circle fa-3x" id='pause'></i> 
+            <div class="buttons">
+              <button class="prev-track" id="step_backward" onclick="prevPlay()">
+                <i class="fa fa-step-backward fa-2x" ></i>
               </button>
-              <button class="next-track" id="step_forwad" onclick="nextPlay()"> 
-                <i class="fa fa-step-forward fa-2x" ></i> 
-              </button> 
+              <button class="playpause-track" onclick="play()" id="pause_btn">
+                <i class="fa fa-play-circle fa-3x" id='pause'></i>
+              </button>
+              <button class="next-track" id="step_forwad" onclick="nextPlay()">
+                <i class="fa fa-step-forward fa-2x" ></i>
+              </button>
             </div>
-            
-            <div class="slider_container"> 
+
+            <div class="slider_container">
               <label class="song-name" id="playing_song_name"></label>
-              <div class="current-time" id="ctview">00:00</div> 
+              <div class="current-time" id="ctview">00:00</div>
               <input type="range" min="0" max="100"
-                value="0" class="seek_slider" id="progress" oninput="changeProgressBar();"> 
-              <div class="total-duration" id="ttview">00:00</div> 
+                value="0" class="seek_slider" id="progress" oninput="changeProgressBar();">
+              <div class="total-duration" id="ttview">00:00</div>
 
               <div class="re-play" ><button id="re_play"><i class="fas fa-retweet"  onclick="repeat()" ></i></button></div>
             </div>
 
-            <div class="slider_container"> 
+            <div class="slider_container">
 
-              <button id="volumedown"><i class="fa fa-volume-down" onclick="volumeDown()" ></i></button> 
+              <button id="volumedown"><i class="fa fa-volume-down" onclick="volumeDown()" ></i></button>
               <input type="range" min="0" max="100"
-                value="10"  class="volume_slider" id="volumeBar" oninput="player.volume = this.value/100"> 
+                value="10"  class="volume_slider" id="volumeBar" oninput="player.volume = this.value/100">
               <button id="volumeup"><i class="fa fa-volume-up" onclick="volumeUp()" ></i> </button>
           </div>
           <div class="own-right-icons mr-2">
-            <button class="mic" id="mic"><img src="{% static '/main/img/microphone.png' %}" width="35" height="35" onclick="showLyrics();"></button><!-- showLyrics(musicData.lyrics, musicData.name, musicData.auther); -->
+            <button class="mic" id="mic"><img src="{% static '/main/img/microphone.png' %}" width="35" height="35" onclick="check_song_lyrics();"></button><!-- showLyrics(musicData.lyrics, showLyrics(); musicData.name, musicData.auther); -->
             <button class="shufle" id="shufle"><i class="fas fa-random" style="font-size: 20px;"></i></button>
             <button class="queue" id="queue" onclick="showQueueBox();"><i class="fas fa-bars fa-2x"></i></button>
-          </div>  
+          </div>
         </div>
-        
+
       </div>
     </div>
-    
+
     <script src="{% static 'main/js/swiper.min.js' %}"></script>
     <script src="{% static 'main/js/base.js' %}"></script>
+    <!-- <script src="{% static 'main/js/ajax.js' %}"></script> -->
     <script src="{% static 'main/js/data.js' %}"></script>
     <script src="{% static 'main/js/slider.js' %}"></script>
 
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>  
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 
@@ -313,7 +369,7 @@
   </body>
 </html>
 
-<!-- 
+<!--
 
 var counter = 0;
   var s_lyrics = "";//1 line maximum 55
@@ -323,7 +379,7 @@ var counter = 0;
   for(var s = 0; s <= lyrics_holder.length; s++){
     s_lyrics += lyrics_holder[s];
     counter += 1;
-    
+
     // check if counter is >= 55 if so the we add a new line if not we keep looping until we see a space
     if(counter >= 55){
       if(lyrics_holder[s] === ' '){
@@ -335,24 +391,24 @@ var counter = 0;
         counter +=1;
         continue;
       }
-      
+
     }
   }
 
  -->
 
 
-<!-- 
+<!--
 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          
+
                            {% if user.is_authenticated %}
                              <span class="" style="color: #fff;">{{user.username}}</span>
                              <img class="img-profile" src="{{user.profile.image.url}}">
-       
+
                            {% else %}
-       
+
                            {% endif %}
-                             
+
                            </a>
                            <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background: #333;">
                              <a class="dropdown-item" href="{% url 'profile' %}" style="color: #fff;"><i class="far fa-id-badge mr-2"></i>Profile</a>
@@ -363,4 +419,3 @@ var counter = 0;
                            </div>
 
  -->
- 

@@ -61,7 +61,7 @@
 
 						<input type="checkbox" value="{{art.name}}" name="check_box" id="{{art.name}}">
 
-						<label for="{{art.name}}">
+						<label for="{{art.name}}"><!-- this label shouldn't have a class of checkbox because it contains an image which should be visible -->
 							<img src="{{art.img.url}}" alt="{{art.name}}" width="250" height="250" id="artist_img" onclick="add_checkbox({{forloop.counter}});">
 						</label>
 
@@ -88,20 +88,20 @@
 		var clicked = false;
 		var checkbox_img = document.getElementsByTagName("img");
 
-		let arr = [];
+		let checkbox_arr = [];
 		for(let i = 0; i< checkbox.length; i++){
-			arr.push(false);
+			checkbox_arr.push(false);
 		}
 		
 		function add_checkbox(id){
 			id = id - 1;
-			if(arr[id] === false){
-				arr[id] = true;
+			if(checkbox_arr[id] === false){
+				checkbox_arr[id] = true;
 				checkbox[id].style.visibility = 'visible';
 				console.log(checkbox[id].getAttribute('value') + " clicked");
 			}
 			else{
-				arr[id] = false;
+				checkbox_arr[id] = false;
 				checkbox[id].style.visibility = 'hidden';
 				console.log(checkbox[id].getAttribute('value') + " unclicked");
 			}
